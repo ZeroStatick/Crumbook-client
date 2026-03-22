@@ -9,6 +9,8 @@ import Login from "./components/Login.jsx"
 import RecipePage from "./components/pages/RecipePage.jsx"
 import CreateRecipePage from "./components/pages/CreateRecipePage.jsx"
 import RecipeDetailPage from "./components/pages/RecipeDetailPage.jsx"
+import Navbar from "./components/Navbar.jsx"
+import ProtectedRoute from "./components/ProtectedRoute.jsx"
 
 import { Toaster } from "react-hot-toast"
 
@@ -35,13 +37,24 @@ function App() {
     <>
       <Toaster />
       <BrowserRouter>
+        <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
           <Route path="/me" element={<Login />} />
           <Route path="/recipes" element={<RecipePage />} />
-          <Route path="/recipes/new" element={<CreateRecipePage />} />
+
+          {/* Protected Route for creating recipes */}
+          <Route
+            path="/recipes/new"
+            element={
+              <ProtectedRoute>
+                <CreateRecipePage />
+              </ProtectedRoute>
+            }
+          />
+
           <Route path="/recipes/:id" element={<RecipeDetailPage />} />
           <Route
             path="*"

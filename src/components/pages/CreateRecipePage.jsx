@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
 import axios from "axios"
 import { BASE_URL, RECIPE_URL } from "../../../constant/endpoints"
+import toast from "react-hot-toast"
 
 const CreateRecipePage = () => {
   const navigate = useNavigate()
@@ -34,10 +35,13 @@ const CreateRecipePage = () => {
         },
       })
 
+      toast.success("Recipe created successfully!")
       // Redirect back to the recipe list upon success
       navigate("/recipes")
     } catch (err) {
-      setError(err.response?.data?.message || err.message)
+      const errorMessage = err.response?.data?.message || err.message
+      setError(errorMessage)
+      toast.error(errorMessage)
     } finally {
       setLoading(false)
     }
