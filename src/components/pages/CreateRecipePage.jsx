@@ -27,13 +27,7 @@ const CreateRecipePage = () => {
     setError(null)
 
     try {
-      await axios.post(RECIPE_URL, formData, {
-        headers: {
-          "Content-Type": "application/json",
-          // Note: If your endpoint requires a token, you'd add the Authorization header here
-          // 'Authorization': `Bearer ${localStorage.getItem('token')}`
-        },
-      })
+      await axios.post(RECIPE_URL, formData)
 
       toast.success("Recipe created successfully!")
       // Redirect back to the recipe list upon success
