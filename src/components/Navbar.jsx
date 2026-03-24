@@ -45,6 +45,12 @@ const Navbar = () => {
         {user ? (
           <>
             <span style={{ color: "#ccc" }}>Hello, {user.name || "Chef"}</span>
+            <Link
+              to="/profile"
+              style={{ color: "#ddd", textDecoration: "none" }}
+            >
+              Profile
+            </Link>
             <button
               onClick={handleLogout}
               style={{

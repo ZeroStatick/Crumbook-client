@@ -1,7 +1,10 @@
 import React from "react"
 import { Link } from "react-router-dom"
+import useUserStore from "../global/user"
 
 const Home = () => {
+  const { user } = useUserStore()
+
   return (
     <div
       style={{
@@ -18,7 +21,7 @@ const Home = () => {
         Your personal digital recipe collection.
       </p>
 
-      <div>
+      <div style={{ display: "flex", gap: "15px", justifyContent: "center" }}>
         <Link
           to="/recipes"
           style={{
@@ -33,6 +36,22 @@ const Home = () => {
         >
           Browse Recipes
         </Link>
+        {user && (
+          <Link
+            to="/profile"
+            style={{
+              padding: "12px 24px",
+              backgroundColor: "#6c757d",
+              color: "#fff",
+              textDecoration: "none",
+              borderRadius: "5px",
+              fontWeight: "bold",
+              fontSize: "1.1rem",
+            }}
+          >
+            My Profile
+          </Link>
+        )}
       </div>
     </div>
   )
