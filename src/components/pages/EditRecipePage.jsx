@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 import { useNavigate, useParams } from "react-router-dom"
-import axios from "axios"
+import api from "../../../API/api.api"
 import toast from "react-hot-toast"
 import useUserStore from "../../global/user"
 import { RECIPE_URL } from "../../../constant/endpoints"
@@ -16,7 +16,7 @@ export default function EditRecipePage() {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const { data } = await axios.get(`${RECIPE_URL}/${id}`)
+        const { data } = await api.get(`${RECIPE_URL}/${id}`)
 
         // Optional: Ensure the logged-in user is actually the author
         // Depending on your backend, author might be data.author._id or data.user
@@ -44,7 +44,7 @@ export default function EditRecipePage() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      await axios.put(`${RECIPE_URL}/${id}`, { title, description })
+      await api.put(`${RECIPE_URL}/${id}`, { title, description })
       toast.success("Recipe updated successfully!")
       navigate(`/recipes/${id}`)
     } catch (error) {

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import axios from "axios"
-import { BASE_URL, RECIPE_URL } from "../../../constant/endpoints"
+import api from "../../../API/api.api"
+import { RECIPE_URL } from "../../../constant/endpoints"
 import toast from "react-hot-toast"
 
 const RecipePage = () => {
@@ -17,7 +17,7 @@ const RecipePage = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get(RECIPE_URL)
+        const response = await api.get(RECIPE_URL)
         setRecipes(response.data)
       } catch (err) {
         const errorMessage = err.response?.data?.message || err.message

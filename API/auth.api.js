@@ -1,9 +1,8 @@
-import axios from "axios"
+import api from "./api.api"
 import { REGISTER_URL, LOGIN_URL } from "../constant/endpoints"
 
 export const register = async (userData) => {
-  const { data } = await axios.post(REGISTER_URL, userData)
-  // Assuming the backend returns { user, token } or similar
+  const { data } = await api.post(REGISTER_URL, userData)
   if (data.token) {
     localStorage.setItem("token", data.token)
   }
@@ -11,7 +10,7 @@ export const register = async (userData) => {
 }
 
 export const login = async (userData) => {
-  const { data } = await axios.post(LOGIN_URL, userData)
+  const { data } = await api.post(LOGIN_URL, userData)
   if (data.token) {
     localStorage.setItem("token", data.token)
   }

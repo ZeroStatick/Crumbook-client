@@ -8,6 +8,7 @@ const ProfilePage = () => {
     <div className="min-h-screen bg-gray-50 px-4 py-10 sm:px-6 lg:px-8">
       <div className="mx-auto max-w-4xl overflow-hidden rounded-xl bg-white shadow-md">
         {/* Cover Photo */}
+
         <div className="h-48 bg-gradient-to-r from-blue-500 to-indigo-600"></div>
 
         {/* Profile Header */}

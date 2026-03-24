@@ -44,7 +44,22 @@ const Navbar = () => {
       <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
         {user ? (
           <>
-            <span style={{ color: "#ccc" }}>Hello, {user.name || "Chef"}</span>
+            <span style={{ color: "#ccc" }}>
+              Hello, {user.username || user.name || "Chef"}
+            </span>
+            <Link
+              to="/profile"
+              style={{
+                color: "#fff",
+                textDecoration: "none",
+                fontWeight: "bold",
+                padding: "6px 12px",
+                borderRadius: "4px",
+                backgroundColor: "#555",
+              }}
+            >
+              Profile
+            </Link>
             <button
               onClick={handleLogout}
               style={{
