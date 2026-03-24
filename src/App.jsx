@@ -8,6 +8,7 @@ import Register from "./components/Register.jsx"
 import Login from "./components/Login.jsx"
 import RecipePage from "./components/pages/RecipePage.jsx"
 import CreateRecipePage from "./components/pages/CreateRecipePage.jsx"
+import EditRecipePage from "./components/pages/EditRecipePage.jsx"
 import RecipeDetailPage from "./components/pages/RecipeDetailPage.jsx"
 import Navbar from "./components/Navbar.jsx"
 import ProtectedRoute from "./components/ProtectedRoute.jsx"
@@ -42,7 +43,6 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/me" element={<Login />} />
           <Route path="/recipes" element={<RecipePage />} />
 
           {/* Protected Route for creating recipes */}
@@ -51,6 +51,16 @@ function App() {
             element={
               <ProtectedRoute>
                 <CreateRecipePage />
+              </ProtectedRoute>
+            }
+          />
+
+          {/* Protected Route for editing recipes */}
+          <Route
+            path="/recipes/edit/:id"
+            element={
+              <ProtectedRoute>
+                <EditRecipePage />
               </ProtectedRoute>
             }
           />

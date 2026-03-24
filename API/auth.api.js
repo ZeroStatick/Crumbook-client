@@ -1,20 +1,23 @@
-const { API_call } = require("./api.api.js");
+import axios from "axios"
+import { REGISTER_URL, LOGIN_URL } from "../constant/endpoints"
 
-const register = async (userData) => {
-  const result = await API_call("/api/auth/register", "POST", userData);
-  // Note: Your backend register controller currently doesn't return a token, just the user data.
-  localStorage.setItem("user_data", JSON.stringify(result));
-  return result;
-};
+export const register = async (userData) => {
+  const { data } = await axios.post(REGISTER_URL, userData)
+  // Assuming the backend returns { user, token } or similar
+  if (data.token) {
+    localStorage.setItem("token", data.token)
+  }
+  return data
+}
 
-const login = async (userData) => {
-  const result = await API_call("/api/auth/login", "POST", userData);
-  localStorage.setItem("user_data", JSON.stringify(result));
-  return result;
-};
+export const login = async (userData) => {
+  const { data } = await axios.post(LOGIN_URL, userData)
+  if (data.token) {
+    localStorage.setItem("token", data.token)
+  }
+  return data
+}
 
-const logout = () => {
-  localStorage.removeItem("user_data");
-};
-
-module.exports = { register, login, logout };
+export const logout = () => {
+  localStorage.removeItem("token")
+}

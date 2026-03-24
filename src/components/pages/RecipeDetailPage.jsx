@@ -13,7 +13,7 @@ const RecipeDetailPage = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}${RECIPE_URL}/${id}`)
+        const response = await axios.get(`${RECIPE_URL}/${id}`)
         setRecipe(response.data)
       } catch (err) {
         const errorMessage = err.response?.data?.message || err.message
@@ -62,6 +62,23 @@ const RecipeDetailPage = () => {
           backgroundColor: "#f9f9f9",
         }}
       >
+        {recipe.image && (
+          <img
+            src={
+              recipe.image.startsWith("http")
+                ? recipe.image
+                : `${BASE_URL}${recipe.image}`
+            }
+            alt={recipe.title}
+            style={{
+              width: "100%",
+              maxHeight: "400px",
+              objectFit: "cover",
+              borderRadius: "8px",
+              marginBottom: "20px",
+            }}
+          />
+        )}
         <h1 style={{ marginTop: "0", marginBottom: "20px" }}>
           {recipe.title || "Untitled Recipe"}
         </h1>
