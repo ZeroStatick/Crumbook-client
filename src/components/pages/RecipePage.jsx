@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
-import axios from "axios"
-import { BASE_URL, RECIPE_URL } from "../../../constant/endpoints"
+import { get_all_recipes } from "../../../API/recipe.api"
 import toast from "react-hot-toast"
 
 const RecipePage = () => {
@@ -17,12 +16,17 @@ const RecipePage = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}${RECIPE_URL}`)
-        setRecipes(response.data)
+        const data = await get_all_recipes()
+        
+        if (Array.isArray(data)) {
+          setRecipes(data)
+        } else {
+          console.error("Expected an array but got:", data)
+          setRecipes([])
+        }
       } catch (err) {
-        const errorMessage = err.response?.data?.message || err.message
-        setError(errorMessage)
-        toast.error(errorMessage)
+        setError(err.message)
+        toast.error(err.message)
       } finally {
         setLoading(false)
       }
@@ -31,10 +35,12 @@ const RecipePage = () => {
     fetchRecipes()
   }, [])
 
-  // Handle filtering
-  const filteredRecipes = recipes.filter((recipe) =>
-    (recipe.title || "").toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  // Handle filtering safely - check if recipes is an array and each recipe is an object
+  const filteredRecipes = Array.isArray(recipes) 
+    ? recipes.filter((recipe) =>
+        recipe && (recipe.title || "").toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    : []
 
   // Handle pagination
   const indexOfLastRecipe = currentPage * recipesPerPage
@@ -52,140 +58,89 @@ const RecipePage = () => {
 
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value)
-    setCurrentPage(1) // Reset to first page whenever the user types a new search
+    setCurrentPage(1)
   }
 
-  if (loading) return <div style={{ padding: "20px" }}>Loading recipes...</div>
+  if (loading) return <div className="p-8 text-center">Loading recipes...</div>
+  
   if (error)
     return (
-      <div style={{ padding: "20px", color: "red" }}>
+      <div className="p-8 text-center text-red-600">
         Error loading recipes: {error}
       </div>
     )
 
   return (
-    <div
-      className="recipe-page"
-      style={{ padding: "20px", maxWidth: "1200px", margin: "0 auto" }}
-    >
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          marginBottom: "20px",
-        }}
-      >
-        <h1>All Recipes</h1>
-
-        {/* Link to Create New Recipe Page */}
+    <div className="max-w-6xl mx-auto p-4">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">All Recipes</h1>
         <Link
           to="/recipes/new"
-          style={{
-            padding: "10px 15px",
-            backgroundColor: "#007bff",
-            color: "#fff",
-            textDecoration: "none",
-            borderRadius: "5px",
-            fontWeight: "bold",
-          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
         >
           + Create New Recipe
         </Link>
       </div>
 
-      {/* Filter Section */}
-      <div style={{ marginBottom: "20px" }}>
+      <div className="mb-6">
         <input
           type="text"
           placeholder="Search recipes by title..."
           value={searchTerm}
           onChange={handleSearchChange}
-          style={{
-            padding: "10px",
-            width: "100%",
-            maxWidth: "400px",
-            borderRadius: "4px",
-            border: "1px solid #ccc",
-          }}
+          className="w-full max-w-md p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
         />
       </div>
 
-      {/* Recipe Grid */}
       {filteredRecipes.length === 0 ? (
-        <p>No recipes found matching your search.</p>
+        <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
+          <p className="text-gray-500">No recipes found matching your search.</p>
+        </div>
       ) : (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-            gap: "20px",
-          }}
-        >
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {currentRecipes.map((recipe) => (
             <div
               key={recipe._id || recipe.id}
-              style={{
-                border: "1px solid #ddd",
-                padding: "15px",
-                borderRadius: "8px",
-                display: "flex",
-                flexDirection: "column",
-              }}
+              className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col"
             >
-              <h3 style={{ marginTop: "0" }}>
-                {recipe.title || "Untitled Recipe"}
-              </h3>
-              <p style={{ flexGrow: 1 }}>
-                {recipe.description || "No description provided."}
-              </p>
-              <Link
-                to={`/recipes/${recipe._id || recipe.id}`}
-                style={{
-                  color: "#007bff",
-                  textDecoration: "none",
-                  marginTop: "10px",
-                  display: "inline-block",
-                }}
-              >
-                View Details &rarr;
-              </Link>
+              <div className="p-5 flex-grow">
+                <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
+                  {recipe.title || "Untitled Recipe"}
+                </h3>
+                <p className="text-gray-600 text-sm line-clamp-3">
+                  {recipe.description || "No description provided."}
+                </p>
+              </div>
+              <div className="px-5 py-4 bg-gray-50 border-t border-gray-100">
+                <Link
+                  to={`/recipes/${recipe._id || recipe.id}`}
+                  className="text-blue-600 font-semibold text-sm hover:underline flex items-center"
+                >
+                  View Details 
+                  <span className="ml-1">→</span>
+                </Link>
+              </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* Pagination Controls */}
       {totalPages > 1 && (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            marginTop: "30px",
-            gap: "15px",
-          }}
-        >
+        <div className="flex justify-center items-center mt-10 gap-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            style={{
-              padding: "8px 12px",
-              cursor: currentPage === 1 ? "not-allowed" : "pointer",
-            }}
+            className="px-4 py-2 border rounded bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
           >
             Previous
           </button>
-          <span>
+          <span className="text-gray-600 font-medium">
             Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            style={{
-              padding: "8px 12px",
-              cursor: currentPage === totalPages ? "not-allowed" : "pointer",
-            }}
+            className="px-4 py-2 border rounded bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
           >
             Next
           </button>
