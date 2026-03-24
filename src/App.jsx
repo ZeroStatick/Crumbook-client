@@ -1,7 +1,7 @@
 import { useEffect } from "react"
 import { GET_ME_URL } from "../constant/endpoints"
 import useUserStore from "./global/user"
-import axios from "axios"
+import api from "../API/api.api"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Home from "./components/Home.jsx"
 import Register from "./components/Register.jsx"
@@ -24,7 +24,7 @@ function App() {
     const token = localStorage.getItem("token")
     if (!token) return
     try {
-      const { data } = await axios.get(GET_ME_URL)
+      const { data } = await api.get(GET_ME_URL)
       setUser(data.user)
     } catch (error) {
       console.error(error)

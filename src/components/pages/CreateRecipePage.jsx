@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import { useNavigate, Link } from "react-router-dom"
-import axios from "axios"
+import api from "../../../API/api.api"
 import { BASE_URL, RECIPE_URL } from "../../../constant/endpoints"
 import toast from "react-hot-toast"
 
@@ -44,7 +44,7 @@ const CreateRecipePage = () => {
     }
 
     try {
-      await axios.post(RECIPE_URL, data, {
+      await api.post(RECIPE_URL, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
