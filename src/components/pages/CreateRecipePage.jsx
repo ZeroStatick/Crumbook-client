@@ -10,6 +10,8 @@ const CreateRecipePage = () => {
     title: "",
     description: "",
   })
+  const [image, setImage] = useState(null)
+  const [imagePreview, setImagePreview] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -21,13 +23,32 @@ const CreateRecipePage = () => {
     }))
   }
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setImage(file)
+      setImagePreview(URL.createObjectURL(file))
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError(null)
 
+    const data = new FormData()
+    data.append("title", formData.title)
+    data.append("description", formData.description)
+    if (image) {
+      data.append("image", image)
+    }
+
     try {
-      await axios.post(RECIPE_URL, formData)
+      await axios.post(RECIPE_URL, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
 
       toast.success("Recipe created successfully!")
       // Redirect back to the recipe list upon success
@@ -125,6 +146,45 @@ const CreateRecipePage = () => {
             }}
             placeholder="A brief description of the recipe..."
           />
+        </div>
+
+        <div>
+          <label
+            htmlFor="image"
+            style={{
+              display: "block",
+              marginBottom: "5px",
+              fontWeight: "bold",
+            }}
+          >
+            Recipe Image
+          </label>
+          <input
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={handleImageChange}
+            style={{
+              width: "100%",
+              padding: "10px",
+              borderRadius: "4px",
+              border: "1px solid #ccc",
+            }}
+          />
+          {imagePreview && (
+            <div style={{ marginTop: "10px" }}>
+              <img
+                src={imagePreview}
+                alt="Preview"
+                style={{
+                  width: "100%",
+                  maxHeight: "300px",
+                  objectFit: "cover",
+                  borderRadius: "8px",
+                }}
+              />
+            </div>
+          )}
         </div>
 
         <button
