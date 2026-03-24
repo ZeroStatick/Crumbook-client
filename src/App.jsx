@@ -25,7 +25,10 @@ function App() {
     if (!token) return
     try {
       const { data } = await api.get(GET_ME_URL)
-      setUser(data.user)
+      // The backend returns { success: true, result: foundUser }
+      if (data.success) {
+        setUser(data.result)
+      }
     } catch (error) {
       console.error(error)
     }
