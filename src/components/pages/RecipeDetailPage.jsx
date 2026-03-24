@@ -13,7 +13,7 @@ const RecipeDetailPage = () => {
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
-        const response = await axios.get(`${BASE_URL}${RECIPE_URL}/${id}`)
+        const response = await axios.get(`${RECIPE_URL}/${id}`)
         setRecipe(response.data)
       } catch (err) {
         const errorMessage = err.response?.data?.message || err.message

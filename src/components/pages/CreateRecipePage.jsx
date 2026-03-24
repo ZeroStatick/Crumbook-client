@@ -27,7 +27,7 @@ const CreateRecipePage = () => {
     setError(null)
 
     try {
-      await axios.post(`${BASE_URL}${RECIPE_URL}`, formData, {
+      await axios.post(RECIPE_URL, formData, {
         headers: {
           "Content-Type": "application/json",
           // Note: If your endpoint requires a token, you'd add the Authorization header here
