@@ -15,6 +15,8 @@ import Login from "./components/Login.jsx"
 import RecipePage from "./components/pages/RecipePage.jsx"
 import CreateRecipePage from "./components/pages/CreateRecipePage.jsx"
 import RecipeDetailPage from "./components/pages/RecipeDetailPage.jsx"
+import DropYourIngredients from "./components/pages/DropYourIngredients.jsx"
+import UserProfilePage from "./components/pages/UserProfilePage.jsx"
 
 import { Toaster } from "react-hot-toast"
 
@@ -51,6 +53,7 @@ function App() {
             {/* Main Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/recipes" element={<RecipePage />} />
+            <Route path="/drop-ingredients" element={<DropYourIngredients />} />
             
             {/* Protected Routes - Catch "new" specifically first */}
             <Route
@@ -63,6 +66,14 @@ function App() {
             />
 
             <Route path="/recipes/:id" element={<RecipeDetailPage />} />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute>
+                  <UserProfilePage />
+                </ProtectedRoute>
+              }
+            />
             
             {/* Auth Routes */}
             <Route path="/register" element={<Register />} />

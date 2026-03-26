@@ -17,7 +17,7 @@ const RecipePage = () => {
     const fetchRecipes = async () => {
       try {
         const data = await get_all_recipes()
-        
+
         if (Array.isArray(data)) {
           setRecipes(data)
         } else {
@@ -36,9 +36,11 @@ const RecipePage = () => {
   }, [])
 
   // Handle filtering safely - check if recipes is an array and each recipe is an object
-  const filteredRecipes = Array.isArray(recipes) 
-    ? recipes.filter((recipe) =>
-        recipe && (recipe.title || "").toLowerCase().includes(searchTerm.toLowerCase())
+  const filteredRecipes = Array.isArray(recipes)
+    ? recipes.filter(
+        (recipe) =>
+          recipe &&
+          (recipe.title || "").toLowerCase().includes(searchTerm.toLowerCase()),
       )
     : []
 
@@ -62,7 +64,7 @@ const RecipePage = () => {
   }
 
   if (loading) return <div className="p-8 text-center">Loading recipes...</div>
-  
+
   if (error)
     return (
       <div className="p-8 text-center text-red-600">
@@ -71,12 +73,12 @@ const RecipePage = () => {
     )
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
-      <div className="flex justify-between items-center mb-6">
+    <div className="mx-auto max-w-6xl p-4">
+      <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-800">All Recipes</h1>
         <Link
           to="/recipes/new"
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+          className="rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-blue-700"
         >
           + Create New Recipe
         </Link>
@@ -88,35 +90,37 @@ const RecipePage = () => {
           placeholder="Search recipes by title..."
           value={searchTerm}
           onChange={handleSearchChange}
-          className="w-full max-w-md p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
+          className="w-full max-w-md rounded-lg border border-gray-300 p-2 outline-none focus:ring-2 focus:ring-blue-500"
         />
       </div>
 
       {filteredRecipes.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-          <p className="text-gray-500">No recipes found matching your search.</p>
+        <div className="rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 py-12 text-center">
+          <p className="text-gray-500">
+            No recipes found matching your search.
+          </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {currentRecipes.map((recipe) => (
             <div
               key={recipe._id || recipe.id}
-              className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col"
+              className="flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-shadow hover:shadow-md"
             >
-              <div className="p-5 flex-grow">
-                <h3 className="text-xl font-bold text-gray-900 mb-2 truncate">
+              <div className="flex-grow p-5">
+                <h3 className="mb-2 truncate text-xl font-bold text-gray-900">
                   {recipe.title || "Untitled Recipe"}
                 </h3>
-                <p className="text-gray-600 text-sm line-clamp-3">
+                <p className="line-clamp-3 text-sm text-gray-600">
                   {recipe.description || "No description provided."}
                 </p>
               </div>
-              <div className="px-5 py-4 bg-gray-50 border-t border-gray-100">
+              <div className="border-t border-gray-100 bg-gray-50 px-5 py-4">
                 <Link
                   to={`/recipes/${recipe._id || recipe.id}`}
-                  className="text-blue-600 font-semibold text-sm hover:underline flex items-center"
+                  className="flex items-center text-sm font-semibold text-blue-600 hover:underline"
                 >
-                  View Details 
+                  View Details
                   <span className="ml-1">→</span>
                 </Link>
               </div>
@@ -126,21 +130,21 @@ const RecipePage = () => {
       )}
 
       {totalPages > 1 && (
-        <div className="flex justify-center items-center mt-10 gap-4">
+        <div className="mt-10 flex items-center justify-center gap-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="px-4 py-2 border rounded bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+            className="rounded border bg-white px-4 py-2 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Previous
           </button>
-          <span className="text-gray-600 font-medium">
+          <span className="font-medium text-gray-600">
             Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="px-4 py-2 border rounded bg-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+            className="rounded border bg-white px-4 py-2 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Next
           </button>

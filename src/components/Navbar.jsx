@@ -40,12 +40,43 @@ const Navbar = () => {
         <Link to="/recipes" style={{ color: "#ddd", textDecoration: "none" }}>
           Recipes
         </Link>
+        <Link to="/drop-ingredients" style={{ color: "#ddd", textDecoration: "none" }}>
+          Drop Ingredients
+        </Link>
       </div>
 
       <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
         {user ? (
           <>
-            <span style={{ color: "#ccc" }}>Hello, {user.name || "Chef"}</span>
+            <Link 
+              to="/profile" 
+              style={{ 
+                color: "#ddd", 
+                textDecoration: "none",
+                display: "flex",
+                alignItems: "center",
+                gap: "8px"
+              }}
+            >
+              <div style={{
+                width: "28px",
+                height: "28px",
+                borderRadius: "50%",
+                backgroundColor: "#555",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "0.8rem",
+                overflow: "hidden"
+              }}>
+                <img 
+                  src={user.profile_picture || "https://ui-avatars.com/api/?name=" + user.name} 
+                  alt="" 
+                  style={{ width: "100%", height: "100%", objectCover: "cover" }}
+                />
+              </div>
+              <span style={{ color: "#ccc" }}>{user.name || "Chef"}</span>
+            </Link>
             <button
               onClick={handleLogout}
               style={{
