@@ -6,7 +6,9 @@ import { logout } from "../API/auth.api"
 
 // Components
 import Navbar from "./components/Navbar.jsx"
+import Footer from "./components/Footer.jsx"
 import ProtectedRoute from "./components/ProtectedRoute.jsx"
+import AdminRoute from "./components/AdminRoute.jsx"
 
 // Pages
 import Home from "./components/pages/Home.jsx"
@@ -15,6 +17,7 @@ import Login from "./components/Login.jsx"
 import RecipePage from "./components/pages/RecipePage.jsx"
 import CreateRecipePage from "./components/pages/CreateRecipePage.jsx"
 import RecipeDetailPage from "./components/pages/RecipeDetailPage.jsx"
+import AdminDashboard from "./components/pages/AdminDashboard.jsx"
 
 import { Toaster } from "react-hot-toast"
 
@@ -64,6 +67,16 @@ function App() {
 
             <Route path="/recipes/:id" element={<RecipeDetailPage />} />
             
+            {/* Admin Routes */}
+            <Route
+              path="/admin"
+              element={
+                <AdminRoute>
+                  <AdminDashboard />
+                </AdminRoute>
+              }
+            />
+
             {/* Auth Routes */}
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
@@ -80,6 +93,7 @@ function App() {
             />
           </Routes>
         </main>
+        <Footer />
       </BrowserRouter>
     </>
   )
