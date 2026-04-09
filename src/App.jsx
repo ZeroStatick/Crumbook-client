@@ -64,6 +64,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/recipes/edit/:id"
+              element={
+                <ProtectedRoute>
+                  <CreateRecipePage />
+                </ProtectedRoute>
+              }
+            />
 
             <Route path="/recipes/:id" element={<RecipeDetailPage />} />
             <Route

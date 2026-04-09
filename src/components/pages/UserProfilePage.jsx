@@ -119,12 +119,26 @@ const UserProfilePage = () => {
                   <span className="text-xs font-medium text-gray-500">
                     {recipe.prepTime + recipe.cookTime} mins • {recipe.difficulty}
                   </span>
-                  <Link
-                    to={`/recipes/${recipe._id}`}
-                    className="text-sm font-bold text-blue-600 hover:underline"
-                  >
-                    Manage
-                  </Link>
+                  <div className="flex gap-3">
+                    <Link
+                      to={`/recipes/edit/${recipe._id}`}
+                      className="text-sm font-bold text-blue-600 hover:text-blue-800"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => handleDelete(recipe._id)}
+                      className="text-sm font-bold text-red-600 hover:text-red-800"
+                    >
+                      Delete
+                    </button>
+                    <Link
+                      to={`/recipes/${recipe._id}`}
+                      className="text-sm font-bold text-gray-600 hover:text-gray-800"
+                    >
+                      View
+                    </Link>
+                  </div>
                 </div>
               </div>
             ))}

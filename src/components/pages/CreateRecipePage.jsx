@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react"
-import { useNavigate, Link } from "react-router-dom"
-import { create_recipe } from "../../../API/recipe.api"
+import { useNavigate, Link, useParams } from "react-router-dom"
+import { create_recipe, get_recipe_by_id, update_recipe } from "../../../API/recipe.api"
 import { get_all_ingredients } from "../../../API/ingredient.api"
 import toast from "react-hot-toast"
 
@@ -25,8 +25,11 @@ const UNITS = [
 const DIFFICULTIES = ["Easy", "Medium", "Hard"]
 
 const CreateRecipePage = () => {
+  const { id } = useParams()
+  const isEditMode = Boolean(id)
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
+  const [fetching, setFetching] = useState(isEditMode)
   const [ingredientsList, setIngredientsList] = useState([])
 
   const [formData, setFormData] = useState({
@@ -49,16 +52,47 @@ const CreateRecipePage = () => {
   const [instructions, setInstructions] = useState([""])
 
   useEffect(() => {
-    const fetchIngredients = async () => {
+    const fetchData = async () => {
       try {
-        const data = await get_all_ingredients()
-        setIngredientsList(data)
+        const ingredientsData = await get_all_ingredients()
+        setIngredientsList(ingredientsData)
+
+        if (isEditMode) {
+          const recipe = await get_recipe_by_id(id)
+          setFormData({
+            title: recipe.title || "",
+            description: recipe.description || "",
+            prepTime: recipe.prepTime || "",
+            cookTime: recipe.cookTime || "",
+            servings: recipe.servings || "",
+            difficulty: recipe.difficulty || "Medium",
+            source: recipe.source || "Original",
+            public: recipe.public !== undefined ? recipe.public : true,
+            image: recipe.image || "",
+            tags: recipe.tags ? recipe.tags.join(", ") : "",
+          })
+
+          if (recipe.ingredients && recipe.ingredients.length > 0) {
+            setRecipeIngredients(recipe.ingredients.map(ing => ({
+              item: ing.item?._id || ing.item,
+              quantity: ing.quantity,
+              unit: ing.unit
+            })))
+          }
+
+          if (recipe.instructions && recipe.instructions.length > 0) {
+            setInstructions(recipe.instructions)
+          }
+        }
       } catch (error) {
-        toast.error("Failed to load ingredients")
+        toast.error(isEditMode ? "Failed to load recipe" : "Failed to load ingredients")
+        if (isEditMode) navigate("/profile")
+      } finally {
+        setFetching(false)
       }
     }
-    fetchIngredients()
-  }, [])
+    fetchData()
+  }, [id, isEditMode, navigate])
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -134,9 +168,15 @@ const CreateRecipePage = () => {
         servings: Number(formData.servings),
       }
 
-      await create_recipe(submissionData)
-      toast.success("Recipe created successfully!")
-      navigate("/recipes")
+      if (isEditMode) {
+        await update_recipe(id, submissionData)
+        toast.success("Recipe updated successfully!")
+      } else {
+        await create_recipe(submissionData)
+        toast.success("Recipe created successfully!")
+      }
+      
+      navigate(isEditMode ? `/recipes/${id}` : "/recipes")
     } catch (err) {
       toast.error(err.message)
     } finally {
@@ -144,15 +184,17 @@ const CreateRecipePage = () => {
     }
   }
 
+  if (fetching) return <div className="p-12 text-center text-gray-500">Loading recipe data...</div>
+
   return (
     <div className="mx-auto mt-8 max-w-2xl rounded-lg border border-gray-100 bg-white p-6 shadow">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">New Recipe</h1>
+        <h1 className="text-2xl font-bold text-gray-800">{isEditMode ? "Edit Recipe" : "New Recipe"}</h1>
         <Link
-          to="/recipes"
+          to={isEditMode ? `/recipes/${id}` : "/recipes"}
           className="text-sm font-medium text-blue-600 hover:underline"
         >
-          &larr; Back
+          &larr; Cancel
         </Link>
       </div>
 
@@ -265,6 +307,20 @@ const CreateRecipePage = () => {
                 </span>
               </label>
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700">
+              Tags (comma separated)
+            </label>
+            <input
+              type="text"
+              name="tags"
+              value={formData.tags}
+              onChange={handleInputChange}
+              className="mt-1 w-full rounded border border-gray-300 p-2 outline-none focus:ring-1 focus:ring-blue-500"
+              placeholder="e.g., Italian, Dinner, Quick"
+            />
           </div>
         </div>
 
@@ -380,7 +436,7 @@ const CreateRecipePage = () => {
           disabled={loading}
           className="w-full rounded bg-blue-600 py-3 font-bold text-white transition-colors hover:bg-blue-700 disabled:bg-gray-400"
         >
-          {loading ? "Saving..." : "Create Recipe"}
+          {loading ? "Saving..." : isEditMode ? "Update Recipe" : "Create Recipe"}
         </button>
       </form>
     </div>
