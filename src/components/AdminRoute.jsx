@@ -7,7 +7,7 @@ const AdminRoute = ({ children }) => {
   const token = localStorage.getItem("token")
 
   // TEMPORARY BYPASS: Allow access to admin pages for development/testing
-  return children ? children : <Outlet />
+  // return children ? children : <Outlet />
 
   // If there's no user and no token, redirect to login
   if (!user && !token) {
@@ -18,7 +18,9 @@ const AdminRoute = ({ children }) => {
   if (!user && token) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="text-xl font-semibold text-gray-600">Authenticating...</div>
+        <div className="text-xl font-semibold text-gray-600">
+          Authenticating...
+        </div>
       </div>
     )
   }
