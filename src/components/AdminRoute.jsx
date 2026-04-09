@@ -25,9 +25,8 @@ const AdminRoute = ({ children }) => {
     )
   }
 
-  // Check if user is admin. Adjust this condition based on your backend user model
-  // Common patterns are user.isAdmin === true or user.role === "admin"
-  if (user && user.role !== "admin" && !user.isAdmin) {
+  // Check if user is admin. Backend uses: 1 (User), 2 (Admin), 3 (Owner)
+  if (user && user.role < 2) {
     return (
       <div className="flex h-screen flex-col items-center justify-center p-4 text-center">
         <h1 className="text-4xl font-bold text-red-600">Access Denied</h1>
