@@ -77,6 +77,22 @@ const Navbar = () => {
               </div>
               <span style={{ color: "#ccc" }}>{user.name || "Chef"}</span>
             </Link>
+            <span style={{ color: "#ccc" }}>Hello, {user.name || "Chef"}</span>
+            {(user.role === "admin" || user.isAdmin) && (
+              <Link
+                to="/admin"
+                style={{
+                  color: "#ffd700",
+                  textDecoration: "none",
+                  fontWeight: "bold",
+                  border: "1px solid #ffd700",
+                  padding: "4px 8px",
+                  borderRadius: "4px",
+                }}
+              >
+                Admin
+              </Link>
+            )}
             <button
               onClick={handleLogout}
               style={{
