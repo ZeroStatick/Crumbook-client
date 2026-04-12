@@ -48,17 +48,22 @@ const RecipePage = () => {
   const currentPage = parseInt(searchParams.get("page") || "1", 10)
   const sortBy = searchParams.get("sort") || "newest"
   const onlyFavorites = searchParams.get("favorites") === "true"
+  const maxTime = searchParams.get("maxTime") || ""
+  const difficulty = searchParams.get("difficulty") || ""
+  const servings = searchParams.get("servings") || ""
+  const selectedTag = searchParams.get("tag") || ""
+  
   const recipesPerPage = 20
 
   // Local state for debounced search
   const [searchInput, setSearchInput] = useState(searchTerm)
 
-  // Sync local input with URL if it changes externally (e.g. Clear Filters)
+  // Sync local input with URL if it changes externally
   useEffect(() => {
     setSearchInput(searchTerm)
   }, [searchTerm])
 
-  // Debounce effect
+  // Debounce search effect
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchInput !== searchTerm) {
@@ -75,7 +80,7 @@ const RecipePage = () => {
           { replace: true },
         )
       }
-    }, 400) // 400ms debounce
+    }, 400)
 
     return () => clearTimeout(timer)
   }, [searchInput, setSearchParams, searchTerm])
@@ -84,80 +89,84 @@ const RecipePage = () => {
     const fetchRecipes = async () => {
       try {
         const data = await get_all_recipes()
-        console.log("API response data:", data)
-
         if (Array.isArray(data)) {
           setRecipes(data)
         } else {
-          const errorMessage = `Expected an array but got: ${typeof data}`
-          console.error(errorMessage, data)
-          setError(errorMessage)
           setRecipes([])
         }
       } catch (err) {
-        console.error("Fetch error:", err)
         setError(err.message || "Failed to fetch recipes")
         toast.error(err.message || "Failed to fetch recipes")
       } finally {
         setLoading(false)
       }
     }
-
     fetchRecipes()
   }, [])
 
-  // Handle filtering safely
+  // Extract unique tags from all recipes
+  const allTags = Array.from(
+    new Set(
+      recipes.flatMap((r) => r.tags || [])
+        .filter(Boolean)
+        .map(t => t.trim())
+    )
+  ).sort()
+
+  // Handle filtering logic
   const filteredRecipes = Array.isArray(recipes) 
     ? recipes.filter((recipe) => {
         if (!recipe) return false
-        const title = (recipe.title || recipe.name || "").toString().toLowerCase()
-        const matchesSearch = title.includes(searchTerm.toLowerCase())
+        
+        const matchesSearch = (recipe.title || "").toLowerCase().includes(searchTerm.toLowerCase())
         const matchesFavorites = onlyFavorites ? favorites.includes(recipe._id || recipe.id) : true
-        return matchesSearch && matchesFavorites
+        const matchesDifficulty = difficulty ? recipe.difficulty === difficulty : true
+        
+        const totalTime = (recipe.prepTime || 0) + (recipe.cookTime || 0)
+        const matchesMaxTime = maxTime ? totalTime <= parseInt(maxTime, 10) : true
+        
+        const matchesTag = selectedTag ? (recipe.tags || []).includes(selectedTag) : true
+        
+        let matchesServings = true
+        if (servings === "1-2") matchesServings = recipe.servings <= 2
+        else if (servings === "3-4") matchesServings = recipe.servings >= 3 && recipe.servings <= 4
+        else if (servings === "5+") matchesServings = recipe.servings >= 5
+
+        return matchesSearch && matchesFavorites && matchesDifficulty && matchesMaxTime && matchesTag && matchesServings
       })
     : []
 
-  // Handle sorting safely
+  // Handle sorting logic
   const getSortedRecipes = () => {
-    try {
-      return [...filteredRecipes].sort((a, b) => {
-        if (!a || !b) return 0
-        switch (sortBy) {
-          case "title-asc":
-            return (a.title || a.name || "").toString().localeCompare((b.title || b.name || "").toString())
-          case "title-desc":
-            return (b.title || b.name || "").toString().localeCompare((a.title || a.name || "").toString())
-          case "oldest":
-            return (
-              new Date(a.createdAt || a._id || 0).getTime() -
-              new Date(b.createdAt || b._id || 0).getTime()
-            )
-          case "newest":
-          default:
-            return (
-              new Date(b.createdAt || b._id || 0).getTime() -
-              new Date(a.createdAt || a._id || 0).getTime()
-            )
-        }
-      })
-    } catch (err) {
-      console.error("Sorting error:", err)
-      return filteredRecipes
-    }
+    return [...filteredRecipes].sort((a, b) => {
+      switch (sortBy) {
+        case "title-asc": return a.title.localeCompare(b.title)
+        case "title-desc": return b.title.localeCompare(a.title)
+        case "oldest": return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+        case "newest":
+        default: return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      }
+    })
   }
 
   const sortedRecipes = getSortedRecipes()
 
-  // Handle pagination
+  // Pagination
   const indexOfLastRecipe = currentPage * recipesPerPage
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage
-  const currentRecipes = sortedRecipes.slice(
-    indexOfFirstRecipe,
-    indexOfLastRecipe,
-  )
+  const currentRecipes = sortedRecipes.slice(indexOfFirstRecipe, indexOfLastRecipe)
   const totalPages = Math.ceil(sortedRecipes.length / recipesPerPage)
 
-  // Handlers
+  // Handlers for URL params
+  const updateFilter = (key, value) => {
+    setSearchParams((prev) => {
+      if (!value || value === "") prev.delete(key)
+      else prev.set(key, value)
+      prev.set("page", "1")
+      return prev
+    })
+  }
+
   const handlePageChange = (pageNumber) => {
     setSearchParams((prev) => {
       prev.set("page", pageNumber.toString())
@@ -165,38 +174,7 @@ const RecipePage = () => {
     })
   }
 
-  const handleSearchChange = (e) => {
-    setSearchInput(e.target.value)
-  }
-
-  const handleSortChange = (e) => {
-    const value = e.target.value
-    setSearchParams((prev) => {
-      if (value === "newest") {
-        prev.delete("sort")
-      } else {
-        prev.set("sort", value)
-      }
-      prev.set("page", "1")
-      return prev
-    })
-  }
-
-  const toggleFavoritesFilter = () => {
-    setSearchParams((prev) => {
-      if (onlyFavorites) {
-        prev.delete("favorites")
-      } else {
-        prev.set("favorites", "true")
-      }
-      prev.set("page", "1")
-      return prev
-    })
-  }
-
-  const clearFilters = () => {
-    setSearchParams({})
-  }
+  const clearFilters = () => setSearchParams({})
 
   if (loading) {
     return (
@@ -205,138 +183,213 @@ const RecipePage = () => {
           <div className="h-9 bg-gray-200 rounded w-48 animate-pulse"></div>
           <div className="h-10 bg-gray-200 rounded w-40 animate-pulse"></div>
         </div>
-
-        <div className="mb-6 flex flex-col md:flex-row gap-4 items-start md:items-center">
-          <div className="h-10 bg-gray-100 rounded flex-grow max-w-md w-full animate-pulse"></div>
-          <div className="h-10 bg-gray-100 rounded w-32 animate-pulse"></div>
-        </div>
-
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
-            <RecipeCardSkeleton key={i} />
-          ))}
+          {[...Array(6)].map((_, i) => <RecipeCardSkeleton key={i} />)}
         </div>
       </div>
     )
   }
 
-  if (error)
-    return (
-      <div className="p-8 text-center text-red-600">
-        Error loading recipes: {error}
-      </div>
-    )
-
   return (
     <div className="mx-auto max-w-6xl p-4">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-800">All Recipes</h1>
+        <h1 className="text-3xl font-bold text-gray-800">Explore Recipes</h1>
         <Link
           to="/recipes/new"
-          className="rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-blue-700"
+          className="rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-blue-700 shadow-sm"
         >
-          + Create New Recipe
+          + Create New
         </Link>
       </div>
 
-      <div className="mb-6 flex flex-col md:flex-row gap-4 items-start md:items-center">
-        <div className="relative flex-grow max-w-md w-full">
-          <input
-            type="text"
-            placeholder="Search recipes by title..."
-            value={searchInput}
-            onChange={handleSearchChange}
-            className="w-full p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-        </div>
+      <div className="mb-8 space-y-4">
+        {/* Search and Quick Filters */}
+        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+          <div className="relative flex-grow max-w-md w-full">
+            <input
+              type="text"
+              placeholder="Search by title..."
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              className="w-full p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none shadow-sm"
+            />
+          </div>
 
-        <div className="flex flex-wrap items-center gap-3 w-full md:w-auto">
-          <button
-            onClick={toggleFavoritesFilter}
-            className={`px-3 py-2 rounded-lg border text-sm font-medium transition-all flex items-center gap-2 ${
-              onlyFavorites 
-                ? "bg-red-50 border-red-200 text-red-600 shadow-sm" 
-                : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
-            }`}
-          >
-            {onlyFavorites ? "❤️ Favorites" : "🤍 Favorites"}
-          </button>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => updateFilter("favorites", onlyFavorites ? "" : "true")}
+              className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all flex items-center gap-2 ${
+                onlyFavorites 
+                  ? "bg-red-50 border-red-200 text-red-600 shadow-sm" 
+                  : "bg-white border-gray-300 text-gray-700 hover:bg-gray-50"
+              }`}
+            >
+              {onlyFavorites ? "❤️ Favorites" : "🤍 Favorites"}
+            </button>
 
-          <div className="flex items-center gap-2">
-            <label htmlFor="sort" className="text-sm font-medium text-gray-700 whitespace-nowrap">
-              Sort by:
-            </label>
             <select
-              id="sort"
               value={sortBy}
-              onChange={handleSortChange}
-              className="p-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 outline-none bg-white text-sm"
+              onChange={(e) => updateFilter("sort", e.target.value)}
+              className="p-2.5 border border-gray-300 rounded-xl focus:ring-2 focus:ring-blue-500 outline-none bg-white text-sm shadow-sm"
             >
               <option value="newest">Newest First</option>
               <option value="oldest">Oldest First</option>
-              <option value="title-asc">Title (A-Z)</option>
-              <option value="title-desc">Title (Z-A)</option>
+              <option value="title-asc">A-Z</option>
+              <option value="title-desc">Z-A</option>
             </select>
           </div>
         </div>
 
-        {(searchTerm || sortBy !== "newest" || currentPage !== 1 || onlyFavorites) && (
-          <button
-            onClick={clearFilters}
-            className="text-blue-600 hover:text-blue-800 text-sm font-semibold transition-colors"
-          >
-            Clear Filters
-          </button>
+        {/* Detailed Filters */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-gray-50 p-4 rounded-2xl border border-gray-200">
+          <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Difficulty</label>
+            <select
+              value={difficulty}
+              onChange={(e) => updateFilter("difficulty", e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white"
+            >
+              <option value="">All Levels</option>
+              <option value="Easy">Easy</option>
+              <option value="Medium">Medium</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Max Time</label>
+            <select
+              value={maxTime}
+              onChange={(e) => updateFilter("maxTime", e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white"
+            >
+              <option value="">Any Time</option>
+              <option value="15">Under 15 min</option>
+              <option value="30">Under 30 min</option>
+              <option value="60">Under 1 hour</option>
+              <option value="120">Under 2 hours</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Servings</label>
+            <select
+              value={servings}
+              onChange={(e) => updateFilter("servings", e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white"
+            >
+              <option value="">Any Size</option>
+              <option value="1-2">1-2 People</option>
+              <option value="3-4">3-4 People</option>
+              <option value="5+">5+ People</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block text-xs font-bold text-gray-500 uppercase mb-1 ml-1">Tags</label>
+            <select
+              value={selectedTag}
+              onChange={(e) => updateFilter("tag", e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded-lg text-sm bg-white"
+            >
+              <option value="">All Tags</option>
+              {allTags.map(tag => (
+                <option key={tag} value={tag}>{tag}</option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {/* Clear Filters Button */}
+        {(searchTerm || sortBy !== "newest" || onlyFavorites || difficulty || maxTime || servings || selectedTag) && (
+          <div className="flex justify-end">
+            <button
+              onClick={clearFilters}
+              className="text-blue-600 hover:text-blue-800 text-sm font-bold flex items-center gap-1"
+            >
+              <span>✕</span> Clear All Filters
+            </button>
+          </div>
         )}
       </div>
 
       {sortedRecipes.length === 0 ? (
-        <div className="text-center py-12 bg-gray-50 rounded-lg border-2 border-dashed border-gray-200">
-          <p className="text-gray-500 mb-4">No recipes found matching your search.</p>
+        <div className="text-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-200">
+          <div className="text-4xl mb-4">🔍</div>
+          <h3 className="text-lg font-bold text-gray-800 mb-1">No recipes found</h3>
+          <p className="text-gray-500 mb-6">Try adjusting your filters or search terms.</p>
           <button
             onClick={clearFilters}
-            className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors"
+            className="px-6 py-2 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition-all font-medium"
           >
-            Show All Recipes
+            Reset Filters
           </button>
         </div>
       ) : (
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {currentRecipes.map((recipe) => {
             const recipeId = recipe._id || recipe.id
             const isFav = favorites.includes(recipeId)
+            const totalTime = (recipe.prepTime || 0) + (recipe.cookTime || 0)
             
             return (
               <div
                 key={recipeId}
-                className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col relative group"
+                className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col relative group"
               >
                 <button
                   onClick={(e) => toggleFavorite(recipeId, e)}
-                  className={`absolute top-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm transition-transform hover:scale-110 z-10 ${
-                    isFav ? "text-red-500" : "text-gray-400 hover:text-red-400"
+                  className={`absolute top-4 right-4 p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-all hover:scale-110 z-10 ${
+                    isFav ? "text-red-500 scale-105" : "text-gray-300 hover:text-red-400"
                   }`}
-                  title={isFav ? "Remove from favorites" : "Add to favorites"}
                 >
                   {isFav ? "❤️" : "🤍"}
                 </button>
 
-                <div className="p-5 flex-grow">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 truncate pr-8">
-                    {recipe.title || "Untitled Recipe"}
+                <div className="p-6 flex-grow">
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {recipe.difficulty && (
+                      <span className={`text-[10px] uppercase tracking-widest font-black px-2.5 py-1 rounded-lg ${
+                        recipe.difficulty === "Easy" ? "bg-emerald-50 text-emerald-600" :
+                        recipe.difficulty === "Medium" ? "bg-amber-50 text-amber-600" :
+                        "bg-rose-50 text-rose-600"
+                      }`}>
+                        {recipe.difficulty}
+                      </span>
+                    )}
+                    {totalTime > 0 && (
+                      <span className="text-[10px] uppercase tracking-widest font-black px-2.5 py-1 rounded-lg bg-slate-50 text-slate-500">
+                        ⏱️ {totalTime} min
+                      </span>
+                    )}
+                  </div>
+
+                  <h3 className="text-xl font-extrabold text-gray-900 mb-2 leading-tight group-hover:text-blue-600 transition-colors">
+                    {recipe.title}
                   </h3>
-                  <p className="text-gray-600 text-sm line-clamp-3">
-                    {recipe.description || "No description provided."}
+                  
+                  <p className="text-gray-500 text-sm line-clamp-2 mb-4 leading-relaxed">
+                    {recipe.description || "A delicious recipe waiting for you to try it out."}
                   </p>
+
+                  <div className="flex flex-wrap gap-1 mt-auto">
+                    {(recipe.tags || []).slice(0, 3).map(tag => (
+                      <span key={tag} className="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md font-medium">
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <div className="px-5 py-4 bg-gray-50 border-t border-gray-100">
+
+                <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100 mt-auto flex justify-between items-center">
+                  <span className="text-xs font-bold text-gray-400">
+                    Serves {recipe.servings || "?"}
+                  </span>
                   <Link
                     to={`/recipes/${recipeId}`}
-                    className="text-blue-600 font-semibold text-sm hover:underline flex items-center"
+                    className="text-blue-600 font-bold text-sm hover:translate-x-1 transition-transform flex items-center gap-1"
                   >
-                    View Details 
-                    <span className="ml-1">→</span>
+                    View Recipe <span>→</span>
                   </Link>
                 </div>
               </div>
