@@ -1,5 +1,6 @@
 import axios from "axios"
 import { BASE_URL } from "../constant/endpoints"
+import useUserStore from "../src/global/user"
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -31,8 +32,9 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       localStorage.removeItem("token")
       localStorage.removeItem("user_data")
-      // We don't have access to the Zustand store here directly easily,
-      // but clearing storage will make the next app-wide check fail.
+      
+      // Update the Zustand store to reflect the logout in the UI immediately
+      useUserStore.getState().setUser(null)
     }
     // Standardize error handling
     const message = error.response?.data?.message || "An unexpected error occurred"

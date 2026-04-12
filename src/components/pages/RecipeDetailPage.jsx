@@ -103,22 +103,24 @@ const RecipeDetailPage = () => {
             </span>
             <span className="text-gray-800">{recipe.servings || 1} people</span>
           </div>
-          <div className="flex flex-col border-l pl-6">
-            <span className="text-xs tracking-wider text-gray-400 uppercase">
-              Difficulty
-            </span>
-            <span
-              className={`mt-1 w-fit rounded px-2 py-0.5 text-xs text-white ${
-                recipe.difficulty === "Easy"
-                  ? "bg-green-500"
-                  : recipe.difficulty === "Hard"
-                    ? "bg-red-500"
-                    : "bg-orange-500"
-              }`}
-            >
-              {recipe.difficulty || "Medium"}
-            </span>
-          </div>
+          {recipe.difficulty && (
+            <div className="flex flex-col border-l pl-6">
+              <span className="text-xs tracking-wider text-gray-400 uppercase">
+                Difficulty
+              </span>
+              <span
+                className={`mt-1 w-fit rounded px-2 py-0.5 text-xs text-white ${
+                  recipe.difficulty === "Easy"
+                    ? "bg-green-500"
+                    : recipe.difficulty === "Hard"
+                      ? "bg-red-500"
+                      : "bg-orange-500"
+                }`}
+              >
+                {recipe.difficulty}
+              </span>
+            </div>
+          )}
         </div>
       </header>
 
@@ -133,7 +135,7 @@ const RecipeDetailPage = () => {
                 className="flex items-center justify-between border-b border-gray-50 pb-2"
               >
                 <span className="font-medium text-gray-800 capitalize">
-                  {ing.item?.name || "Unknown Ingredient"}
+                  {ing.item?.name || ing.item || "Unknown Ingredient"}
                 </span>
                 <span className="text-sm text-gray-500">
                   {ing.quantity} {ing.unit}

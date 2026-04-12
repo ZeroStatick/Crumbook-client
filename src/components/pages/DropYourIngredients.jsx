@@ -147,14 +147,35 @@ const DropYourIngredients = () => {
                   <Link 
                     to={`/recipes/${recipe._id}`} 
                     key={recipe._id}
-                    className="flex bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow"
+                    className="flex bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow group"
                   >
+                    {recipe.image && (
+                      <div className="w-24 sm:w-32 h-full overflow-hidden">
+                        <img 
+                          src={recipe.image} 
+                          alt={recipe.title} 
+                          className="w-full h-full object-cover transition-transform group-hover:scale-105"
+                        />
+                      </div>
+                    )}
                     <div className="p-4 flex-1">
-                      <h3 className="font-bold text-gray-900 mb-1">{recipe.title}</h3>
+                      <div className="flex justify-between items-start mb-1">
+                        <h3 className="font-bold text-gray-900 line-clamp-1">{recipe.title}</h3>
+                        {recipe.isExternal && (
+                          <span className="text-[10px] bg-orange-100 text-orange-600 px-1.5 py-0.5 rounded font-bold">
+                            External
+                          </span>
+                        )}
+                      </div>
                       <p className="text-xs text-gray-500 line-clamp-2 mb-3">{recipe.description}</p>
-                      <div className="flex gap-3 text-[10px] font-bold text-gray-400">
-                        <span>{recipe.prepTime + recipe.cookTime} MINS</span>
-                        <span>{recipe.difficulty?.toUpperCase()}</span>
+                      <div className="flex items-center justify-between mt-auto">
+                        <div className="flex gap-3 text-[10px] font-bold text-gray-400">
+                          {recipe.prepTime + recipe.cookTime > 0 && (
+                            <span>{recipe.prepTime + recipe.cookTime} MINS</span>
+                          )}
+                          <span className="uppercase">{recipe.difficulty}</span>
+                        </div>
+                        <span className="text-[10px] text-gray-400">Source: <span className="text-blue-500">{recipe.source}</span></span>
                       </div>
                     </div>
                   </Link>
