@@ -61,38 +61,27 @@ const Navbar = () => {
                 gap: "8px",
               }}
             >
-              <div
-                style={{
-                  width: "28px",
-                  height: "28px",
-                  borderRadius: "50%",
-                  backgroundColor: "#555",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "0.8rem",
-                  overflow: "hidden",
-                }}
-              >
-                <img
-                  src={
-                    user.profile_picture ||
-                    "https://ui-avatars.com/api/?name=" + user.name
-                  }
-                  alt=""
-                  style={{
-                    width: "100%",
-                    height: "100%",
-                    objectCover: "cover",
-                  }}
+              <div style={{
+                width: "28px",
+                height: "28px",
+                borderRadius: "50%",
+                backgroundColor: "#555",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: "0.8rem",
+                overflow: "hidden",
+                border: "1px solid #444"
+              }}>
+                <img 
+                  src={user.profile_picture || "https://ui-avatars.com/api/?name=" + user.name} 
+                  alt="" 
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
                 />
               </div>
-
-              <span style={{ color: "#ccc" }}>
-                Hello, {user.name || "Chef"}
-              </span>
+              <span style={{ color: "#ccc", fontWeight: "500" }}>{user.name || "Chef"}</span>
             </Link>
-            {(user.role === "admin" || user.isAdmin) && (
+            {user.role >= 2 && (
               <Link
                 to="/admin"
                 style={{
@@ -100,23 +89,26 @@ const Navbar = () => {
                   textDecoration: "none",
                   fontWeight: "bold",
                   border: "1px solid #ffd700",
-                  padding: "4px 8px",
-                  borderRadius: "4px",
+                  padding: "4px 10px",
+                  borderRadius: "6px",
+                  fontSize: "0.85rem",
+                  transition: "all 0.2s"
                 }}
               >
-                Admin
+                Admin Panel
               </Link>
             )}
             <button
               onClick={handleLogout}
               style={{
-                padding: "6px 12px",
+                padding: "6px 14px",
                 backgroundColor: "#dc3545",
                 color: "#fff",
                 border: "none",
-                borderRadius: "4px",
+                borderRadius: "6px",
                 cursor: "pointer",
                 fontWeight: "bold",
+                fontSize: "0.9rem"
               }}
             >
               Logout

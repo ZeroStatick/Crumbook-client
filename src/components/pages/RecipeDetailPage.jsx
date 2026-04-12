@@ -61,7 +61,7 @@ const RecipeDetailPage = () => {
         {isAuthor && (
           <div className="flex gap-3">
             <button
-              onClick={() => navigate(`/recipes/${id}/edit`)}
+              onClick={() => navigate(`/recipes/edit/${id}`)}
               className="rounded bg-gray-100 px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-200"
             >
               Edit
