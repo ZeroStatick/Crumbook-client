@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import useUserStore from "../../global/user"
-import { get_recipes_by_user_id } from "../../../API/recipe.api"
+import { get_recipes_by_user_id, delete_recipe } from "../../../API/recipe.api"
+import { edit_user } from "../../../API/api.api"
 import toast from "react-hot-toast"
 
 const UserProfilePage = () => {
-  const { user } = useUserStore()
+  const { user, setUser } = useUserStore()
   const [recipes, setRecipes] = useState([])
   const [loading, setLoading] = useState(true)
+  const [isEditing, setIsEditing] = useState(false)
+  const [editData, setEditData] = useState({ name: "", profile_picture: "" })
+
+  useEffect(() => {
+    if (user) {
+      setEditData({
+        name: user.name || "",
+        profile_picture: user.profile_picture || "",
+      })
+    }
+  }, [user])
 
   useEffect(() => {
     const fetchUserRecipes = async () => {
@@ -15,7 +27,7 @@ const UserProfilePage = () => {
 
       try {
         const data = await get_recipes_by_user_id(user._id)
-        setRecipes(data)
+        setRecipes(Array.isArray(data) ? data : [])
       } catch (error) {
         toast.error("Failed to load your recipes")
         console.error(error)
@@ -26,6 +38,32 @@ const UserProfilePage = () => {
 
     fetchUserRecipes()
   }, [user])
+
+  const handleDelete = async (recipeId) => {
+    if (!window.confirm("Are you sure you want to delete this recipe? This action cannot be undone.")) {
+      return
+    }
+
+    try {
+      await delete_recipe(recipeId)
+      toast.success("Recipe deleted successfully")
+      setRecipes((prev) => prev.filter((r) => r._id !== recipeId))
+    } catch (error) {
+      toast.error(error.message || "Failed to delete recipe")
+    }
+  }
+
+  const handleUpdateProfile = async (e) => {
+    e.preventDefault()
+    try {
+      const updatedUser = await edit_user(user._id, editData)
+      setUser(updatedUser)
+      setIsEditing(false)
+      toast.success("Profile updated successfully")
+    } catch (error) {
+      toast.error(error.message || "Failed to update profile")
+    }
+  }
 
   if (!user) {
     return (
@@ -55,8 +93,53 @@ const UserProfilePage = () => {
                 />
               </div>
               <div className="pb-2">
-                <h1 className="text-3xl font-bold text-gray-900">{user.name}</h1>
-                <p className="text-gray-500">{user.email}</p>
+                {isEditing ? (
+                  <form onSubmit={handleUpdateProfile} className="flex flex-col gap-2">
+                    <input
+                      type="text"
+                      className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
+                      value={editData.name}
+                      onChange={(e) => setEditData({ ...editData, name: e.target.value })}
+                      placeholder="Name"
+                      required
+                    />
+                    <input
+                      type="text"
+                      className="rounded border border-gray-300 px-2 py-1 text-sm focus:border-blue-500 focus:outline-none"
+                      value={editData.profile_picture}
+                      onChange={(e) => setEditData({ ...editData, profile_picture: e.target.value })}
+                      placeholder="Profile Picture URL"
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        type="submit"
+                        className="rounded bg-blue-600 px-3 py-1 text-xs font-bold text-white hover:bg-blue-700"
+                      >
+                        Save
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setIsEditing(false)}
+                        className="rounded bg-gray-200 px-3 py-1 text-xs font-bold text-gray-700 hover:bg-gray-300"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                ) : (
+                  <>
+                    <div className="flex items-center gap-3">
+                      <h1 className="text-3xl font-bold text-gray-900">{user.name}</h1>
+                      <button 
+                        onClick={() => setIsEditing(true)}
+                        className="text-sm text-blue-600 hover:underline"
+                      >
+                        Edit
+                      </button>
+                    </div>
+                    <p className="text-gray-500">{user.email}</p>
+                  </>
+                )}
               </div>
             </div>
             <div className="pb-2">
