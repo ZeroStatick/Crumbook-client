@@ -133,7 +133,7 @@ const UserProfilePage = () => {
                       Delete
                     </button>
                     <Link
-                      to={`/recipes/${recipe._id}`}
+                      to={`/recipes/details/${recipe._id}`}
                       className="text-sm font-bold text-gray-600 hover:text-gray-800"
                     >
                       View

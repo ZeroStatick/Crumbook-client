@@ -386,7 +386,7 @@ const RecipePage = () => {
                     Serves {recipe.servings || "?"}
                   </span>
                   <Link
-                    to={`/recipes/${recipeId}`}
+                    to={`/recipes/details/${recipeId}`}
                     className="text-blue-600 font-bold text-sm hover:translate-x-1 transition-transform flex items-center gap-1"
                   >
                     View Recipe <span>→</span>

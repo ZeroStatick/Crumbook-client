@@ -76,7 +76,7 @@ function App() {
               }
             />
 
-            <Route path="/recipes/:id" element={<RecipeDetailPage />} />
+            <Route path="/recipes/details/:id" element={<RecipeDetailPage />} />
             <Route
               path="/profile"
               element={
