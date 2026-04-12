@@ -40,7 +40,10 @@ const Navbar = () => {
         <Link to="/recipes" style={{ color: "#ddd", textDecoration: "none" }}>
           Recipes
         </Link>
-        <Link to="/drop-ingredients" style={{ color: "#ddd", textDecoration: "none" }}>
+        <Link
+          to="/drop-ingredients"
+          style={{ color: "#ddd", textDecoration: "none" }}
+        >
           Drop Ingredients
         </Link>
       </div>
@@ -48,14 +51,14 @@ const Navbar = () => {
       <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
         {user ? (
           <>
-            <Link 
-              to="/profile" 
-              style={{ 
-                color: "#ddd", 
+            <Link
+              to="/profile"
+              style={{
+                color: "#ddd",
                 textDecoration: "none",
                 display: "flex",
                 alignItems: "center",
-                gap: "8px"
+                gap: "8px",
               }}
             >
               <div style={{
