@@ -14,126 +14,81 @@ const Navbar = () => {
   }
 
   return (
-    <nav
-      style={{
-        padding: "15px 20px",
-        backgroundColor: "#333",
-        color: "#fff",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        marginBottom: "20px",
-      }}
-    >
-      <div style={{ display: "flex", gap: "20px", alignItems: "center" }}>
-        <Link
-          to="/"
-          style={{
-            color: "#fff",
-            textDecoration: "none",
-            fontSize: "1.2rem",
-            fontWeight: "bold",
-          }}
-        >
-          Crumbook
-        </Link>
-        <Link to="/recipes" style={{ color: "#ddd", textDecoration: "none" }}>
-          Recipes
-        </Link>
-        <Link
-          to="/drop-ingredients"
-          style={{ color: "#ddd", textDecoration: "none" }}
-        >
-          Drop Ingredients
-        </Link>
-      </div>
+    <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-4 mb-8 shadow-xl">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        <div className="flex items-center gap-8">
+          <Link
+            to="/"
+            className="text-2xl font-black text-blue-400 tracking-tighter hover:scale-105 transition-transform"
+          >
+            Crumbook
+          </Link>
+          <div className="hidden md:flex items-center gap-6">
+            <Link 
+              to="/recipes" 
+              className="text-slate-300 hover:text-blue-400 font-semibold transition-colors"
+            >
+              Recipes
+            </Link>
+            <Link
+              to="/drop-ingredients"
+              className="text-slate-300 hover:text-blue-400 font-semibold transition-colors"
+            >
+              Drop Ingredients
+            </Link>
+          </div>
+        </div>
 
-      <div style={{ display: "flex", gap: "15px", alignItems: "center" }}>
-        {user ? (
-          <>
-            <Link
-              to="/profile"
-              style={{
-                color: "#ddd",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                gap: "8px",
-              }}
-            >
-              <div style={{
-                width: "28px",
-                height: "28px",
-                borderRadius: "50%",
-                backgroundColor: "#555",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: "0.8rem",
-                overflow: "hidden",
-                border: "1px solid #444"
-              }}>
-                <img 
-                  src={user.profile_picture || "https://ui-avatars.com/api/?name=" + user.name} 
-                  alt="" 
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </div>
-              <span style={{ color: "#ccc", fontWeight: "500" }}>{user.name || "Chef"}</span>
-            </Link>
-            {user.role >= 2 && (
+        <div className="flex items-center gap-4">
+          {user ? (
+            <div className="flex items-center gap-4">
               <Link
-                to="/admin"
-                style={{
-                  color: "#ffd700",
-                  textDecoration: "none",
-                  fontWeight: "bold",
-                  border: "1px solid #ffd700",
-                  padding: "4px 10px",
-                  borderRadius: "6px",
-                  fontSize: "0.85rem",
-                  transition: "all 0.2s"
-                }}
+                to="/profile"
+                className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-700"
               >
-                Admin Panel
+                <div className="w-8 h-8 rounded-full bg-blue-900/50 border border-blue-700 overflow-hidden">
+                  <img 
+                    src={user.profile_picture || `https://ui-avatars.com/api/?name=${user.name}&background=0D8ABC&color=fff`} 
+                    alt={user.name} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="hidden sm:inline font-bold text-slate-200">{user.name || "Chef"}</span>
               </Link>
-            )}
-            <button
-              onClick={handleLogout}
-              style={{
-                padding: "6px 14px",
-                backgroundColor: "#dc3545",
-                color: "#fff",
-                border: "none",
-                borderRadius: "6px",
-                cursor: "pointer",
-                fontWeight: "bold",
-                fontSize: "0.9rem"
-              }}
-            >
-              Logout
-            </button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" style={{ color: "#ddd", textDecoration: "none" }}>
-              Login
-            </Link>
-            <Link
-              to="/register"
-              style={{
-                padding: "6px 12px",
-                backgroundColor: "#28a745",
-                color: "#fff",
-                textDecoration: "none",
-                borderRadius: "4px",
-                fontWeight: "bold",
-              }}
-            >
-              Register
-            </Link>
-          </>
-        )}
+              
+              {user.role >= 2 && (
+                <Link
+                  to="/admin"
+                  className="hidden lg:inline-block px-4 py-2 rounded-xl bg-amber-500/10 text-amber-400 text-sm font-black uppercase tracking-widest border border-amber-500/20 hover:bg-amber-500/20 transition-colors"
+                >
+                  Admin
+                </Link>
+              )}
+              
+              <button
+                onClick={handleLogout}
+                className="px-5 py-2 bg-slate-100 text-slate-900 rounded-xl font-bold text-sm hover:bg-white transition-all active:scale-95 shadow-lg"
+              >
+                Logout
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <Link 
+                to="/login" 
+                className="text-slate-300 hover:text-white font-bold transition-colors"
+              >
+                Login
+              </Link>
+              <Link
+                to="/register"
+                className="px-6 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20 active:scale-95 border border-blue-500/30"
+              >
+                Join Now
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
     </nav>
   )
