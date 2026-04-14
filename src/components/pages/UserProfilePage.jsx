@@ -324,7 +324,7 @@ const UserProfilePage = () => {
                             {recipe.author?.name || "Chef"}
                           </span>
                         </div>
-                        <Link to={`/recipes/details/${recipe._id}`} className="text-sm font-black text-blue-600 hover:text-blue-800">
+                        <Link to={`/recipe/${recipe._id}`} className="text-sm font-black text-blue-600 hover:text-blue-800">
                           View Recipe →
                         </Link>
                       </div>

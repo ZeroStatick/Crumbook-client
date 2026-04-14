@@ -145,7 +145,7 @@ const DropYourIngredients = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {matchingRecipes.map(recipe => (
                   <Link 
-                    to={`/recipes/${recipe._id}`} 
+                    to={`/recipe/${recipe._id}`} 
                     key={recipe._id}
                     className="flex bg-white rounded-xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-md transition-shadow group"
                   >

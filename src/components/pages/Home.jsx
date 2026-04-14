@@ -85,7 +85,7 @@ const Home = () => {
               latestRecipes.map((recipe) => (
                 <Link
                   key={recipe._id}
-                  to={`/recipes/details/${recipe._id}`}
+                  to={`/recipe/${recipe._id}`}
                   className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-xl hover:-translate-y-1"
                 >
                   <div className="p-6">

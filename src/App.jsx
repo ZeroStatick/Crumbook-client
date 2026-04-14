@@ -57,7 +57,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/recipes" element={<RecipePage />} />
             <Route path="/drop-ingredients" element={<DropYourIngredients />} />
-            
+
             {/* Protected Routes - Catch "new" specifically first */}
             <Route
               path="/recipes/new"
@@ -76,7 +76,7 @@ function App() {
               }
             />
 
-            <Route path="/recipes/details/:id" element={<RecipeDetailPage />} />
+            <Route path="/recipe/:id" element={<RecipeDetailPage />} />
             <Route
               path="/profile"
               element={
@@ -85,7 +85,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            
+
             {/* Admin Routes */}
             <Route
               path="/admin"
