@@ -176,7 +176,7 @@ const CreateRecipePage = () => {
         toast.success("Recipe created successfully!")
       }
       
-      navigate(isEditMode ? `/recipes/details/${id}` : "/recipes")
+      navigate(isEditMode ? `/recipe/${id}` : "/recipes")
     } catch (err) {
       toast.error(err.message)
     } finally {
@@ -191,7 +191,7 @@ const CreateRecipePage = () => {
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-gray-800">{isEditMode ? "Edit Recipe" : "New Recipe"}</h1>
         <Link
-          to={isEditMode ? `/recipes/details/${id}` : "/recipes"}
+          to={isEditMode ? `/recipe/${id}` : "/recipes"}
           className="text-sm font-medium text-blue-600 hover:underline"
         >
           &larr; Cancel
