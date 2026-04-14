@@ -53,3 +53,5 @@ export const edit_user = (user_id, new_user_data) =>
 export const delete_user = (user_id) => api.delete(`/api/users/${user_id}`)
 
 export const get_me = () => api.get("/api/users/me")
+
+export const toggle_favorite = (recipeId) => api.post("/api/users/favorites", { recipeId })

@@ -51,7 +51,7 @@ function App() {
       <Toaster />
       <BrowserRouter>
         <Navbar />
-        <main className="container mx-auto px-4">
+        <main className="min-h-screen">
           <Routes>
             {/* Main Routes */}
             <Route path="/" element={<Home />} />

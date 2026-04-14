@@ -108,8 +108,7 @@ const UserRow = memo(({ u, onDelete, onRoleChange, currentUser }) => {
   const isSelf = currentUser?._id === u._id || currentUser?.id === u._id
 
   // Logic for who can edit whom
-  const canEditRole =
-    !isSelf && (isOwner || (isAdmin && !targetIsAdmin && !targetIsOwner))
+  const canEditRole = !isSelf && isOwner
   const canDelete =
     !isSelf && (isOwner || (isAdmin && !targetIsAdmin && !targetIsOwner))
 

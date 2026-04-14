@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 import { get_all_recipes } from "../../../API/recipe.api"
+import { toggle_favorite } from "../../../API/api.api"
+import useUserStore from "../../global/user"
 import toast from "react-hot-toast"
 
 const RecipeCardSkeleton = () => (
@@ -20,26 +22,43 @@ const RecipeCardSkeleton = () => (
 )
 
 const RecipePage = () => {
+  const { user, setUser } = useUserStore()
   const [recipes, setRecipes] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   
-  // Favorites logic (Local Storage)
-  const [favorites, setFavorites] = useState(() => {
+  // Local guest favorites as fallback
+  const [guestFavorites, setGuestFavorites] = useState(() => {
     const saved = localStorage.getItem("recipe_favorites")
     return saved ? JSON.parse(saved) : []
   })
 
-  useEffect(() => {
-    localStorage.setItem("recipe_favorites", JSON.stringify(favorites))
-  }, [favorites])
+  // Determine current favorites based on login status
+  const favorites = user ? (user.favorites || []) : guestFavorites
 
-  const toggleFavorite = (id, e) => {
-    e.preventDefault() // Prevent navigation to detail page
+  const toggleFavoriteHandler = async (id, e) => {
+    e.preventDefault()
     e.stopPropagation()
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((favId) => favId !== id) : [...prev, id],
-    )
+    
+    if (user) {
+      try {
+        const updatedUser = await toggle_favorite(id)
+        setUser(updatedUser)
+        const isNowFav = updatedUser.favorites.includes(id)
+        toast.success(isNowFav ? "Added to favorites" : "Removed from favorites")
+      } catch (err) {
+        toast.error("Failed to update favorites")
+      }
+    } else {
+      // Guest mode
+      const newFavs = guestFavorites.includes(id)
+        ? guestFavorites.filter(favId => favId !== id)
+        : [...guestFavorites, id]
+      
+      setGuestFavorites(newFavs)
+      localStorage.setItem("recipe_favorites", JSON.stringify(newFavs))
+      toast.success(newFavs.includes(id) ? "Added to favorites (Guest)" : "Removed from favorites (Guest)")
+    }
   }
 
   // URL Search Params for Filtering and Pagination
@@ -178,7 +197,7 @@ const RecipePage = () => {
 
   if (loading) {
     return (
-      <div className="max-w-6xl mx-auto p-4">
+      <div className="max-w-6xl mx-auto p-4 px-6 lg:px-8">
         <div className="flex justify-between items-center mb-6">
           <div className="h-9 bg-gray-200 rounded w-48 animate-pulse"></div>
           <div className="h-10 bg-gray-200 rounded w-40 animate-pulse"></div>
@@ -191,7 +210,7 @@ const RecipePage = () => {
   }
 
   return (
-    <div className="mx-auto max-w-6xl p-4">
+    <div className="mx-auto max-w-7xl p-4 px-6 lg:px-8">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-3xl font-bold text-gray-800">Explore Recipes</h1>
         <Link
@@ -338,7 +357,7 @@ const RecipePage = () => {
                 className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col relative group"
               >
                 <button
-                  onClick={(e) => toggleFavorite(recipeId, e)}
+                  onClick={(e) => toggleFavoriteHandler(recipeId, e)}
                   className={`absolute top-4 right-4 p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-all hover:scale-110 z-10 ${
                     isFav ? "text-red-500 scale-105" : "text-gray-300 hover:text-red-400"
                   }`}
