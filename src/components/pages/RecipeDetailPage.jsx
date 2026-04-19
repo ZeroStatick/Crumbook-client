@@ -2,15 +2,54 @@ import React, { useState, useEffect } from "react"
 import { useParams, Link, useNavigate } from "react-router-dom"
 import { get_recipe_by_id, delete_recipe } from "../../../API/recipe.api"
 import { get_ingredient_by_id } from "../../../API/ingredient.api"
+import { toggle_favorite } from "../../../API/api.api"
 import useUserStore from "../../global/user.js"
 import toast from "react-hot-toast"
 
 const RecipeDetailPage = () => {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { user } = useUserStore()
+  const { user, setUser } = useUserStore()
   const [recipe, setRecipe] = useState(null)
   const [loading, setLoading] = useState(true)
+
+  // Local guest favorites as fallback
+  const [guestFavorites, setGuestFavorites] = useState(() => {
+    const saved = localStorage.getItem("recipe_favorites")
+    return saved ? JSON.parse(saved) : []
+  })
+
+  // Determine if current recipe is favorited
+  const favorites = user ? user.favorites || [] : guestFavorites
+  const isFav = favorites.includes(id)
+
+  const toggleFavoriteHandler = async () => {
+    if (user) {
+      try {
+        const updatedUser = await toggle_favorite(id)
+        setUser(updatedUser)
+        const isNowFav = updatedUser.favorites.includes(id)
+        toast.success(
+          isNowFav ? "Added to favorites" : "Removed from favorites",
+        )
+      } catch (err) {
+        toast.error("Failed to update favorites")
+      }
+    } else {
+      // Guest mode logic
+      const newFavs = guestFavorites.includes(id)
+        ? guestFavorites.filter((favId) => favId !== id)
+        : [...guestFavorites, id]
+
+      setGuestFavorites(newFavs)
+      localStorage.setItem("recipe_favorites", JSON.stringify(newFavs))
+      toast.success(
+        newFavs.includes(id)
+          ? "Added to favorites (Guest)"
+          : "Removed from favorites (Guest)",
+      )
+    }
+  }
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -58,22 +97,35 @@ const RecipeDetailPage = () => {
         >
           &larr; Back to all recipes
         </Link>
-        {isAuthor && (
-          <div className="flex gap-3">
-            <button
-              onClick={() => navigate(`/recipes/edit/${id}`)}
-              className="rounded bg-gray-100 px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-200"
-            >
-              Edit
-            </button>
-            <button
-              onClick={handleDelete}
-              className="rounded bg-red-500 px-4 py-2 text-sm font-bold text-white hover:bg-red-600"
-            >
-              Delete
-            </button>
-          </div>
-        )}
+        <div className="flex gap-3">
+          <button
+            onClick={toggleFavoriteHandler}
+            className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-all ${
+              isFav
+                ? "border border-red-100 bg-red-50 text-red-600"
+                : "border border-transparent bg-gray-100 text-gray-700 hover:bg-gray-200"
+            }`}
+          >
+            {isFav ? "❤️ Favorited" : "🤍 Add to Favorites"}
+          </button>
+
+          {isAuthor && (
+            <>
+              <button
+                onClick={() => navigate(`/recipes/edit/${id}`)}
+                className="rounded-xl bg-gray-100 px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-200"
+              >
+                Edit
+              </button>
+              <button
+                onClick={handleDelete}
+                className="rounded-xl bg-red-500 px-4 py-2 text-sm font-bold text-white hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
       <header className="mb-8 border-b pb-8">
