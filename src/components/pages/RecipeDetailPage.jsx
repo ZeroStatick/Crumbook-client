@@ -5,6 +5,7 @@ import { get_ingredient_by_id } from "../../../API/ingredient.api"
 import { toggle_favorite } from "../../../API/api.api"
 import useUserStore from "../../global/user.js"
 import toast from "react-hot-toast"
+import ReportModal from "../ReportModal"
 
 const RecipeDetailPage = () => {
   const { id } = useParams()
@@ -12,6 +13,7 @@ const RecipeDetailPage = () => {
   const { user, setUser } = useUserStore()
   const [recipe, setRecipe] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isReporting, setIsReporting] = useState(false)
 
   // Local guest favorites as fallback
   const [guestFavorites, setGuestFavorites] = useState(() => {
@@ -88,6 +90,8 @@ const RecipeDetailPage = () => {
   const isAuthor =
     user && (user._id === recipe.author?._id || user._id === recipe.author)
 
+  const isUserGenerated = recipe.source === "Original" || !recipe.source
+
   return (
     <div className="mx-auto max-w-4xl p-4 md:p-8">
       <div className="mb-6 flex items-center justify-between">
@@ -127,6 +131,10 @@ const RecipeDetailPage = () => {
           )}
         </div>
       </div>
+
+      {isReporting && (
+        <ReportModal recipeId={id} onClose={() => setIsReporting(false)} />
+      )}
 
       <header className="mb-8 border-b pb-8">
         <h1 className="mb-4 text-4xl font-extrabold text-gray-900">
