@@ -4,6 +4,7 @@ import { get_recipe_by_id, delete_recipe } from "../../../API/recipe.api"
 import { get_ingredient_by_id } from "../../../API/ingredient.api"
 import useUserStore from "../../global/user.js"
 import toast from "react-hot-toast"
+import ReportModal from "../ReportModal"
 
 const RecipeDetailPage = () => {
   const { id } = useParams()
@@ -11,6 +12,7 @@ const RecipeDetailPage = () => {
   const { user } = useUserStore()
   const [recipe, setRecipe] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [isReporting, setIsReporting] = useState(false)
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -49,6 +51,8 @@ const RecipeDetailPage = () => {
   const isAuthor =
     user && (user._id === recipe.author?._id || user._id === recipe.author)
 
+  const isUserGenerated = recipe.source === "Original" || !recipe.source
+
   return (
     <div className="mx-auto max-w-4xl p-4 md:p-8">
       <div className="mb-6 flex items-center justify-between">
@@ -58,23 +62,37 @@ const RecipeDetailPage = () => {
         >
           &larr; Back to all recipes
         </Link>
-        {isAuthor && (
-          <div className="flex gap-3">
+        <div className="flex gap-3">
+          {isAuthor && (
+            <>
+              <button
+                onClick={() => navigate(`/recipes/edit/${id}`)}
+                className="rounded bg-gray-100 px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-200"
+              >
+                Edit
+              </button>
+              <button
+                onClick={handleDelete}
+                className="rounded bg-red-500 px-4 py-2 text-sm font-bold text-white hover:bg-red-600"
+              >
+                Delete
+              </button>
+            </>
+          )}
+          {!isAuthor && user && isUserGenerated && (
             <button
-              onClick={() => navigate(`/recipes/edit/${id}`)}
-              className="rounded bg-gray-100 px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-200"
+              onClick={() => setIsReporting(true)}
+              className="rounded bg-orange-100 px-4 py-2 text-sm font-bold text-orange-700 hover:bg-orange-200"
             >
-              Edit
+              🚩 Report
             </button>
-            <button
-              onClick={handleDelete}
-              className="rounded bg-red-500 px-4 py-2 text-sm font-bold text-white hover:bg-red-600"
-            >
-              Delete
-            </button>
-          </div>
-        )}
+          )}
+        </div>
       </div>
+
+      {isReporting && (
+        <ReportModal recipeId={id} onClose={() => setIsReporting(false)} />
+      )}
 
       <header className="mb-8 border-b pb-8">
         <h1 className="mb-4 text-4xl font-extrabold text-gray-900">
