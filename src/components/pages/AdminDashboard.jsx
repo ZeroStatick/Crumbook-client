@@ -6,6 +6,7 @@ import React, {
   memo,
   useTransition,
 } from "react"
+import { Link } from "react-router-dom"
 import {
   get_all_users,
   delete_user,
@@ -17,6 +18,7 @@ import {
   add_ingredient,
 } from "../../../API/ingredient.api"
 import { get_all_reports, delete_report } from "../../../API/report.api"
+import { delete_comment } from "../../../API/comment.api"
 import toast from "react-hot-toast"
 import useUserStore from "../../global/user"
 
@@ -120,8 +122,16 @@ const UserRow = memo(({ u, onDelete, onRoleChange, currentUser }) => {
   )
 })
 
-const ReportRow = memo(({ r, onDeleteRecipe, onDismissReport }) => {
-  const recipeTitle = r.recipe_id?.title || "Deleted/Unknown Recipe"
+const ReportRow = memo(({ r, onDeleteRecipe, onDeleteComment, onDismissReport }) => {
+  const isRecipe = r.target_type === "recipe"
+  const recipeId = isRecipe ? r.recipe_id?._id : r.comment_id?.commented_recipe?._id
+  const recipeTitle = isRecipe 
+    ? (r.recipe_id?.title || "Deleted Recipe")
+    : (r.comment_id?.commented_recipe?.title || "Recipe")
+    
+  const commentText = r.comment_id?.text
+  const commentAuthor = r.comment_id?.comment_author?.name || "Unknown"
+  
   const reporterName = r.user_id?.name || "Unknown User"
   const reportSort = r.sort || "other"
   const reportReason = r.reason || "No reason provided"
@@ -129,24 +139,53 @@ const ReportRow = memo(({ r, onDeleteRecipe, onDismissReport }) => {
   return (
     <tr className="transition-colors hover:bg-gray-50">
       <td className="px-6 py-4">
-        <div className="text-sm font-bold text-gray-800">{recipeTitle}</div>
-        <div className="text-[10px] text-gray-500">Reported by: {reporterName}</div>
+        <div className="text-sm font-bold text-gray-800">
+          {isRecipe ? (
+            <Link to={`/recipe/${recipeId}`} className="text-blue-600 hover:underline">
+              {recipeTitle}
+            </Link>
+          ) : (
+            <div className="flex flex-col gap-1">
+              <span className="text-xs text-gray-500">On Recipe: {" "}
+                <Link to={`/recipe/${recipeId}`} className="font-medium text-blue-600 hover:underline">
+                  {recipeTitle}
+                </Link>
+              </span>
+              <div className="rounded-lg bg-gray-50 p-2 text-[11px] text-gray-700 italic border border-gray-100">
+                "{commentText || "Comment deleted"}"
+              </div>
+              <span className="text-[10px] font-semibold text-gray-400">— {commentAuthor}</span>
+            </div>
+          )}
+        </div>
+        <div className="mt-1 text-[10px] text-gray-500">Reported by: {reporterName}</div>
       </td>
       <td className="px-6 py-4">
         <span className="rounded bg-orange-100 px-2 py-0.5 text-[10px] font-bold text-orange-700 uppercase">
           {reportSort.replace("_", " ")}
         </span>
-        <div className="mt-1 max-w-[200px] truncate text-[10px] text-gray-600 italic">"{reportReason}"</div>
+        <div className="mt-1 max-w-[200px] truncate text-[10px] text-gray-600 italic" title={reportReason}>
+          "{reportReason}"
+        </div>
       </td>
       <td className="px-6 py-4 text-center">
         <div className="flex justify-center gap-2">
-          {r.recipe_id && (
+          {isRecipe && r.recipe_id && (
             <button
               onClick={() => onDeleteRecipe(r.recipe_id._id || r.recipe_id.id, r._id)}
               className="rounded p-1 text-red-600 transition-colors hover:bg-red-50"
               title="Delete Recipe"
             >
               🗑️ Recipe
+            </button>
+          )}
+          {!isRecipe && r.comment_id && (
+            <button
+              onClick={() => onDeleteComment(r.comment_id._id || r.comment_id.id, r._id)}
+              className="rounded p-1 text-red-600 transition-colors hover:bg-red-50"
+              title="Delete Comment"
+            >
+              🗑️ Comment
             </button>
           )}
           <button
@@ -176,6 +215,14 @@ const AdminDashboard = () => {
   const [isPending, startTransition] = useTransition()
   const [ingSearch, setIngSearch] = useState("")
   const [userSearch, setUserSearch] = useState("")
+
+  const recipeReports = useMemo(() => 
+    (data.reports || []).filter(r => r.target_type === "recipe"), 
+  [data.reports])
+  
+  const commentReports = useMemo(() => 
+    (data.reports || []).filter(r => r.target_type === "comment"), 
+  [data.reports])
 
   const stats = useMemo(() => {
     const users = data.users || []
@@ -261,6 +308,31 @@ const AdminDashboard = () => {
     ))
   }, [executeDeleteRecipe])
 
+  const executeDeleteComment = useCallback(async (commentId, reportId) => {
+    setData((prev) => ({
+      ...prev,
+      reports: prev.reports.filter((rep) => rep._id !== reportId && (rep.comment_id?._id || rep.comment_id?.id) !== commentId),
+    }))
+    try {
+      await Promise.all([delete_comment(commentId), delete_report(reportId)])
+      toast.success("Comment deleted")
+    } catch (err) {
+      toast.error("Action failed")
+    }
+  }, [])
+
+  const handleDeleteComment = useCallback((commentId, reportId) => {
+    toast((t) => (
+      <div className="flex flex-col gap-2">
+        <p className="text-xs font-bold text-gray-800">Delete this comment?</p>
+        <div className="flex justify-end gap-2">
+          <button onClick={() => toast.dismiss(t.id)} className="text-[10px] bg-gray-100 px-2 py-1 rounded">Cancel</button>
+          <button onClick={() => { toast.dismiss(t.id); executeDeleteComment(commentId, reportId); }} className="text-[10px] bg-red-600 text-white px-2 py-1 rounded">Delete</button>
+        </div>
+      </div>
+    ))
+  }, [executeDeleteComment])
+
   const handleDismissReport = useCallback(async (reportId) => {
     try {
       await delete_report(reportId)
@@ -303,28 +375,64 @@ const AdminDashboard = () => {
     <div className="mx-auto max-w-6xl space-y-8 p-4 sm:p-6">
       <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
       <StatsSection stats={stats} />
+      
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <div className="lg:col-span-2">
-          <div className="flex flex-col overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
-            <div className="border-b border-red-50 bg-red-50/30 p-5">
-              <h2 className="flex items-center justify-between font-bold text-red-800">
-                Reported Recipes
-                <span className="rounded bg-red-100 px-2 py-0.5 text-[10px] text-red-600">Pending: {data.reports.length}</span>
-              </h2>
-            </div>
-            <div className="max-h-[400px] overflow-y-auto">
-              <table className="w-full text-left">
-                <thead className="sticky top-0 bg-white text-[10px] font-bold text-gray-400 uppercase">
-                  <tr><th className="px-6 py-2">Recipe</th><th className="px-6 py-2">Reason</th><th className="px-6 py-2 text-center">Actions</th></tr>
-                </thead>
-                <tbody className="divide-y divide-gray-50">
-                  {data.reports.map((rep) => <ReportRow key={rep._id} r={rep} onDeleteRecipe={handleDeleteRecipe} onDismissReport={handleDismissReport} />)}
-                </tbody>
-              </table>
-              {data.reports.length === 0 && <div className="p-10 text-center text-xs text-gray-400 italic">No reports</div>}
-            </div>
+        {/* Recipe Reports Section */}
+        <div className="flex flex-col overflow-hidden rounded-xl border border-orange-100 bg-white shadow-sm">
+          <div className="border-b border-orange-50 bg-orange-50/30 p-5">
+            <h2 className="flex items-center justify-between font-bold text-orange-800">
+              Recipe Reports
+              <span className="rounded bg-orange-100 px-2 py-0.5 text-[10px] text-orange-600">Pending: {recipeReports.length}</span>
+            </h2>
+          </div>
+          <div className="max-h-[400px] overflow-y-auto">
+            <table className="w-full text-left">
+              <thead className="sticky top-0 bg-white text-[10px] font-bold text-gray-400 uppercase">
+                <tr><th className="px-6 py-2">Recipe</th><th className="px-6 py-2">Reason</th><th className="px-6 py-2 text-center">Actions</th></tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {recipeReports.map((rep) => (
+                  <ReportRow 
+                    key={rep._id} 
+                    r={rep} 
+                    onDeleteRecipe={handleDeleteRecipe} 
+                    onDismissReport={handleDismissReport} 
+                  />
+                ))}
+              </tbody>
+            </table>
+            {recipeReports.length === 0 && <div className="p-10 text-center text-xs text-gray-400 italic">No recipe reports</div>}
           </div>
         </div>
+
+        {/* Comment Reports Section */}
+        <div className="flex flex-col overflow-hidden rounded-xl border border-red-100 bg-white shadow-sm">
+          <div className="border-b border-red-50 bg-red-50/30 p-5">
+            <h2 className="flex items-center justify-between font-bold text-red-800">
+              Comment Reports
+              <span className="rounded bg-red-100 px-2 py-0.5 text-[10px] text-red-600">Pending: {commentReports.length}</span>
+            </h2>
+          </div>
+          <div className="max-h-[400px] overflow-y-auto">
+            <table className="w-full text-left">
+              <thead className="sticky top-0 bg-white text-[10px] font-bold text-gray-400 uppercase">
+                <tr><th className="px-6 py-2">Comment Detail</th><th className="px-6 py-2">Reason</th><th className="px-6 py-2 text-center">Actions</th></tr>
+              </thead>
+              <tbody className="divide-y divide-gray-50">
+                {commentReports.map((rep) => (
+                  <ReportRow 
+                    key={rep._id} 
+                    r={rep} 
+                    onDeleteComment={handleDeleteComment}
+                    onDismissReport={handleDismissReport} 
+                  />
+                ))}
+              </tbody>
+            </table>
+            {commentReports.length === 0 && <div className="p-10 text-center text-xs text-gray-400 italic">No comment reports</div>}
+          </div>
+        </div>
+
         <div className="flex h-[600px] flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
           <div className="space-y-4 border-b border-gray-100 p-5">
             <h2 className="font-bold text-gray-800">Ingredients ({data.ingredients.length})</h2>
@@ -346,6 +454,7 @@ const AdminDashboard = () => {
             </table>
           </div>
         </div>
+
         <div className="flex h-[600px] flex-col overflow-hidden rounded-xl border border-gray-100 bg-white shadow-sm">
           <div className="space-y-4 border-b border-gray-100 p-5">
             <h2 className="font-bold text-gray-800">Users ({data.users.length})</h2>

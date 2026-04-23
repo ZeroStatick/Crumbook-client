@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { create_report } from "../../API/report.api" // Fixed path: src/components/ to API/
 import toast from "react-hot-toast"
 
-const ReportModal = ({ recipeId, onClose }) => {
+const ReportModal = ({ targetId, targetType = "recipe", onClose }) => {
   const [reportData, setReportData] = useState({ sort: "other", reason: "" })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -10,10 +10,14 @@ const ReportModal = ({ recipeId, onClose }) => {
     e.preventDefault()
     setIsSubmitting(true)
     try {
-      await create_report({
+      const payload = {
         ...reportData,
-        recipe_id: recipeId,
-      })
+        target_type: targetType,
+      }
+      if (targetType === "recipe") payload.recipe_id = targetId
+      if (targetType === "comment") payload.comment_id = targetId
+
+      await create_report(payload)
       toast.success("Report submitted successfully")
       onClose()
     } catch (error) {
@@ -26,7 +30,9 @@ const ReportModal = ({ recipeId, onClose }) => {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
       <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-2xl animate-in fade-in zoom-in duration-200">
-        <h2 className="mb-4 text-xl font-bold text-gray-800">Report Recipe</h2>
+        <h2 className="mb-4 text-xl font-bold text-gray-800">
+          Report {targetType === "recipe" ? "Recipe" : "Comment"}
+        </h2>
         <form onSubmit={handleReportSubmit} className="space-y-4">
           <div>
             <label className="mb-1 block text-sm font-medium text-gray-700">
