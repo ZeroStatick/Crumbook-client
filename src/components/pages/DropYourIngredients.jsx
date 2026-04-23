@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useMemo } from "react"
 import { Link } from "react-router-dom"
 import { get_all_ingredients } from "../../../API/ingredient.api"
 import { RECIPE_URL } from "../../../constant/endpoints"
@@ -12,6 +12,16 @@ const DropYourIngredients = () => {
   const [matchingRecipes, setMatchingRecipes] = useState([])
   const [loading, setLoading] = useState(true)
   const [searching, setSearching] = useState(false)
+
+  // Optimize filtering with useMemo to prevent UI lag
+  const filteredIngredients = useMemo(() => {
+    if (!searchTerm) return ingredients;
+    const lowerSearch = searchTerm.toLowerCase();
+    return ingredients.filter((ing) =>
+      ing.name.toLowerCase().includes(lowerSearch) || 
+      ing.category.toLowerCase().includes(lowerSearch)
+    );
+  }, [ingredients, searchTerm]);
 
   useEffect(() => {
     const fetchIngredients = async () => {
@@ -239,11 +249,7 @@ const DropYourIngredients = () => {
               </div>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-12">
-                {ingredients
-                  .filter((ing) =>
-                    ing.name.toLowerCase().includes(searchTerm.toLowerCase())
-                  )
-                  .map((ing) => (
+                {filteredIngredients.map((ing) => (
                     <button
                       key={ing._id}
                       onClick={() => toggleIngredient(ing._id)}

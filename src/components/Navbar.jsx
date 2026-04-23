@@ -36,6 +36,12 @@ const Navbar = () => {
             >
               Drop Ingredients
             </Link>
+            <Link
+              to="/ai-chef"
+              className="text-blue-400 hover:text-blue-300 font-black transition-colors flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-400/10 border border-blue-400/20"
+            >
+              <span className="text-lg">👨‍🍳</span> AI Chef
+            </Link>
           </div>
         </div>
 
