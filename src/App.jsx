@@ -19,6 +19,7 @@ import CreateRecipePage from "./components/pages/CreateRecipePage.jsx"
 import RecipeDetailPage from "./components/pages/RecipeDetailPage.jsx"
 import DropYourIngredients from "./components/pages/DropYourIngredients.jsx"
 import UserProfilePage from "./components/pages/UserProfilePage.jsx"
+import AIChefPage from "./components/pages/AIChefPage.jsx"
 import AdminDashboard from "./components/pages/AdminDashboard.jsx"
 
 import { Toaster } from "react-hot-toast"
@@ -57,6 +58,14 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/recipes" element={<RecipePage />} />
             <Route path="/drop-ingredients" element={<DropYourIngredients />} />
+            <Route
+              path="/ai-chef"
+              element={
+                <ProtectedRoute>
+                  <AIChefPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Protected Routes - Catch "new" specifically first */}
             <Route
