@@ -360,7 +360,13 @@ const UserProfilePage = () => {
                             {recipe.author?.name?.charAt(0) || "C"}
                           </div>
                           <span className="text-xs font-bold text-gray-400">
-                            {recipe.author?.name || "Chef"}
+                            {recipe.author?._id ? (
+                              <Link to={`/user/${recipe.author._id}`} className="hover:text-blue-500 transition-colors">
+                                {recipe.author.name}
+                              </Link>
+                            ) : (
+                              recipe.author?.name || "Chef"
+                            )}
                           </span>
                         </div>
                         <Link to={`/recipe/${recipe._id}`} className="text-sm font-black text-blue-600 hover:text-blue-800">
