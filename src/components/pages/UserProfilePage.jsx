@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Link } from "react-router-dom"
 import useUserStore from "../../global/user"
 import { get_recipes_by_user_id, delete_recipe, get_all_recipes } from "../../../API/recipe.api"
 import { edit_user, toggle_favorite } from "../../../API/api.api"
 import toast from "react-hot-toast"
+import defaultAvatar from "../../assets/bread.jfif"
 
 const UserProfilePage = () => {
   const { user, setUser } = useUserStore()
@@ -13,6 +14,8 @@ const UserProfilePage = () => {
   const [loading, setLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState({ name: "", profile_picture: "" })
+  const [previewUrl, setPreviewUrl] = useState(null)
+  const fileInputRef = useRef(null)
   
   // Local guest favorites as fallback if user favorites are not yet available or for guests
   const [guestFavorites, setGuestFavorites] = useState(() => {
@@ -97,16 +100,41 @@ const UserProfilePage = () => {
     }
   }
 
+  const handleCancel = () => {
+    setIsEditing(false)
+    setEditData({
+      name: user.name || "",
+      profile_picture: user.profile_picture || "",
+    })
+    setPreviewUrl(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ""
+    }
+  }
+
   const handleUpdateProfile = async (e) => {
     e.preventDefault()
     try {
       const updatedUser = await edit_user(user._id, editData)
       setUser(updatedUser)
       setIsEditing(false)
+      setPreviewUrl(null)
       toast.success("Profile updated successfully")
     } catch (error) {
       toast.error(error.message || "Failed to update profile")
     }
+  }
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      setEditData({ ...editData, profile_picture: file })
+      setPreviewUrl(URL.createObjectURL(file))
+    }
+  }
+
+  const handleUploadClick = () => {
+    fileInputRef.current.click()
   }
 
   if (!user) {
@@ -134,7 +162,7 @@ const UserProfilePage = () => {
             <div className="flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
               <div className="h-32 w-32 rounded-3xl border-4 border-white bg-gray-200 overflow-hidden shadow-2xl relative group">
                 <img 
-                  src={user.profile_picture || `https://ui-avatars.com/api/?name=${user.name}&background=0D8ABC&color=fff`} 
+                  src={previewUrl || user.profile_picture || defaultAvatar} 
                   alt={user.name}
                   className="h-full w-full object-cover"
                 />
@@ -150,13 +178,24 @@ const UserProfilePage = () => {
                       placeholder="Display Name"
                       required
                     />
-                    <input
-                      type="text"
-                      className="rounded-xl border border-gray-300 px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
-                      value={editData.profile_picture}
-                      onChange={(e) => setEditData({ ...editData, profile_picture: e.target.value })}
-                      placeholder="Profile Picture URL"
-                    />
+                    <div className="flex flex-col gap-2">
+                      <input 
+                        type="file" 
+                        ref={fileInputRef} 
+                        onChange={handleFileChange} 
+                        accept="image/*" 
+                        className="hidden" 
+                      />
+                      <button 
+                        type="button" 
+                        onClick={handleUploadClick}
+                        onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
+                        onMouseDown={(e) => e.preventDefault()}
+                        className="w-full rounded-xl border-2 border-dashed border-blue-200 bg-blue-50/50 px-4 py-2 text-xs font-bold text-blue-600 hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
+                      >
+                        📷 Upload New Picture
+                      </button>
+                    </div>
                     <div className="flex gap-2">
                       <button
                         type="submit"
@@ -166,7 +205,7 @@ const UserProfilePage = () => {
                       </button>
                       <button
                         type="button"
-                        onClick={() => setIsEditing(false)}
+                        onClick={handleCancel}
                         className="flex-1 rounded-xl bg-gray-200 px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-300 transition-colors"
                       >
                         Cancel
