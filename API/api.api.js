@@ -49,8 +49,6 @@ export const get_all_users = () => api.get("/api/users")
 
 export const get_user_by_id = (user_id) => api.get(`/api/users/${user_id}`)
 
-export const edit_user = (user_id, new_user_data) =>
-  api.put(`/api/users/${user_id}`, new_user_data)
 export const edit_user = (user_id, new_user_data) => {
   // Check if we need to send multipart/form-data (for file uploads)
   const hasFile = new_user_data.profile_picture instanceof File
