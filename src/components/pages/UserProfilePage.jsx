@@ -4,6 +4,7 @@ import useUserStore from "../../global/user"
 import { get_recipes_by_user_id, delete_recipe, get_all_recipes } from "../../../API/recipe.api"
 import { edit_user, toggle_favorite } from "../../../API/api.api"
 import toast from "react-hot-toast"
+import defaultAvatar from "../../assets/bread.jfif"
 
 const UserProfilePage = () => {
   const { user, setUser } = useUserStore()
@@ -134,7 +135,7 @@ const UserProfilePage = () => {
             <div className="flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
               <div className="h-32 w-32 rounded-3xl border-4 border-white bg-gray-200 overflow-hidden shadow-2xl relative group">
                 <img 
-                  src={user.profile_picture || `https://ui-avatars.com/api/?name=${user.name}&background=0D8ABC&color=fff`} 
+                  src={user.profile_picture || defaultAvatar} 
                   alt={user.name}
                   className="h-full w-full object-cover"
                 />
