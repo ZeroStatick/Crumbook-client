@@ -2,6 +2,7 @@ import React from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { logout } from "../../API/auth.api"
 import useUserStore from "../global/user"
+import defaultAvatar from "../assets/bread.jfif"
 
 const Navbar = () => {
   const { user, setUser } = useUserStore()
@@ -54,7 +55,7 @@ const Navbar = () => {
               >
                 <div className="w-8 h-8 rounded-full bg-blue-900/50 border border-blue-700 overflow-hidden">
                   <img 
-                    src={user.profile_picture || `https://ui-avatars.com/api/?name=${user.name}&background=0D8ABC&color=fff`} 
+                    src={user.profile_picture || defaultAvatar} 
                     alt={user.name} 
                     className="w-full h-full object-cover"
                   />
