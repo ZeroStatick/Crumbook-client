@@ -19,6 +19,7 @@ import CreateRecipePage from "./components/pages/CreateRecipePage.jsx"
 import RecipeDetailPage from "./components/pages/RecipeDetailPage.jsx"
 import DropYourIngredients from "./components/pages/DropYourIngredients.jsx"
 import UserProfilePage from "./components/pages/UserProfilePage.jsx"
+import VisitProfilePage from "./components/pages/VisitProfilePage.jsx"
 import AIChefPage from "./components/pages/AIChefPage.jsx"
 import AdminDashboard from "./components/pages/AdminDashboard.jsx"
 
@@ -84,8 +85,17 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/recipes/fork/:id"
+              element={
+                <ProtectedRoute>
+                  <CreateRecipePage />
+                </ProtectedRoute>
+              }
+            />
 
             <Route path="/recipe/:id" element={<RecipeDetailPage />} />
+            <Route path="/user/:id" element={<VisitProfilePage />} />
             <Route
               path="/profile"
               element={

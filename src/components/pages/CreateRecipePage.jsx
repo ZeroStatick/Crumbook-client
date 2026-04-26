@@ -26,11 +26,16 @@ const DIFFICULTIES = ["Easy", "Medium", "Hard"]
 
 const CreateRecipePage = () => {
   const { id } = useParams()
-  const isEditMode = Boolean(id)
+  // Determine if we are editing an existing recipe
+  const isEditMode = Boolean(id) && !window.location.pathname.includes('/fork/')
+  // Determine if we are creating a new version based on an existing recipe
+  const isForkMode = Boolean(id) && window.location.pathname.includes('/fork/')
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
-  const [fetching, setFetching] = useState(isEditMode)
+  const [fetching, setFetching] = useState(isEditMode || isForkMode)
   const [ingredientsList, setIngredientsList] = useState([])
+  // Store a snapshot of the initial forked data to verify if changes were made
+  const [originalDataStr, setOriginalDataStr] = useState("")
 
   const [formData, setFormData] = useState({
     title: "",
@@ -57,42 +62,64 @@ const CreateRecipePage = () => {
         const ingredientsData = await get_all_ingredients()
         setIngredientsList(ingredientsData)
 
-        if (isEditMode) {
+        if (isEditMode || isForkMode) {
           const recipe = await get_recipe_by_id(id)
-          setFormData({
+          
+          const newFormData = {
             title: recipe.title || "",
             description: recipe.description || "",
             prepTime: recipe.prepTime || "",
             cookTime: recipe.cookTime || "",
             servings: recipe.servings || "",
             difficulty: recipe.difficulty || "Medium",
-            source: recipe.source || "Original",
+            // If forking, label the source as "Forked", otherwise keep original
+            source: isForkMode ? "Forked" : (recipe.source || "Original"),
             public: recipe.public !== undefined ? recipe.public : true,
             image: recipe.image || "",
             tags: recipe.tags ? recipe.tags.join(", ") : "",
-          })
+          }
+          
+          // If forking, track the lineage (original recipe and author) so the backend can link them
+          if (isForkMode) {
+            newFormData.original_recipe = recipe.original_recipe || recipe._id
+            newFormData.original_author = recipe.original_author?._id || recipe.original_author || recipe.author?._id || recipe.author
+          }
+          
+          setFormData(newFormData)
 
+          let initialIngredients = [{ item: "", quantity: "", unit: "g" }]
           if (recipe.ingredients && recipe.ingredients.length > 0) {
-            setRecipeIngredients(recipe.ingredients.map(ing => ({
+            initialIngredients = recipe.ingredients.map(ing => ({
               item: ing.item?._id || ing.item,
               quantity: ing.quantity,
               unit: ing.unit
-            })))
+            }))
+            setRecipeIngredients(initialIngredients)
           }
 
+          let initialInstructions = [""]
           if (recipe.instructions && recipe.instructions.length > 0) {
-            setInstructions(recipe.instructions)
+            initialInstructions = recipe.instructions
+            setInstructions(initialInstructions)
+          }
+
+          if (isForkMode) {
+            setOriginalDataStr(JSON.stringify({
+              formData: newFormData,
+              ingredients: initialIngredients,
+              instructions: initialInstructions
+            }))
           }
         }
       } catch (error) {
-        toast.error(isEditMode ? "Failed to load recipe" : "Failed to load ingredients")
-        if (isEditMode) navigate("/profile")
+        toast.error(isEditMode || isForkMode ? "Failed to load recipe" : "Failed to load ingredients")
+        if (isEditMode || isForkMode) navigate("/profile")
       } finally {
         setFetching(false)
       }
     }
     fetchData()
-  }, [id, isEditMode, navigate])
+  }, [id, isEditMode, isForkMode, navigate])
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target
@@ -150,6 +177,18 @@ const CreateRecipePage = () => {
       // Validate instructions
       if (instructions.some((inst) => !inst.trim())) {
         throw new Error("Please fill in all instruction steps")
+      }
+
+      // If in fork mode, ensure the user has actually modified the recipe
+      if (isForkMode) {
+        const currentDataStr = JSON.stringify({
+          formData,
+          ingredients: recipeIngredients,
+          instructions
+        })
+        if (currentDataStr === originalDataStr) {
+          throw new Error("You must make changes to the recipe before publishing your own version.")
+        }
       }
 
       const submissionData = {
@@ -436,7 +475,7 @@ const CreateRecipePage = () => {
           disabled={loading}
           className="w-full rounded bg-blue-600 py-3 font-bold text-white transition-colors hover:bg-blue-700 disabled:bg-gray-400"
         >
-          {loading ? "Saving..." : isEditMode ? "Update Recipe" : "Create Recipe"}
+          {loading ? "Saving..." : isEditMode ? "Update Recipe" : isForkMode ? "Publish Your Version" : "Create Recipe"}
         </button>
       </form>
     </div>

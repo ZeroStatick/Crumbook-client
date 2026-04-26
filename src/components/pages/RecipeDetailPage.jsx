@@ -161,6 +161,14 @@ const RecipeDetailPage = () => {
               Report Recipe
             </button>
           )}
+          {user && (
+            <button
+              onClick={() => navigate(`/recipes/fork/${id}`)}
+              className="rounded-xl bg-blue-100 px-4 py-2 text-sm font-bold text-blue-700 hover:bg-blue-200"
+            >
+              Make Your Own Version
+            </button>
+          )}
           <button
             onClick={toggleFavoriteHandler}
             className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-bold transition-all ${
@@ -287,7 +295,19 @@ const RecipeDetailPage = () => {
       </div>
 
       <footer className="mt-12 flex items-center justify-between border-t pt-8 text-sm text-gray-400">
-        <span>Published by {recipe.author?.name || "Anonymous"}</span>
+        <span>
+          Published by{" "}
+          {recipe.author?._id ? (
+            <Link
+              to={`/user/${recipe.author._id}`}
+              className="font-bold text-gray-600 hover:text-blue-600 hover:underline transition-colors"
+            >
+              {recipe.author.name}
+            </Link>
+          ) : (
+            recipe.author?.name || "Anonymous"
+          )}
+        </span>
         <span>Source: {recipe.source || "Original"}</span>
       </footer>
 
