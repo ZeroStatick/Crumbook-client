@@ -5,6 +5,7 @@ import { toggle_favorite } from "../../../API/api.api"
 import useUserStore from "../../global/user"
 import toast from "react-hot-toast"
 import RecipeFilters from "../RecipeFilters"
+import ShareButton from "../ShareButton"
 
 const RecipeCardSkeleton = () => (
 // ... (rest of the file stays mostly same but with the component call)
@@ -306,9 +307,12 @@ const RecipePage = () => {
                 </div>
 
                 <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100 mt-auto flex justify-between items-center">
-                  <span className="text-xs font-bold text-gray-400">
-                    Serves {recipe.servings || "?"}
-                  </span>
+                  <div className="flex gap-3">
+                    <ShareButton recipeId={recipeId} className="px-2 py-1 text-xs" />
+                    <span className="text-xs font-bold text-gray-400 self-center">
+                      Serves {recipe.servings || "?"}
+                    </span>
+                  </div>
                   <Link
                     to={`/recipe/${recipeId}`}
                     className="text-blue-600 font-bold text-sm hover:translate-x-1 transition-transform flex items-center gap-1"
