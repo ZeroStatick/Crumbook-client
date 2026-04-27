@@ -8,15 +8,21 @@ import defaultAvatar from "../../assets/bread.jfif"
 
 const UserProfilePage = () => {
   const { user, setUser } = useUserStore()
-  const [activeTab, setActiveTab] = useState("my-recipes") // "my-recipes" or "favorites"
+  const [activeTab, setActiveTab] = useState("my-recipes") // "my-recipes", "favorites", or "settings"
   const [myRecipes, setMyRecipes] = useState([])
   const [favoriteRecipes, setFavoriteRecipes] = useState([])
   const [loading, setLoading] = useState(true)
   const [isEditing, setIsEditing] = useState(false)
   const [editData, setEditData] = useState({ name: "", profile_picture: "" })
+  const [settingsData, setSettingsData] = useState({ 
+    name: "", 
+    email: "", 
+    currentPassword: "", 
+    password: "" 
+  })
   const [previewUrl, setPreviewUrl] = useState(null)
   const fileInputRef = useRef(null)
-  
+
   // Local guest favorites as fallback if user favorites are not yet available or for guests
   const [guestFavorites, setGuestFavorites] = useState(() => {
     const saved = localStorage.getItem("recipe_favorites")
@@ -31,6 +37,12 @@ const UserProfilePage = () => {
       setEditData({
         name: user.name || "",
         profile_picture: user.profile_picture || "",
+      })
+      setSettingsData({
+        name: user.name || "",
+        email: user.email || "",
+        currentPassword: "",
+        password: ""
       })
     }
   }, [user])
@@ -240,7 +252,7 @@ const UserProfilePage = () => {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="mb-10 flex gap-2 p-1 bg-gray-100 rounded-2xl w-fit">
+      <div className="mb-10 flex flex-wrap gap-2 p-1 bg-gray-100 rounded-2xl w-fit">
         <button
           onClick={() => setActiveTab("my-recipes")}
           className={`px-8 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${
@@ -261,11 +273,21 @@ const UserProfilePage = () => {
         >
           Favorites ❤️
         </button>
+        <button
+          onClick={() => setActiveTab("settings")}
+          className={`px-8 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${
+            activeTab === "settings" 
+              ? "bg-white text-gray-800 shadow-sm" 
+              : "text-gray-500 hover:text-gray-700 hover:bg-white/50"
+          }`}
+        >
+          Account Settings ⚙️
+        </button>
       </div>
 
       {/* Content Section */}
       <div className="min-h-[400px]">
-        {loading ? (
+        {loading && activeTab !== "settings" ? (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
              {[...Array(3)].map((_, i) => (
               <div key={i} className="h-64 animate-pulse rounded-3xl bg-gray-100"></div>
@@ -273,7 +295,7 @@ const UserProfilePage = () => {
           </div>
         ) : (
           <>
-            {activeTab === "my-recipes" ? (
+            {activeTab === "my-recipes" && (
               myRecipes.length === 0 ? (
                 <div className="rounded-3xl border-2 border-dashed border-gray-200 bg-white py-20 text-center shadow-sm">
                   <div className="text-5xl mb-4">🍳</div>
@@ -318,7 +340,9 @@ const UserProfilePage = () => {
                   ))}
                 </div>
               )
-            ) : (
+            )}
+
+            {activeTab === "favorites" && (
               favoriteRecipes.length === 0 ? (
                 <div className="rounded-3xl border-2 border-dashed border-gray-200 bg-white py-20 text-center shadow-sm">
                   <div className="text-5xl mb-4">❤️</div>
@@ -377,6 +401,95 @@ const UserProfilePage = () => {
                   ))}
                 </div>
               )
+            )}
+
+            {activeTab === "settings" && (
+              <div className="max-w-2xl bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
+                <h2 className="text-2xl font-black text-gray-900 mb-6">Personal Information</h2>
+                <form 
+                  onSubmit={async (e) => {
+                    e.preventDefault();
+                    try {
+                      // Filter out empty password fields if not changing password
+                      const dataToLink = { ...settingsData };
+                      if (!dataToLink.password) {
+                        delete dataToLink.password;
+                        delete dataToLink.currentPassword;
+                      }
+                      
+                      const updatedUser = await edit_user(user._id, dataToLink);
+                      setUser(updatedUser);
+                      setSettingsData({
+                        ...settingsData,
+                        currentPassword: "",
+                        password: ""
+                      });
+                      toast.success("Account information updated!");
+                    } catch (error) {
+                      toast.error(error.message || "Update failed");
+                    }
+                  }} 
+                  className="space-y-6"
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="flex flex-col gap-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Full Name</label>
+                      <input
+                        type="text"
+                        className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                        value={settingsData.name}
+                        onChange={(e) => setSettingsData({ ...settingsData, name: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="flex flex-col gap-2">
+                      <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Email Address</label>
+                      <input
+                        type="email"
+                        className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                        value={settingsData.email}
+                        onChange={(e) => setSettingsData({ ...settingsData, email: e.target.value })}
+                        required
+                      />
+                    </div>
+                  </div>
+
+                  <div className="pt-6 border-t border-gray-50">
+                    <h3 className="text-lg font-black text-gray-900 mb-4">Change Password</h3>
+                    <p className="text-sm text-gray-500 mb-6">Leave these blank if you don't want to change your password.</p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Current Password</label>
+                        <input
+                          type="password"
+                          className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                          value={settingsData.currentPassword}
+                          onChange={(e) => setSettingsData({ ...settingsData, currentPassword: e.target.value })}
+                          placeholder="••••••••"
+                        />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">New Password</label>
+                        <input
+                          type="password"
+                          className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                          value={settingsData.password}
+                          onChange={(e) => setSettingsData({ ...settingsData, password: e.target.value })}
+                          placeholder="Min. 6 characters"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <button
+                    type="submit"
+                    className="w-full md:w-auto rounded-2xl bg-blue-600 px-10 py-4 font-black uppercase tracking-widest text-white hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 active:scale-[0.98]"
+                  >
+                    Update Account
+                  </button>
+                </form>
+              </div>
             )}
           </>
         )}
