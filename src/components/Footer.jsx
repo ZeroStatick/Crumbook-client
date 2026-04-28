@@ -5,12 +5,12 @@ const Footer = () => {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="bg-gray-900 text-gray-400 py-16 px-6 mt-20">
+    <footer className="mt-20 border-t border-amber-200/60 bg-gradient-to-r from-[#7c2d12] via-[#9a3d16] to-[#c86b16] px-6 py-16 text-amber-100">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
         <div className="col-span-1 md:col-span-2">
           <Link
             to="/"
-            className="text-3xl font-black text-white tracking-tighter mb-6 inline-block"
+            className="mb-6 inline-block text-3xl font-black tracking-tighter text-white"
           >
             Crumbook
           </Link>
@@ -20,47 +20,47 @@ const Footer = () => {
           </p>
           <div className="mt-8 flex gap-4">
             {/* Social Icons Placeholder */}
-            <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-blue-600 transition-colors cursor-pointer">FB</div>
-            <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-blue-400 transition-colors cursor-pointer">TW</div>
-            <div className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-pink-600 transition-colors cursor-pointer">IG</div>
+            <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-amber-50/12 transition-colors hover:bg-amber-50/24">FB</div>
+            <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-amber-50/12 transition-colors hover:bg-amber-50/24">TW</div>
+            <div className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-amber-50/12 transition-colors hover:bg-amber-50/24">IG</div>
           </div>
         </div>
 
         <div>
-          <h3 className="text-white font-bold text-lg mb-6">Quick Links</h3>
+          <h3 className="mb-6 text-lg font-bold text-white">Quick Links</h3>
           <ul className="space-y-4">
             <li>
-              <Link to="/" className="hover:text-blue-400 transition-colors">Home</Link>
+              <Link to="/" className="transition-colors hover:text-white">Home</Link>
             </li>
             <li>
-              <Link to="/recipes" className="hover:text-blue-400 transition-colors">All Recipes</Link>
+              <Link to="/recipes" className="transition-colors hover:text-white">All Recipes</Link>
             </li>
             <li>
-              <Link to="/drop-ingredients" className="hover:text-blue-400 transition-colors">Drop Ingredients</Link>
+              <Link to="/drop-ingredients" className="transition-colors hover:text-white">Drop Ingredients</Link>
             </li>
             <li>
-              <Link to="/recipes/new" className="hover:text-blue-400 transition-colors">Create Recipe</Link>
+              <Link to="/recipes/new" className="transition-colors hover:text-white">Create Recipe</Link>
             </li>
           </ul>
         </div>
 
         <div>
-          <h3 className="text-white font-bold text-lg mb-6">Account</h3>
+          <h3 className="mb-6 text-lg font-bold text-white">Account</h3>
           <ul className="space-y-4">
             <li>
-              <Link to="/login" className="hover:text-blue-400 transition-colors">Login</Link>
+              <Link to="/login" className="transition-colors hover:text-white">Login</Link>
             </li>
             <li>
-              <Link to="/register" className="hover:text-blue-400 transition-colors">Register</Link>
+              <Link to="/register" className="transition-colors hover:text-white">Register</Link>
             </li>
             <li>
-              <Link to="/profile" className="hover:text-blue-400 transition-colors">My Profile</Link>
+              <Link to="/profile" className="transition-colors hover:text-white">My Profile</Link>
             </li>
           </ul>
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto border-t border-gray-800 mt-16 pt-8 text-center text-sm">
+      <div className="mx-auto mt-16 max-w-7xl border-t border-amber-100/20 pt-8 text-center text-sm text-amber-100/80">
         <p>&copy; {currentYear} Crumbook. Built for foodies, by foodies. All rights reserved.</p>
       </div>
     </footer>

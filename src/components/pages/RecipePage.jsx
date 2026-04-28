@@ -9,17 +9,17 @@ import ShareButton from "../ShareButton"
 
 const RecipeCardSkeleton = () => (
 // ... (rest of the file stays mostly same but with the component call)
-  <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm flex flex-col animate-pulse">
+  <div className="theme-card flex animate-pulse flex-col overflow-hidden rounded-xl">
     <div className="p-5 flex-grow">
-      <div className="h-7 bg-gray-200 rounded w-3/4 mb-4"></div>
+      <div className="mb-4 h-7 w-3/4 rounded bg-amber-100"></div>
       <div className="space-y-2">
-        <div className="h-4 bg-gray-200 rounded w-full"></div>
-        <div className="h-4 bg-gray-200 rounded w-full"></div>
-        <div className="h-4 bg-gray-200 rounded w-2/3"></div>
+        <div className="h-4 w-full rounded bg-amber-100"></div>
+        <div className="h-4 w-full rounded bg-amber-100"></div>
+        <div className="h-4 w-2/3 rounded bg-amber-100"></div>
       </div>
     </div>
-    <div className="px-5 py-4 bg-gray-50 border-t border-gray-100">
-      <div className="h-4 bg-gray-200 rounded w-24"></div>
+    <div className="border-t border-cb-border bg-amber-50/60 px-5 py-4">
+      <div className="h-4 w-24 rounded bg-amber-100"></div>
     </div>
   </div>
 )
@@ -28,8 +28,6 @@ const RecipePage = () => {
   const { user, setUser } = useUserStore()
   const [recipes, setRecipes] = useState([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-  
   // Local guest favorites as fallback
   const [guestFavorites, setGuestFavorites] = useState(() => {
     const saved = localStorage.getItem("recipe_favorites")
@@ -49,7 +47,7 @@ const RecipePage = () => {
         setUser(updatedUser)
         const isNowFav = updatedUser.favorites.includes(id)
         toast.success(isNowFav ? "Added to favorites" : "Removed from favorites")
-      } catch (err) {
+      } catch {
         toast.error("Failed to update favorites")
       }
     } else {
@@ -116,9 +114,8 @@ const RecipePage = () => {
         } else {
           setRecipes([])
         }
-      } catch (err) {
-        setError(err.message || "Failed to fetch recipes")
-        toast.error(err.message || "Failed to fetch recipes")
+      } catch {
+        toast.error("Failed to fetch recipes")
       } finally {
         setLoading(false)
       }
@@ -202,8 +199,8 @@ const RecipePage = () => {
     return (
       <div className="max-w-6xl mx-auto p-4 px-6 lg:px-8">
         <div className="flex justify-between items-center mb-6">
-          <div className="h-9 bg-gray-200 rounded w-48 animate-pulse"></div>
-          <div className="h-10 bg-gray-200 rounded w-40 animate-pulse"></div>
+          <div className="h-9 w-48 animate-pulse rounded bg-amber-100"></div>
+          <div className="h-10 w-40 animate-pulse rounded bg-amber-100"></div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, i) => <RecipeCardSkeleton key={i} />)}
@@ -215,10 +212,10 @@ const RecipePage = () => {
   return (
     <div className="mx-auto max-w-7xl p-4 px-6 lg:px-8">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-3xl font-bold text-gray-800">Explore Recipes</h1>
+        <h1 className="text-3xl font-bold text-cb-text">Explore Recipes</h1>
         <Link
           to="/recipes/new"
-          className="rounded-lg bg-blue-600 px-4 py-2 font-semibold text-white transition-colors hover:bg-blue-700 shadow-sm"
+          className="theme-button-primary px-4 py-2 shadow-sm"
         >
           + Create New
         </Link>
@@ -239,13 +236,13 @@ const RecipePage = () => {
       />
 
       {sortedRecipes.length === 0 ? (
-        <div className="text-center py-20 bg-white rounded-2xl border-2 border-dashed border-gray-200">
+        <div className="theme-card py-20 text-center rounded-2xl border-2 border-dashed border-cb-border">
           <div className="text-4xl mb-4">🔍</div>
-          <h3 className="text-lg font-bold text-gray-800 mb-1">No recipes found</h3>
-          <p className="text-gray-500 mb-6">Try adjusting your filters or search terms.</p>
+          <h3 className="mb-1 text-lg font-bold text-cb-text">No recipes found</h3>
+          <p className="mb-6 text-cb-text-soft">Try adjusting your filters or search terms.</p>
           <button
             onClick={clearFilters}
-            className="px-6 py-2 bg-gray-800 text-white rounded-xl hover:bg-gray-900 transition-all font-medium"
+            className="theme-button-secondary px-6 py-2 font-medium"
           >
             Reset Filters
           </button>
@@ -260,11 +257,11 @@ const RecipePage = () => {
             return (
               <div
                 key={recipeId}
-                className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col relative group"
+                className="theme-card group relative flex flex-col overflow-hidden rounded-2xl transition-all duration-300 hover:shadow-xl"
               >
                 <button
                   onClick={(e) => toggleFavoriteHandler(recipeId, e)}
-                  className={`absolute top-4 right-4 p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-all hover:scale-110 z-10 ${
+                  className={`absolute right-4 top-4 z-10 rounded-full bg-white/90 p-2.5 shadow-md backdrop-blur-sm transition-all hover:scale-110 ${
                     isFav ? "text-red-500 scale-105" : "text-gray-300 hover:text-red-400"
                   }`}
                 >
@@ -274,48 +271,48 @@ const RecipePage = () => {
                 <div className="p-6 flex-grow">
                   <div className="flex flex-wrap gap-2 mb-3">
                     {recipe.difficulty && (
-                      <span className={`text-[10px] uppercase tracking-widest font-black px-2.5 py-1 rounded-lg ${
-                        recipe.difficulty === "Easy" ? "bg-emerald-50 text-emerald-600" :
-                        recipe.difficulty === "Medium" ? "bg-amber-50 text-amber-600" :
-                        "bg-rose-50 text-rose-600"
+                      <span className={`rounded-lg px-2.5 py-1 text-[10px] font-black uppercase tracking-widest ${
+                        recipe.difficulty === "Easy" ? "bg-amber-50 text-amber-700" :
+                        recipe.difficulty === "Medium" ? "bg-orange-100 text-orange-700" :
+                        "bg-red-50 text-red-600"
                       }`}>
                         {recipe.difficulty}
                       </span>
                     )}
                     {totalTime > 0 && (
-                      <span className="text-[10px] uppercase tracking-widest font-black px-2.5 py-1 rounded-lg bg-slate-50 text-slate-500">
+                      <span className="rounded-lg bg-orange-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-cb-text-soft">
                         ⏱️ {totalTime} min
                       </span>
                     )}
                   </div>
 
-                  <h3 className="text-xl font-extrabold text-gray-900 mb-2 leading-tight group-hover:text-blue-600 transition-colors">
+                  <h3 className="mb-2 text-xl font-extrabold leading-tight text-cb-text transition-colors group-hover:text-cb-primary">
                     {recipe.title}
                   </h3>
                   
-                  <p className="text-gray-500 text-sm line-clamp-2 mb-4 leading-relaxed">
+                  <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-cb-text-soft">
                     {recipe.description || "A delicious recipe waiting for you to try it out."}
                   </p>
 
                   <div className="flex flex-wrap gap-1 mt-auto">
                     {(recipe.tags || []).slice(0, 3).map(tag => (
-                      <span key={tag} className="text-[10px] bg-gray-100 text-gray-600 px-2 py-0.5 rounded-md font-medium">
+                      <span key={tag} className="rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-cb-text-soft">
                         #{tag}
                       </span>
                     ))}
                   </div>
                 </div>
 
-                <div className="px-6 py-4 bg-gray-50/50 border-t border-gray-100 mt-auto flex justify-between items-center">
+                <div className="mt-auto flex items-center justify-between border-t border-cb-border bg-amber-50/45 px-6 py-4">
                   <div className="flex gap-3">
                     <ShareButton recipeId={recipeId} className="px-2 py-1 text-xs" />
-                    <span className="text-xs font-bold text-gray-400 self-center">
+                    <span className="self-center text-xs font-bold text-cb-text-soft/75">
                       Serves {recipe.servings || "?"}
                     </span>
                   </div>
                   <Link
                     to={`/recipe/${recipeId}`}
-                    className="text-blue-600 font-bold text-sm hover:translate-x-1 transition-transform flex items-center gap-1"
+                    className="flex items-center gap-1 text-sm font-bold text-cb-primary transition-transform hover:translate-x-1"
                   >
                     View Recipe <span>→</span>
                   </Link>
@@ -331,17 +328,17 @@ const RecipePage = () => {
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="rounded border bg-white px-4 py-2 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="theme-button-secondary rounded border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Previous
           </button>
-          <span className="font-medium text-gray-600">
+          <span className="font-medium text-cb-text-soft">
             Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="rounded border bg-white px-4 py-2 hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="theme-button-secondary rounded border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Next
           </button>
