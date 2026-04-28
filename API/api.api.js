@@ -24,9 +24,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => {
     // The backend follows { success: true, result: ... } pattern
-    // HOWEVER, some controllers use 'data' instead of 'result'.
-    // Let's be flexible.
-    return response.data.result !== undefined ? response.data.result : response.data.data
+    return response.data.result
   },
   (error) => {
     if (error.response?.status === 401) {

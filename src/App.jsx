@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import useUserStore from "./global/user"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { get_me } from "../API/api.api"
@@ -27,10 +27,14 @@ import { Toaster } from "react-hot-toast"
 
 function App() {
   const { setUser } = useUserStore()
+  const [isInitializing, setIsInitializing] = useState(true)
 
   const checkUser = async () => {
     const token = localStorage.getItem("token")
-    if (!token) return
+    if (!token) {
+      setIsInitializing(false)
+      return
+    }
 
     try {
       const user = await get_me()
@@ -41,12 +45,22 @@ function App() {
       localStorage.removeItem("token")
       localStorage.removeItem("user_data")
       setUser(null)
+    } finally {
+      setIsInitializing(false)
     }
   }
 
   useEffect(() => {
     checkUser()
   }, [])
+
+  if (isInitializing) {
+    return (
+      <div className="flex h-screen w-screen items-center justify-center bg-gray-50">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+      </div>
+    )
+  }
 
   return (
     <>
