@@ -15,31 +15,31 @@ const Navbar = () => {
   }
 
   return (
-    <nav className="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 px-6 py-4 mb-8 shadow-xl">
+    <nav className="sticky top-0 z-50 mb-8 border-b border-amber-300/40 bg-gradient-to-r from-[#9a3d16]/95 via-[#b45309]/95 to-[#d88b1c]/95 px-6 py-4 shadow-xl backdrop-blur-md">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="flex items-center gap-8">
           <Link
             to="/"
-            className="text-2xl font-black text-blue-400 tracking-tighter hover:scale-105 transition-transform"
+            className="text-2xl font-black tracking-tighter text-amber-50 transition-transform hover:scale-105"
           >
             Crumbook
           </Link>
           <div className="hidden md:flex items-center gap-6">
             <Link 
               to="/recipes" 
-              className="text-slate-300 hover:text-blue-400 font-semibold transition-colors"
+              className="font-semibold text-amber-50/85 transition-colors hover:text-white"
             >
               Recipes
             </Link>
             <Link
               to="/drop-ingredients"
-              className="text-slate-300 hover:text-blue-400 font-semibold transition-colors"
+              className="font-semibold text-amber-50/85 transition-colors hover:text-white"
             >
               Drop Ingredients
             </Link>
             <Link
               to="/ai-chef"
-              className="text-blue-400 hover:text-blue-300 font-black transition-colors flex items-center gap-1.5 px-3 py-1 rounded-lg bg-blue-400/10 border border-blue-400/20"
+              className="flex items-center gap-1.5 rounded-lg border border-amber-200/35 bg-amber-100/18 px-3 py-1 font-black text-amber-100 transition-colors hover:text-white"
             >
               <span className="text-lg">👨‍🍳</span> AI Chef
             </Link>
@@ -51,22 +51,22 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <Link
                 to="/profile"
-                className="flex items-center gap-2 px-3 py-1.5 rounded-full hover:bg-slate-800 transition-colors border border-transparent hover:border-slate-700"
+                className="flex items-center gap-2 rounded-full border border-transparent px-3 py-1.5 transition-colors hover:border-amber-100/25 hover:bg-amber-950/10"
               >
-                <div className="w-8 h-8 rounded-full bg-blue-900/50 border border-blue-700 overflow-hidden">
+                <div className="h-8 w-8 overflow-hidden rounded-full border border-amber-100/40 bg-amber-950/30">
                   <img 
                     src={user.profile_picture || defaultAvatar} 
                     alt={user.name} 
                     className="w-full h-full object-cover"
                   />
                 </div>
-                <span className="hidden sm:inline font-bold text-slate-200">{user.name || "Chef"}</span>
+                <span className="hidden sm:inline font-bold text-amber-50">{user.name || "Chef"}</span>
               </Link>
               
               {user.role >= 2 && (
                 <Link
                   to="/admin"
-                  className="hidden lg:inline-block px-4 py-2 rounded-xl bg-amber-500/10 text-amber-400 text-sm font-black uppercase tracking-widest border border-amber-500/20 hover:bg-amber-500/20 transition-colors"
+                  className="hidden rounded-xl border border-amber-100/30 bg-amber-50/18 px-4 py-2 text-sm font-black uppercase tracking-widest text-amber-50 transition-colors hover:bg-amber-50/28 lg:inline-block"
                 >
                   Admin
                 </Link>
@@ -74,7 +74,7 @@ const Navbar = () => {
               
               <button
                 onClick={handleLogout}
-                className="px-5 py-2 bg-slate-100 text-slate-900 rounded-xl font-bold text-sm hover:bg-white transition-all active:scale-95 shadow-lg"
+                className="rounded-xl border border-amber-200/80 bg-amber-50 px-5 py-2 text-sm font-bold text-amber-950 shadow-lg transition-all active:scale-95 hover:bg-white"
               >
                 Logout
               </button>
@@ -83,13 +83,13 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <Link 
                 to="/login" 
-                className="text-slate-300 hover:text-white font-bold transition-colors"
+                className="font-bold text-amber-50/85 transition-colors hover:text-white"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="px-6 py-2 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-500 transition-all shadow-lg shadow-blue-900/20 active:scale-95 border border-blue-500/30"
+                className="rounded-xl border border-amber-100/40 bg-amber-50 px-6 py-2 font-bold text-[#9a3d16] shadow-lg transition-all active:scale-95 hover:bg-white"
               >
                 Join Now
               </Link>

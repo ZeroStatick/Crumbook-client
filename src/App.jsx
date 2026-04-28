@@ -2,7 +2,6 @@ import { useEffect, useState } from "react"
 import useUserStore from "./global/user"
 import { BrowserRouter, Route, Routes } from "react-router-dom"
 import { get_me } from "../API/api.api"
-import { logout } from "../API/auth.api"
 
 // Components
 import Navbar from "./components/Navbar.jsx"
@@ -56,8 +55,8 @@ function App() {
 
   if (isInitializing) {
     return (
-      <div className="flex h-screen w-screen items-center justify-center bg-gray-50">
-        <div className="h-12 w-12 animate-spin rounded-full border-4 border-blue-600 border-t-transparent"></div>
+      <div className="theme-page flex h-screen w-screen items-center justify-center">
+        <div className="h-12 w-12 animate-spin rounded-full border-4 border-cb-border border-t-cb-primary"></div>
       </div>
     )
   }
@@ -67,7 +66,7 @@ function App() {
       <Toaster />
       <BrowserRouter>
         <Navbar />
-        <main className="min-h-screen">
+        <main className="theme-page min-h-screen">
           <Routes>
             {/* Main Routes */}
             <Route path="/" element={<Home />} />
@@ -138,8 +137,8 @@ function App() {
               path="*"
               element={
                 <div className="flex h-64 flex-col items-center justify-center text-center">
-                  <h1 className="text-4xl font-bold text-gray-800">404</h1>
-                  <p className="mt-2 text-gray-600">Page not found</p>
+                  <h1 className="text-4xl font-bold text-cb-text">404</h1>
+                  <p className="mt-2 text-cb-text-soft">Page not found</p>
                 </div>
               }
             />

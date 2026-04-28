@@ -51,25 +51,25 @@ const AIChefPage = () => {
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-8 flex flex-col h-[calc(100vh-120px)]">
       <div className="text-center mb-8 shrink-0">
-        <h1 className="text-4xl font-extrabold text-gray-900 mb-2 flex items-center justify-center gap-3">
+        <h1 className="mb-2 flex items-center justify-center gap-3 text-4xl font-extrabold text-cb-text">
           <span className="text-4xl">👨‍🍳</span> AI Chef
         </h1>
-        <p className="text-gray-600">Your personal culinary assistant, ready to help 24/7.</p>
+        <p className="text-cb-text-soft">Your personal culinary assistant, ready to help 24/7.</p>
       </div>
 
       <div 
         ref={scrollContainerRef}
-        className="flex-1 overflow-y-auto pr-2 custom-scrollbar mb-6 bg-gray-50/50 rounded-2xl p-6 border border-gray-100"
+        className="theme-card flex-1 overflow-y-auto rounded-2xl p-6 pr-2 custom-scrollbar mb-6"
       >
         {messages.map((msg, index) => (
           <ChatMessage key={index} message={msg} />
         ))}
         {isLoading && (
           <div className="flex justify-start mb-4">
-            <div className="bg-white p-4 rounded-2xl rounded-tl-none border border-gray-100 shadow-sm flex items-center gap-2">
-              <div className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce"></div>
-              <div className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce [animation-delay:0.2s]"></div>
-              <div className="w-1.5 h-1.5 bg-gray-300 rounded-full animate-bounce [animation-delay:0.4s]"></div>
+            <div className="theme-card flex items-center gap-2 rounded-2xl rounded-tl-none p-4 shadow-sm">
+              <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-amber-400"></div>
+              <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-amber-500 [animation-delay:0.2s]"></div>
+              <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-orange-500 [animation-delay:0.4s]"></div>
             </div>
           </div>
         )}
@@ -78,7 +78,7 @@ const AIChefPage = () => {
 
       <div className="shrink-0">
         <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
-        <p className="text-[10px] text-gray-400 mt-3 text-center">
+        <p className="mt-3 text-center text-[10px] text-cb-text-soft/75">
           Our AI Chef can make mistakes. Always double-check cooking temperatures and ingredient safety.
         </p>
       </div>

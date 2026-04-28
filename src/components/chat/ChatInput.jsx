@@ -19,15 +19,15 @@ const ChatInput = ({ onSendMessage, isLoading }) => {
         onChange={(e) => setInput(e.target.value)}
         disabled={isLoading}
         placeholder="Ask the AI Chef anything..."
-        className="w-full pl-6 pr-14 py-4 bg-white border border-gray-200 rounded-2xl shadow-sm outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
+        className="theme-input w-full rounded-2xl bg-white/95 py-4 pl-6 pr-14 shadow-sm disabled:cursor-not-allowed disabled:bg-amber-50/60"
       />
       <button
         type="submit"
         disabled={!input.trim() || isLoading}
         className={`absolute right-2 top-2 bottom-2 px-4 rounded-xl font-bold transition-all flex items-center justify-center ${
           !input.trim() || isLoading
-            ? "bg-gray-100 text-gray-400 cursor-not-allowed"
-            : "bg-blue-600 text-white hover:bg-blue-700 shadow-sm active:scale-95"
+            ? "cursor-not-allowed bg-amber-50 text-amber-300"
+            : "theme-button-primary text-white shadow-sm active:scale-95"
         }`}
       >
         {isLoading ? (

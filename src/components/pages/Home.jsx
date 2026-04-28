@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { get_all_recipes } from "../../../API/recipe.api"
-import toast from "react-hot-toast"
 
 const Home = () => {
   const [latestRecipes, setLatestRecipes] = useState([])
@@ -28,28 +27,28 @@ const Home = () => {
   }, [])
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col gap-20 py-10 pb-24">
+    <div className="mx-auto flex max-w-7xl flex-col gap-20 px-4 py-10 pb-24 sm:px-6 lg:px-8">
       {/* Hero Section */}
-      <section className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-600 to-indigo-700 py-20 px-8 text-white shadow-2xl">
+      <section className="relative overflow-hidden rounded-[2rem] border border-amber-200/70 bg-gradient-to-r from-[#b44a17] via-[#cf7a17] to-[#d9981d] px-8 py-20 text-white shadow-2xl shadow-amber-950/15">
         <div className="relative z-10 mx-auto max-w-4xl text-center">
           <h1 className="mb-6 text-5xl font-extrabold tracking-tight md:text-6xl">
             Cook with What You Have. <br />
-            <span className="text-blue-200">Organize Every Bite.</span>
+            <span className="text-amber-100">Organize Every Bite.</span>
           </h1>
-          <p className="mb-10 text-xl text-blue-100 opacity-90 md:text-2xl">
+          <p className="mb-10 text-xl text-amber-50/90 md:text-2xl">
             Crumbook is your ultimate recipe companion. Find meals based on your pantry, 
             save your favorites, and share your culinary creations with the world.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <Link
               to="/recipes"
-              className="rounded-full bg-white px-8 py-4 font-bold text-blue-700 shadow-lg transition-all hover:bg-blue-50 hover:scale-105 active:scale-95"
+              className="rounded-full border border-amber-200 bg-amber-50 px-8 py-4 font-bold text-[#8d3500] shadow-lg transition-all hover:scale-105 hover:bg-white active:scale-95"
             >
               Browse Recipes
             </Link>
             <Link
               to="/drop-ingredients"
-              className="rounded-full bg-blue-500/30 px-8 py-4 font-bold text-white backdrop-blur-md border-2 border-white/20 transition-all hover:bg-blue-500/50 hover:scale-105 active:scale-95"
+              className="rounded-full border-2 border-amber-50/30 bg-[#9a3d16]/40 px-8 py-4 font-bold text-white backdrop-blur-md transition-all hover:scale-105 hover:bg-[#8d3500]/45 active:scale-95"
             >
               Drop Ingredients
             </Link>
@@ -57,18 +56,18 @@ const Home = () => {
         </div>
         
         {/* Decorative elements */}
-        <div className="absolute -top-24 -left-24 h-64 w-64 rounded-full bg-white/10 blur-3xl"></div>
-        <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-blue-400/20 blur-3xl"></div>
+        <div className="absolute -left-24 -top-24 h-64 w-64 rounded-full bg-white/14 blur-3xl"></div>
+        <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-amber-100/20 blur-3xl"></div>
       </section>
 
       {/* Latest Recipes Section */}
       <section>
         <div className="mb-8 flex items-end justify-between px-2">
           <div>
-            <h2 className="text-3xl font-bold text-gray-900">Latest Discoveries</h2>
-            <p className="text-gray-500">Fresh from our community's kitchens.</p>
+            <h2 className="text-3xl font-bold text-cb-text">Latest Discoveries</h2>
+            <p className="text-cb-text-soft">Fresh from our community's kitchens.</p>
           </div>
-          <Link to="/recipes" className="font-bold text-blue-600 hover:text-blue-700 flex items-center gap-1 group">
+          <Link to="/recipes" className="group flex items-center gap-1 font-bold text-cb-primary hover:text-cb-primary-strong">
             View All <span className="group-hover:translate-x-1 transition-transform">→</span>
           </Link>
         </div>
@@ -76,7 +75,7 @@ const Home = () => {
         {loading ? (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-64 animate-pulse rounded-2xl bg-gray-100"></div>
+              <div key={i} className="theme-card h-64 animate-pulse rounded-2xl"></div>
             ))}
           </div>
         ) : (
@@ -86,34 +85,34 @@ const Home = () => {
                 <Link
                   key={recipe._id}
                   to={`/recipe/${recipe._id}`}
-                  className="group flex flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all hover:shadow-xl hover:-translate-y-1"
+                  className="theme-card group flex flex-col overflow-hidden rounded-2xl transition-all hover:-translate-y-1 hover:shadow-xl"
                 >
                   <div className="p-6">
                     <div className="mb-3 flex gap-2">
-                      <span className="rounded-lg bg-blue-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-blue-600">
+                      <span className="rounded-lg bg-amber-100/60 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-cb-primary">
                         {recipe.difficulty || "Easy"}
                       </span>
-                      <span className="rounded-lg bg-gray-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-gray-500">
+                      <span className="rounded-lg bg-orange-50 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-cb-text-soft">
                         ⏱️ {(recipe.prepTime || 0) + (recipe.cookTime || 0)} min
                       </span>
                     </div>
-                    <h3 className="mb-2 text-xl font-bold text-gray-900 group-hover:text-blue-600">
+                    <h3 className="mb-2 text-xl font-bold text-cb-text group-hover:text-cb-primary">
                       {recipe.title}
                     </h3>
-                    <p className="mb-4 line-clamp-2 text-sm text-gray-500">
+                    <p className="mb-4 line-clamp-2 text-sm text-cb-text-soft">
                       {recipe.description || "A delicious recipe waiting for you."}
                     </p>
                     <div className="mt-auto flex items-center justify-between">
-                      <span className="text-xs font-bold text-gray-400">
+                      <span className="text-xs font-bold text-cb-text-soft/80">
                         By {recipe.author?.name || "Chef"}
                       </span>
-                      <span className="text-blue-600 font-bold text-sm">View →</span>
+                      <span className="text-sm font-bold text-cb-primary">View →</span>
                     </div>
                   </div>
                 </Link>
               ))
             ) : (
-              <div className="col-span-full py-12 text-center text-gray-500 bg-gray-50 rounded-2xl border-2 border-dashed border-gray-200">
+              <div className="col-span-full rounded-2xl border-2 border-dashed border-cb-border bg-cb-surface py-12 text-center text-cb-text-soft">
                 No recipes found yet. Be the first to create one!
               </div>
             )}
@@ -124,26 +123,26 @@ const Home = () => {
       {/* Feature Focus: Drop Ingredients */}
       <section className="grid grid-cols-1 items-center gap-12 md:grid-cols-2">
         <div className="order-2 md:order-1">
-          <div className="inline-block rounded-2xl bg-amber-50 px-4 py-2 text-sm font-black uppercase tracking-widest text-amber-600 mb-4">
+          <div className="mb-4 inline-block rounded-2xl bg-amber-100/60 px-4 py-2 text-sm font-black uppercase tracking-widest text-cb-primary">
             Special Feature
           </div>
-          <h2 className="mb-6 text-4xl font-bold text-gray-900">
+          <h2 className="mb-6 text-4xl font-bold text-cb-text">
             Pantry Empty? <br />
             No problem.
           </h2>
-          <p className="mb-8 text-lg text-gray-600 leading-relaxed">
+          <p className="mb-8 text-lg leading-relaxed text-cb-text-soft">
             Our <strong>"Drop Your Ingredients"</strong> engine suggests recipes based on what you actually have. 
             Stop wandering the aisles and start cooking with what's already in your cupboard.
           </p>
           <Link
             to="/drop-ingredients"
-            className="inline-flex items-center gap-2 rounded-xl bg-gray-900 px-6 py-3 font-bold text-white transition-all hover:bg-black hover:scale-105"
+            className="theme-button-primary inline-flex items-center gap-2 px-6 py-3 hover:scale-105"
           >
             Try Ingredient Drop <span>✨</span>
           </Link>
         </div>
         <div className="order-1 md:order-2">
-          <div className="aspect-square rounded-3xl bg-amber-100 flex items-center justify-center text-8xl shadow-inner relative overflow-hidden group">
+          <div className="relative flex aspect-square items-center justify-center overflow-hidden rounded-3xl border border-amber-200/70 bg-gradient-to-br from-amber-100 via-orange-50 to-amber-200 text-8xl shadow-inner group">
             <span className="group-hover:scale-110 transition-transform duration-500">🥘</span>
             <div className="absolute top-4 right-4 text-4xl opacity-50">🥦</div>
             <div className="absolute bottom-10 left-10 text-4xl opacity-50 rotate-12">🍅</div>
@@ -153,33 +152,33 @@ const Home = () => {
       </section>
 
       {/* Testimonial/Trust Section */}
-      <section className="rounded-3xl bg-gray-50 py-16 px-8 text-center border border-gray-100">
-        <h2 className="mb-12 text-3xl font-bold text-gray-900">Why Chefs choose Crumbook</h2>
+      <section className="theme-card rounded-3xl px-8 py-16 text-center">
+        <h2 className="mb-12 text-3xl font-bold text-cb-text">Why Chefs choose Crumbook</h2>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div className="space-y-4">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-100 text-3xl">📱</div>
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-100 text-3xl">📱</div>
             <h3 className="text-xl font-bold">Mobile Friendly</h3>
-            <p className="text-gray-500">Keep your recipes handy while you're standing at the stove.</p>
+            <p className="text-cb-text-soft">Keep your recipes handy while you're standing at the stove.</p>
           </div>
           <div className="space-y-4">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-green-100 text-3xl">📂</div>
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-orange-100 text-3xl">📂</div>
             <h3 className="text-xl font-bold">Perfectly Organized</h3>
-            <p className="text-gray-500">Categorize, tag, and search through your personal cookbook.</p>
+            <p className="text-cb-text-soft">Categorize, tag, and search through your personal cookbook.</p>
           </div>
           <div className="space-y-4">
-            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-purple-100 text-3xl">🤝</div>
+            <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-2xl bg-amber-50 text-3xl">🤝</div>
             <h3 className="text-xl font-bold">Community Shared</h3>
-            <p className="text-gray-500">Discover new ideas from a world of food enthusiasts.</p>
+            <p className="text-cb-text-soft">Discover new ideas from a world of food enthusiasts.</p>
           </div>
         </div>
       </section>
 
       {/* Final CTA */}
       <section className="py-8 text-center">
-        <h2 className="mb-8 text-4xl font-bold text-gray-900">Ready to start your culinary journey?</h2>
+        <h2 className="mb-8 text-4xl font-bold text-cb-text">Ready to start your culinary journey?</h2>
         <Link
           to="/register"
-          className="inline-block rounded-full bg-blue-600 px-10 py-4 text-xl font-bold text-white shadow-xl transition-all hover:bg-blue-700 hover:scale-105 active:scale-95"
+          className="theme-button-primary inline-block rounded-full px-10 py-4 text-xl shadow-xl transition-all hover:scale-105 active:scale-95"
         >
           Join Crumbook Today
         </Link>

@@ -9,8 +9,8 @@ const ChatMessage = ({ message }) => {
       <div
         className={`max-w-[85%] p-4 rounded-2xl shadow-sm ${
           isUser
-            ? "bg-blue-600 text-white rounded-tr-none"
-            : "bg-white text-gray-800 border border-gray-100 rounded-tl-none"
+            ? "rounded-tr-none bg-gradient-to-r from-[#9a3d16] to-[#c86b16] text-white"
+            : "theme-card rounded-tl-none text-cb-text"
         }`}
       >
         <div className="flex items-center gap-2 mb-2">
@@ -21,18 +21,18 @@ const ChatMessage = ({ message }) => {
         <div className={`text-sm leading-relaxed markdown-content ${isUser ? "prose-invert" : ""}`}>
           <ReactMarkdown
             components={{
-              p: ({ node, ...props }) => <p className="mb-2 last:mb-0" {...props} />,
-              ul: ({ node, ...props }) => <ul className="list-disc ml-4 mb-2" {...props} />,
-              ol: ({ node, ...props }) => <ol className="list-decimal ml-4 mb-2" {...props} />,
-              li: ({ node, ...props }) => <li className="mb-1" {...props} />,
-              h1: ({ node, ...props }) => <h1 className="text-lg font-bold mb-2" {...props} />,
-              h2: ({ node, ...props }) => <h2 className="text-md font-bold mb-2" {...props} />,
-              h3: ({ node, ...props }) => <h3 className="text-sm font-bold mb-1" {...props} />,
-              code: ({ node, inline, ...props }) => 
+              p: (props) => <p className="mb-2 last:mb-0" {...props} />,
+              ul: (props) => <ul className="list-disc ml-4 mb-2" {...props} />,
+              ol: (props) => <ol className="list-decimal ml-4 mb-2" {...props} />,
+              li: (props) => <li className="mb-1" {...props} />,
+              h1: (props) => <h1 className="text-lg font-bold mb-2" {...props} />,
+              h2: (props) => <h2 className="text-md font-bold mb-2" {...props} />,
+              h3: (props) => <h3 className="text-sm font-bold mb-1" {...props} />,
+              code: ({ inline, ...props }) => 
                 inline ? 
-                  <code className="bg-gray-100 px-1 rounded text-xs font-mono" {...props} /> :
-                  <code className="block bg-gray-100 p-2 rounded text-xs font-mono my-2 overflow-x-auto" {...props} />,
-              blockquote: ({ node, ...props }) => <blockquote className="border-l-4 border-gray-200 pl-4 italic my-2" {...props} />
+                  <code className="rounded bg-amber-50 px-1 text-xs font-mono" {...props} /> :
+                  <code className="my-2 block overflow-x-auto rounded bg-amber-50 p-2 text-xs font-mono" {...props} />,
+              blockquote: (props) => <blockquote className="my-2 border-l-4 border-amber-200 pl-4 italic" {...props} />
             }}
           >
             {message.text}
