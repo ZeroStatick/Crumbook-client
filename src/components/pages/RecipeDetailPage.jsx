@@ -7,8 +7,8 @@ import {
   create_comment,
   delete_comment,
 } from "../../../API/comment.api"
-import { DEFAULT_RECIPE_IMAGE } from "../../../constant/images.js"
-import useUserStore from "../../global/user.js"
+import { DEFAULT_RECIPE_IMAGE } from "../../../constant/images"
+import useUserStore from "../../global/user"
 import toast from "react-hot-toast"
 import ReportModal from "../ReportModal"
 import ShareButton from "../ShareButton"
@@ -160,7 +160,7 @@ const RecipeDetailPage = () => {
               Report Recipe
             </button>
           )}
-          {user && (
+          {user && !recipe.isExternal && (
             <button
               onClick={() => navigate(`/recipes/fork/${id}`)}
               className="text-cb-primary rounded-xl border border-amber-200 bg-amber-100/70 px-4 py-2 text-sm font-bold hover:bg-amber-100"
@@ -327,7 +327,7 @@ const RecipeDetailPage = () => {
           Comments ({comments.length})
         </h2>
 
-        {user && !isAuthor ? (
+        {user && !isAuthor && !recipe.isExternal ? (
           <form
             onSubmit={handleCommentSubmit}
             className="theme-card mb-12 rounded-2xl p-6 shadow-sm"
@@ -389,6 +389,12 @@ const RecipeDetailPage = () => {
           <div className="theme-card-soft mb-12 rounded-2xl p-6 text-center">
             <p className="text-cb-text-soft italic">
               You cannot comment on your own recipe.
+            </p>
+          </div>
+        ) : recipe.isExternal ? (
+          <div className="theme-card-soft mb-12 rounded-2xl p-6 text-center">
+            <p className="text-cb-text-soft italic">
+              Comments are disabled for external recipes.
             </p>
           </div>
         ) : null}
