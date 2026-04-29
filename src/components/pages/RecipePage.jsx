@@ -8,19 +8,19 @@ import toast from "react-hot-toast"
 import RecipeFilters from "../RecipeFilters"
 import ShareButton from "../ShareButton"
 
+// SKELETON : Refactorisé en Dark Mode
 const RecipeCardSkeleton = () => (
-  // ... (rest of the file stays mostly same but with the component call)
-  <div className="theme-card flex animate-pulse flex-col overflow-hidden rounded-xl">
-    <div className="flex-grow p-5">
-      <div className="mb-4 h-7 w-3/4 rounded bg-amber-100"></div>
+  <div className="flex animate-pulse flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0f141d] shadow-[0_10px_30px_rgba(0,0,0,0.22)]">
+    <div className="grow p-5">
+      <div className="mb-4 h-7 w-3/4 rounded bg-zinc-800"></div>
       <div className="space-y-2">
-        <div className="h-4 w-full rounded bg-amber-100"></div>
-        <div className="h-4 w-full rounded bg-amber-100"></div>
-        <div className="h-4 w-2/3 rounded bg-amber-100"></div>
+        <div className="h-4 w-full rounded bg-zinc-800"></div>
+        <div className="h-4 w-full rounded bg-zinc-800"></div>
+        <div className="h-4 w-2/3 rounded bg-zinc-800"></div>
       </div>
     </div>
-    <div className="border-cb-border border-t bg-amber-50/60 px-5 py-4">
-      <div className="h-4 w-24 rounded bg-amber-100"></div>
+    <div className="border-t border-white/10 bg-[#0d1219] px-5 py-4">
+      <div className="h-4 w-24 rounded bg-zinc-800"></div>
     </div>
   </div>
 )
@@ -29,13 +29,12 @@ const RecipePage = () => {
   const { user, setUser } = useUserStore()
   const [recipes, setRecipes] = useState([])
   const [loading, setLoading] = useState(true)
-  // Local guest favorites as fallback
+
   const [guestFavorites, setGuestFavorites] = useState(() => {
     const saved = localStorage.getItem("recipe_favorites")
     return saved ? JSON.parse(saved) : []
   })
 
-  // Determine current favorites based on login status
   const favorites = user ? user.favorites || [] : guestFavorites
 
   const toggleFavoriteHandler = async (id, e) => {
@@ -54,7 +53,6 @@ const RecipePage = () => {
         toast.error("Failed to update favorites")
       }
     } else {
-      // Guest mode
       const newFavs = guestFavorites.includes(id)
         ? guestFavorites.filter((favId) => favId !== id)
         : [...guestFavorites, id]
@@ -69,7 +67,6 @@ const RecipePage = () => {
     }
   }
 
-  // URL Search Params for Filtering and Pagination
   const [searchParams, setSearchParams] = useSearchParams()
   const searchTerm = searchParams.get("search") || ""
   const currentPage = parseInt(searchParams.get("page") || "1", 10)
@@ -81,16 +78,12 @@ const RecipePage = () => {
   const selectedTag = searchParams.get("tag") || ""
 
   const recipesPerPage = 20
-
-  // Local state for debounced search
   const [searchInput, setSearchInput] = useState(searchTerm)
 
-  // Sync local input with URL if it changes externally
   useEffect(() => {
     setSearchInput(searchTerm)
   }, [searchTerm])
 
-  // Debounce search effect
   useEffect(() => {
     const timer = setTimeout(() => {
       if (searchInput !== searchTerm) {
@@ -108,7 +101,6 @@ const RecipePage = () => {
         )
       }
     }, 400)
-
     return () => clearTimeout(timer)
   }, [searchInput, setSearchParams, searchTerm])
 
@@ -130,7 +122,6 @@ const RecipePage = () => {
     fetchRecipes()
   }, [])
 
-  // Extract unique tags from all recipes
   const allTags = Array.from(
     new Set(
       recipes
@@ -140,7 +131,6 @@ const RecipePage = () => {
     ),
   ).sort()
 
-  // Handle filtering logic
   const filteredRecipes = Array.isArray(recipes)
     ? recipes.filter((recipe) => {
         if (!recipe) return false
@@ -181,7 +171,6 @@ const RecipePage = () => {
       })
     : []
 
-  // Handle sorting logic
   const getSortedRecipes = () => {
     return [...filteredRecipes].sort((a, b) => {
       switch (sortBy) {
@@ -204,7 +193,6 @@ const RecipePage = () => {
 
   const sortedRecipes = getSortedRecipes()
 
-  // Pagination
   const indexOfLastRecipe = currentPage * recipesPerPage
   const indexOfFirstRecipe = indexOfLastRecipe - recipesPerPage
   const currentRecipes = sortedRecipes.slice(
@@ -213,7 +201,6 @@ const RecipePage = () => {
   )
   const totalPages = Math.ceil(sortedRecipes.length / recipesPerPage)
 
-  // Handlers for URL params
   const updateFilter = (key, value) => {
     setSearchParams((prev) => {
       if (!value || value === "") prev.delete(key)
@@ -236,8 +223,8 @@ const RecipePage = () => {
     return (
       <div className="mx-auto max-w-6xl p-4 px-6 lg:px-8">
         <div className="mb-6 flex items-center justify-between">
-          <div className="h-9 w-48 animate-pulse rounded bg-amber-100"></div>
-          <div className="h-10 w-40 animate-pulse rounded bg-amber-100"></div>
+          <div className="h-9 w-48 animate-pulse rounded bg-zinc-800"></div>
+          <div className="h-10 w-40 animate-pulse rounded bg-zinc-800"></div>
         </div>
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {[...Array(6)].map((_, i) => (
@@ -250,14 +237,27 @@ const RecipePage = () => {
 
   return (
     <div className="mx-auto max-w-7xl p-4 px-6 lg:px-8">
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-cb-text text-3xl font-bold">Explore Recipes</h1>
-        <Link
-          to="/recipes/new"
-          className="theme-button-primary px-4 py-2 shadow-sm"
-        >
-          + Create New
-        </Link>
+      <div className="mb-10 overflow-hidden rounded-4xl border border-white/10 bg-[#10151f]/95 p-8 shadow-2xl shadow-black/35 backdrop-blur-xl">
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+          <div className="max-w-3xl">
+            <p className="mb-3 inline-flex rounded-full border border-amber-400/20 bg-amber-400/10 px-4 py-2 text-xs tracking-[0.32em] text-amber-200 uppercase">
+              Curated for you
+            </p>
+            <h1 className="font-serif text-5xl font-black tracking-tight text-white sm:text-6xl">
+              Discover New Flavors
+            </h1>
+            <p className="mt-4 max-w-xl text-base leading-7 text-amber-100/75">
+              Curated recipes for every season, mood, and kitchen. Explore bold
+              tastes and favorite dishes in one beautiful place.
+            </p>
+          </div>
+          <Link
+            to="/recipes/new"
+            className="inline-flex items-center justify-center rounded-full border border-amber-400/20 bg-amber-400/15 px-6 py-3 text-sm font-semibold text-amber-100 shadow-lg shadow-amber-950/15 transition-all hover:bg-amber-400/25"
+          >
+            + Create New
+          </Link>
+        </div>
       </div>
 
       <RecipeFilters
@@ -275,17 +275,17 @@ const RecipePage = () => {
       />
 
       {sortedRecipes.length === 0 ? (
-        <div className="theme-card border-cb-border rounded-2xl border-2 border-dashed py-20 text-center">
-          <div className="mb-4 text-4xl">🔍</div>
-          <h3 className="text-cb-text mb-1 text-lg font-bold">
+        <div className="rounded-2xl border-2 border-dashed border-zinc-800 bg-[#1c1c1c] py-20 text-center">
+          <div className="mb-4 text-4xl opacity-50">🔍</div>
+          <h3 className="mb-1 font-serif text-lg text-[#EAE0D5]">
             No recipes found
           </h3>
-          <p className="text-cb-text-soft mb-6">
+          <p className="mb-6 text-zinc-500">
             Try adjusting your filters or search terms.
           </p>
           <button
             onClick={clearFilters}
-            className="theme-button-secondary px-6 py-2 font-medium"
+            className="rounded-lg bg-zinc-800 px-6 py-2 font-medium text-zinc-300 transition-colors hover:text-white"
           >
             Reset Filters
           </button>
@@ -300,67 +300,76 @@ const RecipePage = () => {
             return (
               <div
                 key={recipeId}
-                className="theme-card group relative flex flex-col overflow-hidden rounded-2xl transition-all duration-300 hover:shadow-xl"
+                className="group relative flex flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0f141d] transition-all duration-300 hover:-translate-y-1 hover:border-amber-400/20 hover:shadow-[0_30px_60px_rgba(0,0,0,0.35)]"
               >
-                <div className="relative h-48 overflow-hidden">
-                  <img
-                    src={recipe.image || DEFAULT_RECIPE_IMAGE}
-                    alt={recipe.title}
-                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  {recipe.imageSource === "ai" && (
-                    <span className="absolute bottom-2 left-2 rounded-md bg-purple-600/80 px-2 py-1 text-[10px] font-bold text-white shadow-lg backdrop-blur-sm">
-                      ✨ AI GENERATED
-                    </span>
-                  )}
-                  <button
-                    onClick={(e) => toggleFavoriteHandler(recipeId, e)}
-                    className={`absolute top-4 right-4 z-10 rounded-full bg-white/90 p-2.5 shadow-md backdrop-blur-sm transition-all hover:scale-110 ${
-                      isFav
-                        ? "scale-105 text-red-500"
-                        : "text-gray-300 hover:text-red-400"
-                    }`}
-                  >
-                    {isFav ? "❤️" : "🤍"}
-                  </button>
+                <div className="p-4">
+                  <div className="relative overflow-hidden rounded-[1rem] border border-white/10 bg-[#0a0f16]">
+                    <img
+                      src={recipe.image || DEFAULT_RECIPE_IMAGE}
+                      alt={recipe.title}
+                      className="h-56 w-full rounded-[1rem] object-cover transition-transform duration-700 group-hover:scale-110"
+                    />
+
+                    {recipe.imageSource === "ai" && (
+                      <span className="absolute bottom-3 left-3 rounded-full border border-white/10 bg-black/60 px-3 py-1 text-[10px] font-bold tracking-[0.12em] text-purple-300 uppercase shadow-lg backdrop-blur-md">
+                        ✨ AI GENERATED
+                      </span>
+                    )}
+
+                    <button
+                      onClick={(e) => toggleFavoriteHandler(recipeId, e)}
+                      className={`absolute top-3 right-3 z-10 inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-black/40 text-base transition-all hover:bg-black/60 ${
+                        isFav
+                          ? "text-red-400"
+                          : "text-white/70 hover:text-white"
+                      }`}
+                    >
+                      {isFav ? "❤️" : "🤍"}
+                    </button>
+                  </div>
                 </div>
 
-                <div className="flex-grow p-6">
-                  <div className="mb-3 flex flex-wrap gap-2">
+                <div className="grow p-6">
+                  <div className="mb-4 flex flex-wrap gap-2">
                     {recipe.difficulty && (
                       <span
-                        className={`rounded-lg px-2.5 py-1 text-[10px] font-black tracking-widest uppercase ${
+                        className={`rounded-full border px-3 py-1 text-[10px] font-semibold tracking-[0.18em] uppercase ${
                           recipe.difficulty === "Easy"
-                            ? "bg-amber-50 text-amber-700"
+                            ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-200"
                             : recipe.difficulty === "Medium"
-                              ? "bg-orange-100 text-orange-700"
-                              : "bg-red-50 text-red-600"
+                              ? "border-amber-400/20 bg-amber-400/10 text-amber-200"
+                              : "border-rose-400/20 bg-rose-400/10 text-rose-200"
                         }`}
                       >
                         {recipe.difficulty}
                       </span>
                     )}
                     {totalTime > 0 && (
-                      <span className="text-cb-text-soft rounded-lg bg-orange-50 px-2.5 py-1 text-[10px] font-black tracking-widest uppercase">
+                      <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold tracking-[0.18em] text-white/70 uppercase">
                         ⏱️ {totalTime} min
+                      </span>
+                    )}
+                    {recipe.servings && (
+                      <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold tracking-[0.18em] text-white/70 uppercase">
+                        🍽️ Serves {recipe.servings}
                       </span>
                     )}
                   </div>
 
-                  <h3 className="text-cb-text group-hover:text-cb-primary mb-2 text-xl leading-tight font-extrabold transition-colors">
+                  <h3 className="mb-3 font-serif text-2xl leading-tight font-black text-white transition-colors">
                     {recipe.title}
                   </h3>
 
-                  <p className="text-cb-text-soft mb-4 line-clamp-2 text-sm leading-relaxed">
+                  <p className="mb-5 line-clamp-2 text-sm leading-relaxed text-white/65">
                     {recipe.description ||
                       "A delicious recipe waiting for you to try it out."}
                   </p>
 
-                  <div className="mt-auto flex flex-wrap gap-1">
+                  <div className="mt-auto flex flex-wrap gap-2">
                     {(recipe.tags || []).slice(0, 3).map((tag) => (
                       <span
                         key={tag}
-                        className="text-cb-text-soft rounded-md bg-amber-50 px-2 py-0.5 text-[10px] font-medium"
+                        className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium text-white/70"
                       >
                         #{tag}
                       </span>
@@ -368,21 +377,18 @@ const RecipePage = () => {
                   </div>
                 </div>
 
-                <div className="border-cb-border mt-auto flex items-center justify-between border-t bg-amber-50/45 px-6 py-4">
-                  <div className="flex gap-3">
+                <div className="mt-auto flex items-center justify-between border-t border-white/10 bg-[#0d1219] px-6 py-4">
+                  <div className="flex items-center gap-3">
                     <ShareButton
                       recipeId={recipeId}
-                      className="px-2 py-1 text-xs"
+                      className="text-white/60 transition-colors hover:text-white"
                     />
-                    <span className="text-cb-text-soft/75 self-center text-xs font-bold">
-                      Serves {recipe.servings || "?"}
-                    </span>
                   </div>
                   <Link
                     to={`/recipe/${recipeId}`}
-                    className="text-cb-primary flex items-center gap-1 text-sm font-bold transition-transform hover:translate-x-1"
+                    className="flex items-center gap-1 text-sm font-medium text-white/70 transition-transform hover:translate-x-1 hover:text-white"
                   >
-                    View Recipe <span>→</span>
+                    View Recipe <span className="text-amber-200">→</span>
                   </Link>
                 </div>
               </div>
@@ -391,22 +397,23 @@ const RecipePage = () => {
         </div>
       )}
 
+      {/* PAGINATION : Boutons dark mode */}
       {totalPages > 1 && (
-        <div className="mt-10 flex items-center justify-center gap-4">
+        <div className="mt-12 flex items-center justify-center gap-4">
           <button
             onClick={() => handlePageChange(currentPage - 1)}
             disabled={currentPage === 1}
-            className="theme-button-secondary rounded border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2 text-zinc-300 transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-30"
           >
             Previous
           </button>
-          <span className="text-cb-text-soft font-medium">
+          <span className="text-sm font-medium text-zinc-400">
             Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={() => handlePageChange(currentPage + 1)}
             disabled={currentPage === totalPages}
-            className="theme-button-secondary rounded border px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50"
+            className="rounded-lg border border-zinc-700 bg-zinc-800 px-4 py-2 text-zinc-300 transition-colors hover:bg-zinc-700 disabled:cursor-not-allowed disabled:opacity-30"
           >
             Next
           </button>

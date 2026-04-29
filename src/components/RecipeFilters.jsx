@@ -2,23 +2,23 @@ import React from "react"
 
 /**
  * RecipeFilters Component
- * 
+ *
  * This component handles the UI for searching, sorting, and filtering recipes.
- * It is designed to be stateless regarding URL params, receiving its values and 
+ * It is designed to be stateless regarding URL params, receiving its values and
  * update handlers via props.
  */
 const RecipeFilters = ({
-  searchInput,      // Current text in the search bar
-  setSearchInput,   // Function to update search bar text
-  onlyFavorites,    // Boolean: are we only showing favorites?
-  updateFilter,     // Multi-purpose function to update URL params
-  sortBy,           // Current sort selection (e.g., "newest")
-  difficulty,       // Selected difficulty filter
-  maxTime,          // Selected maximum preparation time
-  servings,         // Selected servings range
-  selectedTag,      // Selected tag filter
-  allTags,          // Array of all available unique tags
-  clearFilters      // Function to reset all filters to default
+  searchInput, // Current text in the search bar
+  setSearchInput, // Function to update search bar text
+  onlyFavorites, // Boolean: are we only showing favorites?
+  updateFilter, // Multi-purpose function to update URL params
+  sortBy, // Current sort selection (e.g., "newest")
+  difficulty, // Selected difficulty filter
+  maxTime, // Selected maximum preparation time
+  servings, // Selected servings range
+  selectedTag, // Selected tag filter
+  allTags, // Array of all available unique tags
+  clearFilters, // Function to reset all filters to default
 }) => {
   return (
     <div className="mb-8 space-y-4">
@@ -26,15 +26,15 @@ const RecipeFilters = ({
         Row 1: Search and Quick Filters 
         Contains the search input, the Favorites toggle, and the Sort dropdown.
       */}
-      <div className="flex flex-col md:flex-row gap-4 items-start md:items-center">
+      <div className="flex flex-col items-start gap-4 md:flex-row md:items-center">
         {/* Search Bar */}
-        <div className="relative flex-grow max-w-md w-full">
+        <div className="relative w-full max-w-md grow">
           <input
             type="text"
             placeholder="Search by title..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="theme-input w-full p-2.5 shadow-sm"
+            className="theme-input w-full p-3 shadow-sm"
           />
         </div>
 
@@ -42,11 +42,13 @@ const RecipeFilters = ({
         <div className="flex flex-wrap items-center gap-3">
           {/* Favorites Toggle Button */}
           <button
-            onClick={() => updateFilter("favorites", onlyFavorites ? "" : "true")}
-            className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all flex items-center gap-2 ${
-              onlyFavorites 
-                ? "border-red-200 bg-red-50 text-red-600 shadow-sm" 
-                : "border-cb-border bg-white text-cb-text hover:bg-amber-50/60"
+            onClick={() =>
+              updateFilter("favorites", onlyFavorites ? "" : "true")
+            }
+            className={`premium-serif inline-flex items-center gap-2 rounded-2xl border px-4 py-3 text-sm font-medium transition-all ${
+              onlyFavorites
+                ? "border-amber-400/30 bg-amber-400/15 text-amber-100 shadow-sm shadow-amber-400/15"
+                : "border-white/15 bg-white/10 text-sm hover:bg-white/10"
             }`}
           >
             {onlyFavorites ? "❤️ Favorites" : "🤍 Favorites"}
@@ -56,7 +58,7 @@ const RecipeFilters = ({
           <select
             value={sortBy}
             onChange={(e) => updateFilter("sort", e.target.value)}
-            className="theme-input bg-white p-2.5 text-sm shadow-sm"
+            className="premium-serif theme-input bg-white/10 p-3 text-sm shadow-sm"
           >
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
@@ -70,14 +72,16 @@ const RecipeFilters = ({
         Row 2: Detailed Filters Grid
         Contains dropdowns for Difficulty, Time, Servings, and Tags.
       */}
-      <div className="theme-card-soft grid grid-cols-2 gap-4 rounded-2xl p-4 md:grid-cols-4">
+      <div className="theme-card-soft grid grid-cols-2 gap-4 rounded-[1.75rem] p-5 md:grid-cols-4">
         {/* Difficulty Filter */}
         <div>
-          <label className="ml-1 mb-1 block text-xs font-bold uppercase text-cb-text-soft">Difficulty</label>
+          <label className="premium-serif mb-1 ml-1 block text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
+            Difficulty
+          </label>
           <select
             value={difficulty}
             onChange={(e) => updateFilter("difficulty", e.target.value)}
-            className="theme-input w-full p-2 text-sm"
+            className="theme-input w-full p-3 text-sm"
           >
             <option value="">All Levels</option>
             <option value="Easy">Easy</option>
@@ -88,11 +92,13 @@ const RecipeFilters = ({
 
         {/* Max Time Filter */}
         <div>
-          <label className="ml-1 mb-1 block text-xs font-bold uppercase text-cb-text-soft">Max Time</label>
+          <label className="premium-serif mb-1 ml-1 block text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
+            Max Time
+          </label>
           <select
             value={maxTime}
             onChange={(e) => updateFilter("maxTime", e.target.value)}
-            className="theme-input w-full p-2 text-sm"
+            className="theme-input w-full p-3 text-sm"
           >
             <option value="">Any Time</option>
             <option value="15">Under 15 min</option>
@@ -104,11 +110,13 @@ const RecipeFilters = ({
 
         {/* Servings Filter */}
         <div>
-          <label className="ml-1 mb-1 block text-xs font-bold uppercase text-cb-text-soft">Servings</label>
+          <label className="premium-serif mb-1 ml-1 block text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
+            Servings
+          </label>
           <select
             value={servings}
             onChange={(e) => updateFilter("servings", e.target.value)}
-            className="theme-input w-full p-2 text-sm"
+            className="theme-input w-full p-3 text-sm"
           >
             <option value="">Any Size</option>
             <option value="1-2">1-2 People</option>
@@ -119,15 +127,19 @@ const RecipeFilters = ({
 
         {/* Tags Filter */}
         <div>
-          <label className="ml-1 mb-1 block text-xs font-bold uppercase text-cb-text-soft">Tags</label>
+          <label className="premium-serif mb-1 ml-1 block text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
+            Tags
+          </label>
           <select
             value={selectedTag}
             onChange={(e) => updateFilter("tag", e.target.value)}
-            className="theme-input w-full p-2 text-sm"
+            className="theme-input w-full p-3 text-sm"
           >
             <option value="">All Tags</option>
-            {allTags.map(tag => (
-              <option key={tag} value={tag}>{tag}</option>
+            {allTags.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
             ))}
           </select>
         </div>
@@ -137,11 +149,17 @@ const RecipeFilters = ({
         Clear Filters Button 
         Only visible if at least one filter is active.
       */}
-      {(searchInput || sortBy !== "newest" || onlyFavorites || difficulty || maxTime || servings || selectedTag) && (
+      {(searchInput ||
+        sortBy !== "newest" ||
+        onlyFavorites ||
+        difficulty ||
+        maxTime ||
+        servings ||
+        selectedTag) && (
         <div className="flex justify-end">
           <button
             onClick={clearFilters}
-            className="flex items-center gap-1 text-sm font-bold text-cb-primary hover:text-cb-primary-strong"
+            className="flex items-center gap-1 text-sm font-bold text-amber-200 hover:text-white"
           >
             <span>✕</span> Clear All Filters
           </button>
