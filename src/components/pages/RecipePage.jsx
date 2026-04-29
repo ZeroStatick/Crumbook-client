@@ -262,14 +262,26 @@ const RecipePage = () => {
                 key={recipeId}
                 className="bg-white border border-gray-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col relative group"
               >
-                <button
-                  onClick={(e) => toggleFavoriteHandler(recipeId, e)}
-                  className={`absolute top-4 right-4 p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-all hover:scale-110 z-10 ${
-                    isFav ? "text-red-500 scale-105" : "text-gray-300 hover:text-red-400"
-                  }`}
-                >
-                  {isFav ? "❤️" : "🤍"}
-                </button>
+                <div className="relative h-48 overflow-hidden">
+                  <img
+                    src={recipe.image || "/src/assets/bread.jfif"}
+                    alt={recipe.title}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  {recipe.imageSource === "ai" && (
+                    <span className="absolute bottom-2 left-2 bg-purple-600/80 backdrop-blur-sm text-white text-[10px] font-bold px-2 py-1 rounded-md shadow-lg">
+                      ✨ AI GENERATED
+                    </span>
+                  )}
+                  <button
+                    onClick={(e) => toggleFavoriteHandler(recipeId, e)}
+                    className={`absolute top-4 right-4 p-2.5 rounded-full bg-white/90 backdrop-blur-sm shadow-md transition-all hover:scale-110 z-10 ${
+                      isFav ? "text-red-500 scale-105" : "text-gray-300 hover:text-red-400"
+                    }`}
+                  >
+                    {isFav ? "❤️" : "🤍"}
+                  </button>
+                </div>
 
                 <div className="p-6 flex-grow">
                   <div className="flex flex-wrap gap-2 mb-3">

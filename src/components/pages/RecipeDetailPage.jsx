@@ -210,6 +210,18 @@ const RecipeDetailPage = () => {
       )}
 
       <header className="mb-8 border-b pb-8">
+        <div className="relative h-96 w-full mb-8 rounded-3xl overflow-hidden shadow-lg">
+          <img
+            src={recipe.image || "/src/assets/bread.jfif"}
+            alt={recipe.title}
+            className="w-full h-full object-cover"
+          />
+          {recipe.imageSource === "ai" && (
+            <span className="absolute bottom-4 left-4 bg-purple-600/90 backdrop-blur-md text-white text-xs font-black px-4 py-2 rounded-xl shadow-2xl border border-purple-400/30">
+              ✨ AI GENERATED IMAGE
+            </span>
+          )}
+        </div>
         <h1 className="mb-4 text-4xl font-extrabold text-gray-900">
           {recipe.title}
         </h1>

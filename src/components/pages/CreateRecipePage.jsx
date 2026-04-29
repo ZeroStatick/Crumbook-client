@@ -53,8 +53,8 @@ const CreateRecipePage = () => {
   const [recipeIngredients, setRecipeIngredients] = useState([
     { item: "", quantity: "", unit: "g" },
   ])
-
   const [instructions, setInstructions] = useState([""])
+  const [imageFile, setImageFile] = useState(null) // Added for photo upload
 
   useEffect(() => {
     const fetchData = async () => {
@@ -191,27 +191,44 @@ const CreateRecipePage = () => {
         }
       }
 
-      const submissionData = {
-        ...formData,
-        ingredients: recipeIngredients.map((ing) => ({
-          ...ing,
-          quantity: Number(ing.quantity),
-        })),
-        instructions: instructions.filter((i) => i.trim() !== ""),
-        tags: formData.tags
-          .split(",")
-          .map((t) => t.trim())
-          .filter((t) => t !== ""),
-        prepTime: Number(formData.prepTime),
-        cookTime: Number(formData.cookTime),
-        servings: Number(formData.servings),
+      const formDataToSend = new FormData()
+      
+      // Append basic fields
+      Object.keys(formData).forEach(key => {
+        if (formData[key] !== undefined && formData[key] !== null) {
+          formDataToSend.append(key, formData[key])
+        }
+      })
+
+      // Handle the image file separately
+      if (imageFile) {
+        formDataToSend.append("image", imageFile)
       }
 
+      // Append complex fields as JSON strings
+      formDataToSend.set("ingredients", JSON.stringify(recipeIngredients.map((ing) => ({
+        ...ing,
+        quantity: Number(ing.quantity),
+      }))))
+      
+      formDataToSend.set("instructions", JSON.stringify(instructions.filter((i) => i.trim() !== "")))
+      
+      const tagsArray = formData.tags
+        .split(",")
+        .map((t) => t.trim())
+        .filter((t) => t !== "")
+      formDataToSend.set("tags", JSON.stringify(tagsArray))
+
+      // Ensure numbers are numbers
+      formDataToSend.set("prepTime", Number(formData.prepTime))
+      formDataToSend.set("cookTime", Number(formData.cookTime))
+      formDataToSend.set("servings", Number(formData.servings))
+
       if (isEditMode) {
-        await update_recipe(id, submissionData)
+        await update_recipe(id, formDataToSend)
         toast.success("Recipe updated successfully!")
       } else {
-        await create_recipe(submissionData)
+        await create_recipe(formDataToSend)
         toast.success("Recipe created successfully!")
       }
       
@@ -346,6 +363,27 @@ const CreateRecipePage = () => {
                 </span>
               </label>
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-gray-700">
+              Recipe Photo
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImageFile(e.target.files[0])}
+              className="mt-1 w-full text-sm text-gray-500 file:mr-4 file:rounded file:border-0 file:bg-blue-50 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-blue-700 hover:file:bg-blue-100"
+            />
+            {(imageFile || formData.image) && (
+              <div className="mt-2">
+                <img
+                  src={imageFile ? URL.createObjectURL(imageFile) : formData.image}
+                  alt="Preview"
+                  className="h-32 w-full rounded object-cover"
+                />
+              </div>
+            )}
           </div>
 
           <div>
