@@ -7,6 +7,7 @@ import {
   create_comment,
   delete_comment,
 } from "../../../API/comment.api"
+import { DEFAULT_RECIPE_IMAGE } from "../../../constant/images.js"
 import useUserStore from "../../global/user.js"
 import toast from "react-hot-toast"
 import ReportModal from "../ReportModal"
@@ -209,7 +210,7 @@ const RecipeDetailPage = () => {
       <header className="border-cb-border mb-8 border-b pb-8">
         <div className="relative mb-8 h-96 w-full overflow-hidden rounded-3xl shadow-lg">
           <img
-            src={recipe.image || "/src/assets/bread.jfif"}
+            src={recipe.image || DEFAULT_RECIPE_IMAGE}
             alt={recipe.title}
             className="h-full w-full object-cover"
           />
