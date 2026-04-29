@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react"
 import { Link, useSearchParams } from "react-router-dom"
 import { get_all_recipes } from "../../../API/recipe.api"
 import { toggle_favorite } from "../../../API/api.api"
+import { DEFAULT_RECIPE_IMAGE } from "../../../constant/images.js"
 import useUserStore from "../../global/user"
 import toast from "react-hot-toast"
 import RecipeFilters from "../RecipeFilters"
@@ -303,7 +304,7 @@ const RecipePage = () => {
               >
                 <div className="relative h-48 overflow-hidden">
                   <img
-                    src={recipe.image || "/src/assets/bread.jfif"}
+                    src={recipe.image || DEFAULT_RECIPE_IMAGE}
                     alt={recipe.title}
                     className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />

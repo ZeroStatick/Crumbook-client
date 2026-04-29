@@ -8,6 +8,7 @@ import Navbar from "./components/Navbar.jsx"
 import Footer from "./components/Footer.jsx"
 import ProtectedRoute from "./components/ProtectedRoute.jsx"
 import AdminRoute from "./components/AdminRoute.jsx"
+import GuestRoute from "./components/GuestRoute.jsx"
 
 // Pages
 import Home from "./components/pages/Home.jsx"
@@ -129,8 +130,22 @@ function App() {
             />
 
             {/* Auth Routes */}
-            <Route path="/register" element={<Register />} />
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/register"
+              element={
+                <GuestRoute>
+                  <Register />
+                </GuestRoute>
+              }
+            />
+            <Route
+              path="/login"
+              element={
+                <GuestRoute>
+                  <Login />
+                </GuestRoute>
+              }
+            />
 
             {/* Catch-all 404 */}
             <Route
