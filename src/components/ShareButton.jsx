@@ -33,8 +33,8 @@ const ShareButton = ({ recipeId, className = "" }) => {
       title="Copy recipe link"
       className={`flex items-center gap-2 rounded-xl transition-all ${
         isCopied 
-          ? "bg-green-100 text-green-700 border border-green-200" 
-          : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+          ? "border border-amber-200 bg-amber-100/70 text-cb-primary" 
+          : "border border-cb-border bg-white/80 text-cb-text hover:bg-amber-50"
       } ${className}`}
     >
       <span>{isCopied ? "✓" : "🔗"}</span>

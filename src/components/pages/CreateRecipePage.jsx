@@ -111,7 +111,7 @@ const CreateRecipePage = () => {
             }))
           }
         }
-      } catch (error) {
+      } catch {
         toast.error(isEditMode || isForkMode ? "Failed to load recipe" : "Failed to load ingredients")
         if (isEditMode || isForkMode) navigate("/profile")
       } finally {
@@ -240,15 +240,15 @@ const CreateRecipePage = () => {
     }
   }
 
-  if (fetching) return <div className="p-12 text-center text-gray-500">Loading recipe data...</div>
+  if (fetching) return <div className="p-12 text-center text-cb-text-soft">Loading recipe data...</div>
 
   return (
-    <div className="mx-auto mt-8 max-w-2xl rounded-lg border border-gray-100 bg-white p-6 shadow">
+    <div className="theme-card mx-auto mt-8 max-w-2xl rounded-3xl p-6">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold text-gray-800">{isEditMode ? "Edit Recipe" : "New Recipe"}</h1>
+        <h1 className="text-2xl font-bold text-cb-text">{isEditMode ? "Edit Recipe" : "New Recipe"}</h1>
         <Link
           to={isEditMode ? `/recipe/${id}` : "/recipes"}
-          className="text-sm font-medium text-blue-600 hover:underline"
+          className="text-sm font-medium text-cb-primary hover:underline"
         >
           &larr; Cancel
         </Link>
@@ -258,7 +258,7 @@ const CreateRecipePage = () => {
         {/* Basic Info */}
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-700">
+            <label className="block text-sm font-semibold text-cb-text-soft">
               Title
             </label>
             <input
@@ -266,14 +266,14 @@ const CreateRecipePage = () => {
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              className="mt-1 w-full rounded border border-gray-300 p-2 outline-none focus:ring-1 focus:ring-blue-500"
+              className="theme-input mt-1 w-full p-2.5"
               placeholder="e.g., Pizza Margharita"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold text-gray-700">
+            <label className="block text-sm font-semibold text-cb-text-soft">
               Description
             </label>
             <textarea
@@ -281,14 +281,14 @@ const CreateRecipePage = () => {
               value={formData.description}
               onChange={handleInputChange}
               rows="2"
-              className="mt-1 w-full rounded border border-gray-300 p-2 outline-none focus:ring-1 focus:ring-blue-500"
+              className="theme-input mt-1 w-full p-2.5"
               placeholder="Short summary..."
             />
           </div>
 
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <label className="block text-xs font-semibold text-gray-700">
+              <label className="block text-xs font-semibold text-cb-text-soft">
                 Prep (min)
               </label>
               <input
@@ -297,12 +297,12 @@ const CreateRecipePage = () => {
                 name="prepTime"
                 value={formData.prepTime}
                 onChange={handleInputChange}
-                className="mt-1 w-full rounded border border-gray-300 p-2"
+                className="theme-input mt-1 w-full p-2"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-700">
+              <label className="block text-xs font-semibold text-cb-text-soft">
                 Cook (min)
               </label>
               <input
@@ -311,12 +311,12 @@ const CreateRecipePage = () => {
                 name="cookTime"
                 value={formData.cookTime}
                 onChange={handleInputChange}
-                className="mt-1 w-full rounded border border-gray-300 p-2"
+                className="theme-input mt-1 w-full p-2"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs font-semibold text-gray-700">
+              <label className="block text-xs font-semibold text-cb-text-soft">
                 Servings
               </label>
               <input
@@ -325,7 +325,7 @@ const CreateRecipePage = () => {
                 name="servings"
                 value={formData.servings}
                 onChange={handleInputChange}
-                className="mt-1 w-full rounded border border-gray-300 p-2"
+                className="theme-input mt-1 w-full p-2"
                 required
               />
             </div>
@@ -333,14 +333,14 @@ const CreateRecipePage = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-semibold text-gray-700">
+              <label className="block text-sm font-semibold text-cb-text-soft">
                 Difficulty
               </label>
               <select
                 name="difficulty"
                 value={formData.difficulty}
                 onChange={handleInputChange}
-                className="mt-1 w-full rounded border border-gray-300 p-2 text-sm outline-none focus:ring-1 focus:ring-blue-500"
+                className="theme-input mt-1 w-full p-2 text-sm"
               >
                 {DIFFICULTIES.map((d) => (
                   <option key={d} value={d}>
@@ -356,9 +356,9 @@ const CreateRecipePage = () => {
                   name="public"
                   checked={formData.public}
                   onChange={handleInputChange}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                  className="h-4 w-4 rounded border-cb-border text-cb-primary focus:ring-cb-primary"
                 />
-                <span className="ml-2 text-sm font-semibold text-gray-700">
+                <span className="ml-2 text-sm font-semibold text-cb-text-soft">
                   Public Recipe
                 </span>
               </label>
@@ -395,20 +395,20 @@ const CreateRecipePage = () => {
               name="tags"
               value={formData.tags}
               onChange={handleInputChange}
-              className="mt-1 w-full rounded border border-gray-300 p-2 outline-none focus:ring-1 focus:ring-blue-500"
+              className="theme-input mt-1 w-full p-2.5"
               placeholder="e.g., Italian, Dinner, Quick"
             />
           </div>
         </div>
 
         {/* Ingredients */}
-        <div className="border-t pt-4">
+        <div className="border-t border-cb-border pt-4">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-gray-700">Ingredients</h2>
+            <h2 className="text-lg font-bold text-cb-text">Ingredients</h2>
             <button
               type="button"
               onClick={addIngredient}
-              className="rounded bg-blue-50 px-2 py-1 text-xs font-bold text-blue-600 hover:bg-blue-100"
+              className="rounded bg-amber-100 px-2 py-1 text-xs font-bold text-cb-primary hover:bg-amber-200"
             >
               + ADD
             </button>
@@ -422,7 +422,7 @@ const CreateRecipePage = () => {
                   onChange={(e) =>
                     handleIngredientChange(index, "item", e.target.value)
                   }
-                  className="flex-1 rounded border border-gray-300 p-2 text-sm"
+                  className="theme-input flex-1 p-2 text-sm"
                   required
                 >
                   <option value="">Ingredient</option>
@@ -439,7 +439,7 @@ const CreateRecipePage = () => {
                     handleIngredientChange(index, "quantity", e.target.value)
                   }
                   placeholder="Qty"
-                  className="w-16 rounded border border-gray-300 p-2 text-sm"
+                  className="theme-input w-16 p-2 text-sm"
                   required
                 />
                 <select
@@ -447,7 +447,7 @@ const CreateRecipePage = () => {
                   onChange={(e) =>
                     handleIngredientChange(index, "unit", e.target.value)
                   }
-                  className="w-20 rounded border border-gray-300 p-2 text-sm"
+                  className="theme-input w-20 p-2 text-sm"
                 >
                   {UNITS.map((u) => (
                     <option key={u} value={u}>
@@ -468,13 +468,13 @@ const CreateRecipePage = () => {
         </div>
 
         {/* Instructions */}
-        <div className="border-t pt-4">
+        <div className="border-t border-cb-border pt-4">
           <div className="mb-3 flex items-center justify-between">
-            <h2 className="text-lg font-bold text-gray-700">Steps</h2>
+            <h2 className="text-lg font-bold text-cb-text">Steps</h2>
             <button
               type="button"
               onClick={addInstruction}
-              className="rounded bg-blue-50 px-2 py-1 text-xs font-bold text-blue-600 hover:bg-blue-100"
+              className="rounded bg-amber-100 px-2 py-1 text-xs font-bold text-cb-primary hover:bg-amber-200"
             >
               + ADD
             </button>
@@ -483,7 +483,7 @@ const CreateRecipePage = () => {
           <div className="space-y-3">
             {instructions.map((inst, index) => (
               <div key={index} className="flex items-start gap-2">
-                <span className="mt-2 text-sm font-bold text-gray-400">
+                <span className="mt-2 text-sm font-bold text-cb-text-soft/75">
                   {index + 1}.
                 </span>
                 <textarea
@@ -493,7 +493,7 @@ const CreateRecipePage = () => {
                   }
                   rows="1"
                   placeholder="Instructions..."
-                  className="flex-1 rounded border border-gray-300 p-2 text-sm outline-none focus:ring-1 focus:ring-blue-500"
+                  className="theme-input flex-1 p-2 text-sm"
                   required
                 />
                 <button
@@ -511,7 +511,7 @@ const CreateRecipePage = () => {
         <button
           type="submit"
           disabled={loading}
-          className="w-full rounded bg-blue-600 py-3 font-bold text-white transition-colors hover:bg-blue-700 disabled:bg-gray-400"
+          className="theme-button-primary w-full py-3 disabled:bg-amber-200"
         >
           {loading ? "Saving..." : isEditMode ? "Update Recipe" : isForkMode ? "Publish Your Version" : "Create Recipe"}
         </button>

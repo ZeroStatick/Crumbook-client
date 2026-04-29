@@ -98,7 +98,7 @@ const UserProfilePage = () => {
         setUser(updatedUser)
         const isNowFav = updatedUser.favorites.includes(id)
         toast.success(isNowFav ? "Added to favorites" : "Removed from favorites")
-      } catch (err) {
+      } catch {
         toast.error("Failed to update favorites")
       }
     } else {
@@ -152,11 +152,11 @@ const UserProfilePage = () => {
   if (!user) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center text-center px-4">
-        <div className="bg-white p-8 rounded-3xl shadow-xl border border-gray-100 max-w-md w-full">
+        <div className="theme-card w-full max-w-md rounded-3xl p-8 shadow-xl">
           <div className="text-6xl mb-4">🔒</div>
-          <h2 className="text-2xl font-bold text-gray-800">Please log in</h2>
-          <p className="mt-2 text-gray-600">You need to be logged in to view your personal profile and synced favorites.</p>
-          <Link to="/login" className="mt-8 inline-block w-full rounded-xl bg-blue-600 px-6 py-3 font-bold text-white hover:bg-blue-700 transition-all active:scale-95 shadow-lg shadow-blue-200">
+          <h2 className="text-2xl font-bold text-cb-text">Please log in</h2>
+          <p className="mt-2 text-cb-text-soft">You need to be logged in to view your personal profile and synced favorites.</p>
+          <Link to="/login" className="theme-button-primary mt-8 inline-block w-full px-6 py-3 text-center active:scale-95">
             Go to Login
           </Link>
         </div>
@@ -167,12 +167,12 @@ const UserProfilePage = () => {
   return (
     <div className="mx-auto max-w-7xl p-4 md:p-8 px-6 lg:px-8 pb-24">
       {/* User Info Section */}
-      <div className="mb-12 overflow-hidden rounded-3xl bg-white shadow-sm border border-gray-100">
-        <div className="h-40 bg-gradient-to-r from-slate-800 via-slate-900 to-black"></div>
+      <div className="theme-card mb-12 overflow-hidden rounded-3xl shadow-sm">
+        <div className="h-40 bg-gradient-to-r from-[#9a3d16] via-[#b45309] to-[#d9981d]"></div>
         <div className="px-8 pb-8">
           <div className="relative flex flex-col md:flex-row items-center md:items-end justify-between -mt-16 mb-6 gap-6">
             <div className="flex flex-col md:flex-row items-center md:items-end gap-6 text-center md:text-left">
-              <div className="h-32 w-32 rounded-3xl border-4 border-white bg-gray-200 overflow-hidden shadow-2xl relative group">
+              <div className="relative h-32 w-32 overflow-hidden rounded-3xl border-4 border-white bg-amber-50 shadow-2xl group">
                 <img 
                   src={previewUrl || user.profile_picture || defaultAvatar} 
                   alt={user.name}
@@ -181,10 +181,10 @@ const UserProfilePage = () => {
               </div>
               <div className="pb-2">
                 {isEditing ? (
-                  <form onSubmit={handleUpdateProfile} className="flex flex-col gap-3 bg-gray-50 p-4 rounded-2xl border border-gray-200 mt-4 md:mt-0">
+                  <form onSubmit={handleUpdateProfile} className="theme-card-soft mt-4 flex flex-col gap-3 rounded-2xl p-4 md:mt-0">
                     <input
                       type="text"
-                      className="rounded-xl border border-gray-300 px-4 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+                      className="theme-input rounded-xl px-4 py-2 text-sm"
                       value={editData.name}
                       onChange={(e) => setEditData({ ...editData, name: e.target.value })}
                       placeholder="Display Name"
@@ -203,7 +203,7 @@ const UserProfilePage = () => {
                         onClick={handleUploadClick}
                         onKeyDown={(e) => e.key === 'Enter' && e.preventDefault()}
                         onMouseDown={(e) => e.preventDefault()}
-                        className="w-full rounded-xl border-2 border-dashed border-blue-200 bg-blue-50/50 px-4 py-2 text-xs font-bold text-blue-600 hover:bg-blue-50 transition-colors flex items-center justify-center gap-2"
+                        className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50/70 px-4 py-2 text-xs font-bold text-cb-primary transition-colors hover:bg-amber-50"
                       >
                         📷 Upload New Picture
                       </button>
@@ -211,14 +211,14 @@ const UserProfilePage = () => {
                     <div className="flex gap-2">
                       <button
                         type="submit"
-                        className="flex-1 rounded-xl bg-blue-600 px-4 py-2 text-xs font-bold text-white hover:bg-blue-700 transition-colors"
+                        className="theme-button-primary flex-1 px-4 py-2 text-xs"
                       >
                         Save Changes
                       </button>
                       <button
                         type="button"
                         onClick={handleCancel}
-                        className="flex-1 rounded-xl bg-gray-200 px-4 py-2 text-xs font-bold text-gray-700 hover:bg-gray-300 transition-colors"
+                        className="theme-button-secondary flex-1 px-4 py-2 text-xs"
                       >
                         Cancel
                       </button>
@@ -227,23 +227,23 @@ const UserProfilePage = () => {
                 ) : (
                   <>
                     <div className="flex items-center justify-center md:justify-start gap-3">
-                      <h1 className="text-4xl font-black text-gray-900 tracking-tight">{user.name}</h1>
+                      <h1 className="text-4xl font-black tracking-tight text-cb-text">{user.name}</h1>
                       <button 
                         onClick={() => setIsEditing(true)}
-                        className="p-2 rounded-full hover:bg-gray-100 text-blue-600 transition-colors"
+                        className="rounded-full p-2 text-cb-primary transition-colors hover:bg-amber-50"
                         title="Edit Profile"
                       >
                         ✏️
                       </button>
                     </div>
-                    <p className="text-gray-500 font-medium">{user.email}</p>
+                    <p className="font-medium text-cb-text-soft">{user.email}</p>
                   </>
                 )}
               </div>
             </div>
             <div className="pb-4">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-blue-50 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-blue-700 border border-blue-100">
-                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600 animate-pulse"></span>
+                <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-4 py-1.5 text-xs font-black uppercase tracking-widest text-cb-primary">
+                  <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-cb-primary"></span>
                   {user.role === 3 ? "Owner" : user.role === 2 ? "Moderator" : "Head Chef"}
                 </span>
             </div>
@@ -252,13 +252,13 @@ const UserProfilePage = () => {
       </div>
 
       {/* Tabs Navigation */}
-      <div className="mb-10 flex flex-wrap gap-2 p-1 bg-gray-100 rounded-2xl w-fit">
+      <div className="mb-10 flex w-fit flex-wrap gap-2 rounded-2xl bg-amber-50/70 p-1">
         <button
           onClick={() => setActiveTab("my-recipes")}
           className={`px-8 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${
             activeTab === "my-recipes" 
-              ? "bg-white text-blue-600 shadow-sm" 
-              : "text-gray-500 hover:text-gray-700 hover:bg-white/50"
+              ? "bg-white text-cb-primary shadow-sm" 
+              : "text-cb-text-soft hover:bg-white/50 hover:text-cb-text"
           }`}
         >
           My Creations
@@ -268,7 +268,7 @@ const UserProfilePage = () => {
           className={`px-8 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${
             activeTab === "favorites" 
               ? "bg-white text-red-500 shadow-sm" 
-              : "text-gray-500 hover:text-gray-700 hover:bg-white/50"
+              : "text-cb-text-soft hover:bg-white/50 hover:text-cb-text"
           }`}
         >
           Favorites ❤️
@@ -277,8 +277,8 @@ const UserProfilePage = () => {
           onClick={() => setActiveTab("settings")}
           className={`px-8 py-3 text-sm font-black uppercase tracking-widest rounded-xl transition-all ${
             activeTab === "settings" 
-              ? "bg-white text-gray-800 shadow-sm" 
-              : "text-gray-500 hover:text-gray-700 hover:bg-white/50"
+              ? "bg-white text-cb-text shadow-sm" 
+              : "text-cb-text-soft hover:bg-white/50 hover:text-cb-text"
           }`}
         >
           Account Settings ⚙️
@@ -290,20 +290,20 @@ const UserProfilePage = () => {
         {loading && activeTab !== "settings" ? (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
              {[...Array(3)].map((_, i) => (
-              <div key={i} className="h-64 animate-pulse rounded-3xl bg-gray-100"></div>
+              <div key={i} className="h-64 animate-pulse rounded-3xl bg-amber-100"></div>
             ))}
           </div>
         ) : (
           <>
             {activeTab === "my-recipes" && (
               myRecipes.length === 0 ? (
-                <div className="rounded-3xl border-2 border-dashed border-gray-200 bg-white py-20 text-center shadow-sm">
+                <div className="theme-card rounded-3xl border-2 border-dashed border-cb-border py-20 text-center shadow-sm">
                   <div className="text-5xl mb-4">🍳</div>
-                  <h3 className="text-xl font-bold text-gray-900">No recipes yet</h3>
-                  <p className="mt-2 text-gray-500 max-w-sm mx-auto">Your culinary masterpieces will appear here once you share them!</p>
+                  <h3 className="text-xl font-bold text-cb-text">No recipes yet</h3>
+                  <p className="mx-auto mt-2 max-w-sm text-cb-text-soft">Your culinary masterpieces will appear here once you share them!</p>
                   <Link
                     to="/recipes/new"
-                    className="mt-8 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-6 py-3 font-bold text-white hover:bg-blue-700 transition-all shadow-lg shadow-blue-100"
+                    className="theme-button-primary mt-8 inline-flex items-center gap-2 px-6 py-3"
                   >
                     + Create Your First Recipe
                   </Link>
@@ -311,28 +311,28 @@ const UserProfilePage = () => {
               ) : (
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                   {myRecipes.map((recipe) => (
-                    <div key={recipe._id} className="group flex flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white transition-all hover:shadow-2xl hover:-translate-y-1">
+                    <div key={recipe._id} className="theme-card group flex flex-col overflow-hidden rounded-3xl transition-all hover:-translate-y-1 hover:shadow-2xl">
                       <div className="flex-grow p-8">
                         <div className="mb-4 flex items-center gap-2">
                           {recipe.tags?.slice(0, 2).map(tag => (
-                            <span key={tag} className="text-[10px] font-black uppercase tracking-widest text-blue-600 bg-blue-50 px-2.5 py-1 rounded-lg">
+                            <span key={tag} className="rounded-lg bg-amber-100/60 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-cb-primary">
                               {tag}
                             </span>
                           ))}
                         </div>
-                        <h3 className="mb-3 text-2xl font-black text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
+                        <h3 className="mb-3 text-2xl font-black leading-tight text-cb-text transition-colors group-hover:text-cb-primary">
                           {recipe.title}
                         </h3>
-                        <p className="line-clamp-2 text-sm text-gray-500 leading-relaxed">
+                        <p className="line-clamp-2 text-sm leading-relaxed text-cb-text-soft">
                           {recipe.description || "A delicious recipe shared with the Crumbook community."}
                         </p>
                       </div>
-                      <div className="flex items-center justify-between border-t border-gray-50 bg-gray-50/50 px-8 py-5">
-                        <span className="text-xs font-black text-gray-400 uppercase tracking-tighter">
+                      <div className="flex items-center justify-between border-t border-amber-100/60 bg-amber-50/45 px-8 py-5">
+                        <span className="text-xs font-black uppercase tracking-tighter text-cb-text-soft/75">
                           {recipe.difficulty} • {recipe.prepTime + recipe.cookTime} MINS
                         </span>
                         <div className="flex gap-4">
-                          <Link to={`/recipes/edit/${recipe._id}`} className="text-sm font-bold text-blue-600 hover:text-blue-800 transition-colors">Edit</Link>
+                          <Link to={`/recipes/edit/${recipe._id}`} className="text-sm font-bold text-cb-primary transition-colors hover:text-cb-primary-strong">Edit</Link>
                           <button onClick={() => handleDelete(recipe._id)} className="text-sm font-bold text-red-500 hover:text-red-700 transition-colors">Delete</button>
                         </div>
                       </div>
@@ -344,13 +344,13 @@ const UserProfilePage = () => {
 
             {activeTab === "favorites" && (
               favoriteRecipes.length === 0 ? (
-                <div className="rounded-3xl border-2 border-dashed border-gray-200 bg-white py-20 text-center shadow-sm">
+                <div className="theme-card rounded-3xl border-2 border-dashed border-cb-border py-20 text-center shadow-sm">
                   <div className="text-5xl mb-4">❤️</div>
-                  <h3 className="text-xl font-bold text-gray-900">Your favorites are empty</h3>
-                  <p className="mt-2 text-gray-500 max-w-sm mx-auto">Explore the world of recipes and save the ones that inspire you!</p>
+                  <h3 className="text-xl font-bold text-cb-text">Your favorites are empty</h3>
+                  <p className="mx-auto mt-2 max-w-sm text-cb-text-soft">Explore the world of recipes and save the ones that inspire you!</p>
                   <Link
                     to="/recipes"
-                    className="mt-8 inline-flex items-center gap-2 rounded-xl bg-gray-900 px-6 py-3 font-bold text-white hover:bg-black transition-all shadow-lg"
+                    className="theme-button-primary mt-8 inline-flex items-center gap-2 px-6 py-3"
                   >
                     Browse Global Kitchen <span className="ml-1">→</span>
                   </Link>
@@ -358,7 +358,7 @@ const UserProfilePage = () => {
               ) : (
                 <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                   {favoriteRecipes.map((recipe) => (
-                    <div key={recipe._id} className="group flex flex-col overflow-hidden rounded-3xl border border-gray-100 bg-white transition-all hover:shadow-2xl hover:-translate-y-1 relative">
+                    <div key={recipe._id} className="theme-card group relative flex flex-col overflow-hidden rounded-3xl transition-all hover:-translate-y-1 hover:shadow-2xl">
                       <button 
                         onClick={(e) => toggleFavoriteHandler(recipe._id, e)}
                         className="absolute top-6 right-6 text-red-500 bg-white shadow-xl p-3 rounded-2xl hover:scale-110 transition-transform z-10"
@@ -371,21 +371,21 @@ const UserProfilePage = () => {
                             {recipe.difficulty}
                           </span>
                         </div>
-                        <h3 className="mb-3 text-2xl font-black text-gray-900 group-hover:text-blue-600 transition-colors leading-tight">
+                        <h3 className="mb-3 text-2xl font-black leading-tight text-cb-text transition-colors group-hover:text-cb-primary">
                           {recipe.title}
                         </h3>
-                        <p className="line-clamp-2 text-sm text-gray-500 leading-relaxed">
+                        <p className="line-clamp-2 text-sm leading-relaxed text-cb-text-soft">
                           {recipe.description}
                         </p>
                       </div>
-                      <div className="flex items-center justify-between border-t border-gray-50 bg-gray-50/50 px-8 py-5">
+                      <div className="flex items-center justify-between border-t border-amber-100/60 bg-amber-50/45 px-8 py-5">
                         <div className="flex items-center gap-2">
-                          <div className="w-6 h-6 rounded-full bg-blue-100 border border-blue-200 flex items-center justify-center text-[10px] font-bold text-blue-600 uppercase">
+                          <div className="flex h-6 w-6 items-center justify-center rounded-full border border-amber-200 bg-amber-100 text-[10px] font-bold uppercase text-cb-primary">
                             {recipe.author?.name?.charAt(0) || "C"}
                           </div>
-                          <span className="text-xs font-bold text-gray-400">
+                          <span className="text-xs font-bold text-cb-text-soft/75">
                             {recipe.author?._id ? (
-                              <Link to={`/user/${recipe.author._id}`} className="hover:text-blue-500 transition-colors">
+                              <Link to={`/user/${recipe.author._id}`} className="transition-colors hover:text-cb-primary">
                                 {recipe.author.name}
                               </Link>
                             ) : (
@@ -393,7 +393,7 @@ const UserProfilePage = () => {
                             )}
                           </span>
                         </div>
-                        <Link to={`/recipe/${recipe._id}`} className="text-sm font-black text-blue-600 hover:text-blue-800">
+                        <Link to={`/recipe/${recipe._id}`} className="text-sm font-black text-cb-primary hover:text-cb-primary-strong">
                           View Recipe →
                         </Link>
                       </div>
@@ -404,8 +404,8 @@ const UserProfilePage = () => {
             )}
 
             {activeTab === "settings" && (
-              <div className="max-w-2xl bg-white rounded-3xl border border-gray-100 p-8 shadow-sm">
-                <h2 className="text-2xl font-black text-gray-900 mb-6">Personal Information</h2>
+              <div className="theme-card max-w-2xl rounded-3xl p-8 shadow-sm">
+                <h2 className="mb-6 text-2xl font-black text-cb-text">Personal Information</h2>
                 <form 
                   onSubmit={async (e) => {
                     e.preventDefault();
@@ -433,20 +433,20 @@ const UserProfilePage = () => {
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="flex flex-col gap-2">
-                      <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Full Name</label>
+                      <label className="ml-1 text-xs font-black uppercase tracking-widest text-cb-text-soft/75">Full Name</label>
                       <input
                         type="text"
-                        className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                        className="theme-input rounded-2xl px-5 py-4 text-sm"
                         value={settingsData.name}
                         onChange={(e) => setSettingsData({ ...settingsData, name: e.target.value })}
                         required
                       />
                     </div>
                     <div className="flex flex-col gap-2">
-                      <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Email Address</label>
+                      <label className="ml-1 text-xs font-black uppercase tracking-widest text-cb-text-soft/75">Email Address</label>
                       <input
                         type="email"
-                        className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                        className="theme-input rounded-2xl px-5 py-4 text-sm"
                         value={settingsData.email}
                         onChange={(e) => setSettingsData({ ...settingsData, email: e.target.value })}
                         required
@@ -454,26 +454,26 @@ const UserProfilePage = () => {
                     </div>
                   </div>
 
-                  <div className="pt-6 border-t border-gray-50">
-                    <h3 className="text-lg font-black text-gray-900 mb-4">Change Password</h3>
-                    <p className="text-sm text-gray-500 mb-6">Leave these blank if you don't want to change your password.</p>
+                  <div className="border-t border-cb-border pt-6">
+                    <h3 className="mb-4 text-lg font-black text-cb-text">Change Password</h3>
+                    <p className="mb-6 text-sm text-cb-text-soft">Leave these blank if you don't want to change your password.</p>
                     
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="flex flex-col gap-2">
-                        <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">Current Password</label>
+                        <label className="ml-1 text-xs font-black uppercase tracking-widest text-cb-text-soft/75">Current Password</label>
                         <input
                           type="password"
-                          className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                          className="theme-input rounded-2xl px-5 py-4 text-sm"
                           value={settingsData.currentPassword}
                           onChange={(e) => setSettingsData({ ...settingsData, currentPassword: e.target.value })}
                           placeholder="••••••••"
                         />
                       </div>
                       <div className="flex flex-col gap-2">
-                        <label className="text-xs font-black uppercase tracking-widest text-gray-400 ml-1">New Password</label>
+                        <label className="ml-1 text-xs font-black uppercase tracking-widest text-cb-text-soft/75">New Password</label>
                         <input
                           type="password"
-                          className="rounded-2xl border border-gray-200 bg-gray-50 px-5 py-4 text-sm focus:ring-2 focus:ring-blue-500 outline-none transition-all"
+                          className="theme-input rounded-2xl px-5 py-4 text-sm"
                           value={settingsData.password}
                           onChange={(e) => setSettingsData({ ...settingsData, password: e.target.value })}
                           placeholder="Min. 6 characters"
@@ -484,7 +484,7 @@ const UserProfilePage = () => {
 
                   <button
                     type="submit"
-                    className="w-full md:w-auto rounded-2xl bg-blue-600 px-10 py-4 font-black uppercase tracking-widest text-white hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 active:scale-[0.98]"
+                    className="theme-button-primary w-full px-10 py-4 font-black uppercase tracking-widest md:w-auto active:scale-[0.98]"
                   >
                     Update Account
                   </button>

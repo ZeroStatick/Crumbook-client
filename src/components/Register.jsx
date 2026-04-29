@@ -37,48 +37,48 @@ const Register = () => {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <div className="p-8 bg-white rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6 text-center text-gray-800">
+    <div className="theme-page flex min-h-screen flex-col items-center justify-center px-4">
+      <div className="theme-card w-full max-w-md rounded-3xl p-8">
+        <h2 className="mb-6 text-center text-2xl font-bold text-cb-text">
           Register
         </h2>
         <form onSubmit={handleRegister} className="space-y-4">
           {error && (
-            <div className="p-3 text-sm text-red-600 bg-red-100 rounded">
+            <div className="rounded-xl bg-red-50 p-3 text-sm text-red-600">
               {error}
             </div>
           )}
           <div>
-            <label className="block text-sm font-medium text-gray-700">Name</label>
+            <label className="block text-sm font-medium text-cb-text-soft">Name</label>
             <input
               type="text"
               name="name"
               placeholder="Name"
-              className="w-full p-2 mt-1 border rounded focus:ring-blue-500 focus:border-blue-500"
+              className="theme-input mt-1 w-full p-2.5"
               value={registerData.name}
               onChange={updateData}
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <label className="block text-sm font-medium text-cb-text-soft">Email</label>
             <input
               type="email"
               name="email"
               placeholder="Email"
-              className="w-full p-2 mt-1 border rounded focus:ring-blue-500 focus:border-blue-500"
+              className="theme-input mt-1 w-full p-2.5"
               value={registerData.email}
               onChange={updateData}
               required
             />
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700">Password</label>
+            <label className="block text-sm font-medium text-cb-text-soft">Password</label>
             <input
               type="password"
               name="password"
               placeholder="Password"
-              className="w-full p-2 mt-1 border rounded focus:ring-blue-500 focus:border-blue-500"
+              className="theme-input mt-1 w-full p-2.5"
               value={registerData.password}
               onChange={updateData}
               required
@@ -87,7 +87,7 @@ const Register = () => {
           <button
             type="submit"
             disabled={isLoading}
-            className={`w-full p-2 text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors ${
+            className={`theme-button-primary w-full p-2.5 ${
               isLoading ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
@@ -95,9 +95,9 @@ const Register = () => {
           </button>
         </form>
         <div className="mt-4 text-center">
-          <p className="text-sm text-gray-600">
+          <p className="text-sm text-cb-text-soft">
             Already have an account?{" "}
-            <NavLink to="/login" className="text-blue-600 hover:underline">
+            <NavLink to="/login" className="font-semibold text-cb-primary hover:underline">
               Login
             </NavLink>
           </p>
