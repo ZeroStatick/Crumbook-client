@@ -30,7 +30,7 @@ const ShareButton = ({ recipeId, className = "" }) => {
     <button
       onClick={handleCopyLink}
       title="Copy recipe link"
-      className={`premium-serif flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 font-semibold tracking-[0.02em] transition-all ${isCopied ? "text-emerald-300" : "text-amber-100/80 hover:border-white/20 hover:text-white"} ${className}`}
+      className={`font-serif flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 font-semibold tracking-[0.02em] transition-all ${isCopied ? "text-emerald-300" : "text-amber-100/80 hover:border-white/20 hover:text-white"} ${className}`}
     >
       <span>{isCopied ? "✓" : "🔗"}</span>
       <span className="hidden sm:inline">{isCopied ? "Copied!" : "Share"}</span>

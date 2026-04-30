@@ -75,7 +75,7 @@ const Home = () => {
         {loading ? (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[...Array(3)].map((_, i) => (
-              <div key={i} className="theme-card h-64 animate-pulse rounded-2xl"></div>
+              <div key={i} className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] h-64 animate-pulse rounded-2xl"></div>
             ))}
           </div>
         ) : (
@@ -85,7 +85,7 @@ const Home = () => {
                 <Link
                   key={recipe._id}
                   to={`/recipe/${recipe._id}`}
-                  className="theme-card group flex flex-col overflow-hidden rounded-2xl transition-all hover:-translate-y-1 hover:shadow-xl"
+                  className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] group flex flex-col overflow-hidden rounded-2xl transition-all hover:-translate-y-1 hover:shadow-xl"
                 >
                   <div className="p-6">
                     <div className="mb-3 flex gap-2">
@@ -136,7 +136,7 @@ const Home = () => {
           </p>
           <Link
             to="/drop-ingredients"
-            className="theme-button-primary inline-flex items-center gap-2 px-6 py-3 hover:scale-105"
+            className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all inline-flex items-center gap-2 px-6 py-3 hover:scale-105"
           >
             Try Ingredient Drop <span>✨</span>
           </Link>
@@ -152,7 +152,7 @@ const Home = () => {
       </section>
 
       {/* Testimonial/Trust Section */}
-      <section className="theme-card rounded-3xl px-8 py-16 text-center">
+      <section className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] rounded-3xl px-8 py-16 text-center">
         <h2 className="mb-12 text-3xl font-bold text-cb-text">Why Chefs choose Crumbook</h2>
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div className="space-y-4">
@@ -178,7 +178,7 @@ const Home = () => {
         <h2 className="mb-8 text-4xl font-bold text-cb-text">Ready to start your culinary journey?</h2>
         <Link
           to="/register"
-          className="theme-button-primary inline-block rounded-full px-10 py-4 text-xl shadow-xl transition-all hover:scale-105 active:scale-95"
+          className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all inline-block rounded-full px-10 py-4 text-xl shadow-xl transition-all hover:scale-105 active:scale-95"
         >
           Join Crumbook Today
         </Link>

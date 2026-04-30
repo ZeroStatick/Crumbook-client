@@ -19,7 +19,7 @@ const ChatInput = ({ onSendMessage, isLoading }) => {
         onChange={(e) => setInput(e.target.value)}
         disabled={isLoading}
         placeholder="Ask the AI Chef anything..."
-        className="theme-input w-full rounded-2xl bg-white/95 py-4 pl-6 pr-14 shadow-sm disabled:cursor-not-allowed disabled:bg-amber-50/60"
+        className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full rounded-2xl bg-white/95 py-4 pl-6 pr-14 shadow-sm disabled:cursor-not-allowed disabled:bg-amber-50/60"
       />
       <button
         type="submit"
@@ -27,7 +27,7 @@ const ChatInput = ({ onSendMessage, isLoading }) => {
         className={`absolute right-2 top-2 bottom-2 px-4 rounded-xl font-bold transition-all flex items-center justify-center ${
           !input.trim() || isLoading
             ? "cursor-not-allowed bg-amber-50 text-amber-300"
-            : "theme-button-primary text-white shadow-sm active:scale-95"
+            : "rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all text-white shadow-sm active:scale-95"
         }`}
       >
         {isLoading ? (

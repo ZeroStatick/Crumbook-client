@@ -29,7 +29,7 @@ const ReportModal = ({ targetId, targetType = "recipe", onClose }) => {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#52250d]/40 p-4 backdrop-blur-sm">
-      <div className="theme-card animate-in zoom-in w-full max-w-md rounded-2xl p-6 duration-200 fade-in">
+      <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] animate-in zoom-in w-full max-w-md rounded-2xl p-6 duration-200 fade-in">
         <h2 className="mb-4 text-xl font-bold text-cb-text">
           Report {targetType === "recipe" ? "Recipe" : "Comment"}
         </h2>
@@ -43,7 +43,7 @@ const ReportModal = ({ targetId, targetType = "recipe", onClose }) => {
               onChange={(e) =>
                 setReportData({ ...reportData, sort: e.target.value })
               }
-              className="theme-input w-full p-2.5"
+              className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-2.5"
               required
             >
               <option value="spam">Spam / Advertising</option>
@@ -67,7 +67,7 @@ const ReportModal = ({ targetId, targetType = "recipe", onClose }) => {
                 setReportData({ ...reportData, reason: e.target.value })
               }
               placeholder="Provide more context..."
-              className="theme-input h-32 w-full p-2.5"
+              className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all h-32 w-full p-2.5"
               maxLength={500}
             />
             <p className="mt-1 text-right text-xs text-cb-text-soft/75">
@@ -79,7 +79,7 @@ const ReportModal = ({ targetId, targetType = "recipe", onClose }) => {
             <button
               type="button"
               onClick={onClose}
-              className="theme-button-secondary rounded-lg px-4 py-2 text-sm font-medium"
+              className="rounded-xl font-bold text-[#f3d8b0] bg-white/10 border border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-white/15 active:scale-95 transition-all rounded-lg px-4 py-2 text-sm font-medium"
               disabled={isSubmitting}
             >
               Cancel
@@ -87,7 +87,7 @@ const ReportModal = ({ targetId, targetType = "recipe", onClose }) => {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="theme-button-primary rounded-lg px-4 py-2 text-sm font-bold disabled:opacity-50"
+              className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all rounded-lg px-4 py-2 text-sm font-bold disabled:opacity-50"
             >
               {isSubmitting ? "Submitting..." : "Submit Report"}
             </button>

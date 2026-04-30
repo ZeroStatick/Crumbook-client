@@ -50,11 +50,11 @@ const VisitProfilePage = () => {
   if (!profileUser) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center text-center px-4">
-        <div className="theme-card w-full max-w-md rounded-3xl p-8 shadow-xl">
+        <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] w-full max-w-md rounded-3xl p-8 shadow-xl">
           <div className="text-6xl mb-4">🔍</div>
           <h2 className="text-2xl font-bold text-cb-text">Chef not found</h2>
           <p className="mt-2 text-cb-text-soft">The user profile you are looking for does not exist.</p>
-          <Link to="/recipes" className="theme-button-primary mt-8 inline-block w-full px-6 py-3 text-center active:scale-95">
+          <Link to="/recipes" className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all mt-8 inline-block w-full px-6 py-3 text-center active:scale-95">
             Browse All Recipes
           </Link>
         </div>
@@ -65,7 +65,7 @@ const VisitProfilePage = () => {
   return (
     <div className="mx-auto max-w-7xl p-4 md:p-8 px-6 lg:px-8 pb-24">
       {/* User Info Section */}
-      <div className="theme-card mb-12 overflow-hidden rounded-3xl shadow-sm">
+      <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] mb-12 overflow-hidden rounded-3xl shadow-sm">
         <div className="h-40 bg-gradient-to-r from-[#9a3d16] via-[#b45309] to-[#d9981d]"></div>
         <div className="px-8 pb-8">
           <div className="relative flex flex-col items-center -mt-16 mb-6 gap-4">
@@ -93,7 +93,7 @@ const VisitProfilePage = () => {
       {/* Recipes Grid */}
       <div className="min-h-[400px]">
         {userRecipes.length === 0 ? (
-          <div className="theme-card rounded-3xl border-2 border-dashed border-cb-border py-20 text-center shadow-sm">
+          <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] rounded-3xl border-2 border-dashed border-cb-border py-20 text-center shadow-sm">
             <div className="text-5xl mb-4">🍳</div>
             <h3 className="text-xl font-bold text-cb-text">No recipes yet</h3>
             <p className="mx-auto mt-2 max-w-sm text-cb-text-soft">{profileUser.name} hasn't shared any recipes yet.</p>
@@ -101,7 +101,7 @@ const VisitProfilePage = () => {
         ) : (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {userRecipes.map((recipe) => (
-              <div key={recipe._id} className="theme-card group flex flex-col overflow-hidden rounded-3xl transition-all hover:-translate-y-1 hover:shadow-2xl">
+              <div key={recipe._id} className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] group flex flex-col overflow-hidden rounded-3xl transition-all hover:-translate-y-1 hover:shadow-2xl">
                 <div className="flex-grow p-8">
                   <div className="mb-4 flex items-center gap-2">
                     {recipe.tags?.slice(0, 2).map(tag => (

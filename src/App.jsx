@@ -56,7 +56,7 @@ function App() {
 
   if (isInitializing) {
     return (
-      <div className="theme-page flex h-screen w-screen items-center justify-center">
+      <div className="min-h-screen bg-transparent text-[#f6efe8] flex h-screen w-screen items-center justify-center">
         <div className="h-12 w-12 animate-spin rounded-full border-4 border-cb-border border-t-cb-primary"></div>
       </div>
     )
@@ -67,7 +67,7 @@ function App() {
       <Toaster />
       <BrowserRouter>
         <Navbar />
-        <main className="theme-page min-h-screen">
+        <main className="min-h-screen bg-transparent text-[#f6efe8]">
           <Routes>
             {/* Main Routes */}
             <Route path="/" element={<Home />} />

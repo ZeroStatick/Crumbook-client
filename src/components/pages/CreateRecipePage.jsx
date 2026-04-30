@@ -243,7 +243,7 @@ const CreateRecipePage = () => {
   if (fetching) return <div className="p-12 text-center text-cb-text-soft">Loading recipe data...</div>
 
   return (
-    <div className="theme-card mx-auto mt-8 max-w-2xl rounded-3xl p-6">
+    <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] mx-auto mt-8 max-w-2xl rounded-3xl p-6">
       <div className="mb-6 flex items-center justify-between">
         <h1 className="text-2xl font-bold text-cb-text">{isEditMode ? "Edit Recipe" : "New Recipe"}</h1>
         <Link
@@ -266,7 +266,7 @@ const CreateRecipePage = () => {
               name="title"
               value={formData.title}
               onChange={handleInputChange}
-              className="theme-input mt-1 w-full p-2.5"
+              className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all mt-1 w-full p-2.5"
               placeholder="e.g., Pizza Margharita"
               required
             />
@@ -281,7 +281,7 @@ const CreateRecipePage = () => {
               value={formData.description}
               onChange={handleInputChange}
               rows="2"
-              className="theme-input mt-1 w-full p-2.5"
+              className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all mt-1 w-full p-2.5"
               placeholder="Short summary..."
             />
           </div>
@@ -297,7 +297,7 @@ const CreateRecipePage = () => {
                 name="prepTime"
                 value={formData.prepTime}
                 onChange={handleInputChange}
-                className="theme-input mt-1 w-full p-2"
+                className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all mt-1 w-full p-2"
                 required
               />
             </div>
@@ -311,7 +311,7 @@ const CreateRecipePage = () => {
                 name="cookTime"
                 value={formData.cookTime}
                 onChange={handleInputChange}
-                className="theme-input mt-1 w-full p-2"
+                className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all mt-1 w-full p-2"
                 required
               />
             </div>
@@ -325,7 +325,7 @@ const CreateRecipePage = () => {
                 name="servings"
                 value={formData.servings}
                 onChange={handleInputChange}
-                className="theme-input mt-1 w-full p-2"
+                className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all mt-1 w-full p-2"
                 required
               />
             </div>
@@ -340,7 +340,7 @@ const CreateRecipePage = () => {
                 name="difficulty"
                 value={formData.difficulty}
                 onChange={handleInputChange}
-                className="theme-input mt-1 w-full p-2 text-sm"
+                className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all mt-1 w-full p-2 text-sm"
               >
                 {DIFFICULTIES.map((d) => (
                   <option key={d} value={d}>
@@ -395,7 +395,7 @@ const CreateRecipePage = () => {
               name="tags"
               value={formData.tags}
               onChange={handleInputChange}
-              className="theme-input mt-1 w-full p-2.5"
+              className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all mt-1 w-full p-2.5"
               placeholder="e.g., Italian, Dinner, Quick"
             />
           </div>
@@ -422,7 +422,7 @@ const CreateRecipePage = () => {
                   onChange={(e) =>
                     handleIngredientChange(index, "item", e.target.value)
                   }
-                  className="theme-input flex-1 p-2 text-sm"
+                  className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all flex-1 p-2 text-sm"
                   required
                 >
                   <option value="">Ingredient</option>
@@ -439,7 +439,7 @@ const CreateRecipePage = () => {
                     handleIngredientChange(index, "quantity", e.target.value)
                   }
                   placeholder="Qty"
-                  className="theme-input w-16 p-2 text-sm"
+                  className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-16 p-2 text-sm"
                   required
                 />
                 <select
@@ -447,7 +447,7 @@ const CreateRecipePage = () => {
                   onChange={(e) =>
                     handleIngredientChange(index, "unit", e.target.value)
                   }
-                  className="theme-input w-20 p-2 text-sm"
+                  className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-20 p-2 text-sm"
                 >
                   {UNITS.map((u) => (
                     <option key={u} value={u}>
@@ -493,7 +493,7 @@ const CreateRecipePage = () => {
                   }
                   rows="1"
                   placeholder="Instructions..."
-                  className="theme-input flex-1 p-2 text-sm"
+                  className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all flex-1 p-2 text-sm"
                   required
                 />
                 <button
@@ -511,7 +511,7 @@ const CreateRecipePage = () => {
         <button
           type="submit"
           disabled={loading}
-          className="theme-button-primary w-full py-3 disabled:bg-amber-200"
+          className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all w-full py-3 disabled:bg-amber-200"
         >
           {loading ? "Saving..." : isEditMode ? "Update Recipe" : isForkMode ? "Publish Your Version" : "Create Recipe"}
         </button>

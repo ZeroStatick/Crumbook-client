@@ -177,7 +177,7 @@ const UserProfilePage = () => {
   if (!user) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
-        <div className="theme-card w-full max-w-md rounded-3xl p-8 shadow-xl">
+        <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] w-full max-w-md rounded-3xl p-8 shadow-xl">
           <div className="mb-4 text-6xl">🔒</div>
           <h2 className="text-cb-text text-2xl font-bold">Please log in</h2>
           <p className="text-cb-text-soft mt-2">
@@ -186,7 +186,7 @@ const UserProfilePage = () => {
           </p>
           <Link
             to="/login"
-            className="theme-button-primary mt-8 inline-block w-full px-6 py-3 text-center active:scale-95"
+            className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all mt-8 inline-block w-full px-6 py-3 text-center active:scale-95"
           >
             Go to Login
           </Link>
@@ -198,7 +198,7 @@ const UserProfilePage = () => {
   return (
     <div className="mx-auto max-w-7xl p-4 px-6 pb-24 md:p-8 lg:px-8">
       {/* User Info Section */}
-      <div className="theme-card mb-12 overflow-hidden rounded-3xl shadow-sm">
+      <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] mb-12 overflow-hidden rounded-3xl shadow-sm">
         <div className="h-40 bg-gradient-to-r from-[#9a3d16] via-[#b45309] to-[#d9981d]"></div>
         <div className="px-8 pb-8">
           <div className="relative -mt-16 mb-6 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
@@ -214,11 +214,11 @@ const UserProfilePage = () => {
                 {isEditing ? (
                   <form
                     onSubmit={handleUpdateProfile}
-                    className="theme-card-soft mt-4 flex flex-col gap-3 rounded-2xl p-4 md:mt-0"
+                    className="bg-white/5 border border-white/10 backdrop-blur-[18px] mt-4 flex flex-col gap-3 rounded-2xl p-4 md:mt-0"
                   >
                     <input
                       type="text"
-                      className="theme-input rounded-xl px-4 py-2 text-sm"
+                      className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all rounded-xl px-4 py-2 text-sm"
                       value={editData.name}
                       onChange={(e) =>
                         setEditData({ ...editData, name: e.target.value })
@@ -249,14 +249,14 @@ const UserProfilePage = () => {
                     <div className="flex gap-2">
                       <button
                         type="submit"
-                        className="theme-button-primary flex-1 px-4 py-2 text-xs"
+                        className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all flex-1 px-4 py-2 text-xs"
                       >
                         Save Changes
                       </button>
                       <button
                         type="button"
                         onClick={handleCancel}
-                        className="theme-button-secondary flex-1 px-4 py-2 text-xs"
+                        className="rounded-xl font-bold text-[#f3d8b0] bg-white/10 border border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-white/15 active:scale-95 transition-all flex-1 px-4 py-2 text-xs"
                       >
                         Cancel
                       </button>
@@ -351,7 +351,7 @@ const UserProfilePage = () => {
               <input
                 type="text"
                 placeholder={`Search in ${activeTab === "my-recipes" ? "your creations" : "favorites"}...`}
-                className="theme-input w-full rounded-2xl py-4 pr-4 pl-12 transition-all focus:ring-2 focus:ring-amber-200"
+                className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full rounded-2xl py-4 pr-4 pl-12 transition-all focus:ring-2 focus:ring-amber-200"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
@@ -382,7 +382,7 @@ const UserProfilePage = () => {
           <>
             {activeTab === "my-recipes" &&
               (myRecipes.length === 0 ? (
-                <div className="theme-card border-cb-border rounded-3xl border-2 border-dashed py-20 text-center shadow-sm">
+                <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] border-cb-border rounded-3xl border-2 border-dashed py-20 text-center shadow-sm">
                   <div className="mb-4 text-5xl">🍳</div>
                   <h3 className="text-cb-text text-xl font-bold">
                     No recipes yet
@@ -393,13 +393,13 @@ const UserProfilePage = () => {
                   </p>
                   <Link
                     to="/recipes/new"
-                    className="theme-button-primary mt-8 inline-flex items-center gap-2 px-6 py-3"
+                    className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all mt-8 inline-flex items-center gap-2 px-6 py-3"
                   >
                     + Create Your First Recipe
                   </Link>
                 </div>
               ) : filteredMyRecipes.length === 0 ? (
-                <div className="theme-card border-cb-border rounded-3xl border-2 border-dashed py-20 text-center shadow-sm">
+                <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] border-cb-border rounded-3xl border-2 border-dashed py-20 text-center shadow-sm">
                   <div className="mb-4 text-5xl">🔍</div>
                   <h3 className="text-cb-text text-xl font-bold">
                     No matches found
@@ -410,7 +410,7 @@ const UserProfilePage = () => {
                   </p>
                   <button
                     onClick={() => setSearchTerm("")}
-                    className="theme-button-secondary mt-8 px-6 py-3"
+                    className="rounded-xl font-bold text-[#f3d8b0] bg-white/10 border border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-white/15 active:scale-95 transition-all mt-8 px-6 py-3"
                   >
                     Clear Search
                   </button>
@@ -420,7 +420,7 @@ const UserProfilePage = () => {
                   {filteredMyRecipes.map((recipe) => (
                     <div
                       key={recipe._id}
-                      className="theme-card group flex flex-col overflow-hidden rounded-3xl transition-all hover:-translate-y-1 hover:shadow-2xl"
+                      className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] group flex flex-col overflow-hidden rounded-3xl transition-all hover:-translate-y-1 hover:shadow-2xl"
                     >
                       <div className="flex-grow p-8">
                         <div className="mb-4 flex items-center gap-2">
@@ -468,7 +468,7 @@ const UserProfilePage = () => {
 
             {activeTab === "favorites" &&
               (favoriteRecipes.length === 0 ? (
-                <div className="theme-card border-cb-border rounded-3xl border-2 border-dashed py-20 text-center shadow-sm">
+                <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] border-cb-border rounded-3xl border-2 border-dashed py-20 text-center shadow-sm">
                   <div className="mb-4 text-5xl">❤️</div>
                   <h3 className="text-cb-text text-xl font-bold">
                     Your favorites are empty
@@ -479,13 +479,13 @@ const UserProfilePage = () => {
                   </p>
                   <Link
                     to="/recipes"
-                    className="theme-button-primary mt-8 inline-flex items-center gap-2 px-6 py-3"
+                    className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all mt-8 inline-flex items-center gap-2 px-6 py-3"
                   >
                     Browse Global Kitchen <span className="ml-1">→</span>
                   </Link>
                 </div>
               ) : filteredFavoriteRecipes.length === 0 ? (
-                <div className="theme-card border-cb-border rounded-3xl border-2 border-dashed py-20 text-center shadow-sm">
+                <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] border-cb-border rounded-3xl border-2 border-dashed py-20 text-center shadow-sm">
                   <div className="mb-4 text-5xl">🔍</div>
                   <h3 className="text-cb-text text-xl font-bold">
                     No matches found
@@ -496,7 +496,7 @@ const UserProfilePage = () => {
                   </p>
                   <button
                     onClick={() => setSearchTerm("")}
-                    className="theme-button-secondary mt-8 px-6 py-3"
+                    className="rounded-xl font-bold text-[#f3d8b0] bg-white/10 border border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-white/15 active:scale-95 transition-all mt-8 px-6 py-3"
                   >
                     Clear Search
                   </button>
@@ -506,7 +506,7 @@ const UserProfilePage = () => {
                   {filteredFavoriteRecipes.map((recipe) => (
                     <div
                       key={recipe._id}
-                      className="theme-card group relative flex flex-col overflow-hidden rounded-3xl transition-all hover:-translate-y-1 hover:shadow-2xl"
+                      className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] group relative flex flex-col overflow-hidden rounded-3xl transition-all hover:-translate-y-1 hover:shadow-2xl"
                     >
                       <button
                         onClick={(e) => toggleFavoriteHandler(recipe._id, e)}
@@ -558,7 +558,7 @@ const UserProfilePage = () => {
               ))}
 
             {activeTab === "settings" && (
-              <div className="theme-card max-w-2xl rounded-3xl p-8 shadow-sm">
+              <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] max-w-2xl rounded-3xl p-8 shadow-sm">
                 <h2 className="text-cb-text mb-6 text-2xl font-black">
                   Personal Information
                 </h2>
@@ -594,7 +594,7 @@ const UserProfilePage = () => {
                       </label>
                       <input
                         type="text"
-                        className="theme-input rounded-2xl px-5 py-4 text-sm"
+                        className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all rounded-2xl px-5 py-4 text-sm"
                         value={settingsData.name}
                         onChange={(e) =>
                           setSettingsData({
@@ -611,7 +611,7 @@ const UserProfilePage = () => {
                       </label>
                       <input
                         type="email"
-                        className="theme-input rounded-2xl px-5 py-4 text-sm"
+                        className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all rounded-2xl px-5 py-4 text-sm"
                         value={settingsData.email}
                         onChange={(e) =>
                           setSettingsData({
@@ -640,7 +640,7 @@ const UserProfilePage = () => {
                         </label>
                         <input
                           type="password"
-                          className="theme-input rounded-2xl px-5 py-4 text-sm"
+                          className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all rounded-2xl px-5 py-4 text-sm"
                           value={settingsData.currentPassword}
                           onChange={(e) =>
                             setSettingsData({
@@ -657,7 +657,7 @@ const UserProfilePage = () => {
                         </label>
                         <input
                           type="password"
-                          className="theme-input rounded-2xl px-5 py-4 text-sm"
+                          className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all rounded-2xl px-5 py-4 text-sm"
                           value={settingsData.password}
                           onChange={(e) =>
                             setSettingsData({
@@ -673,7 +673,7 @@ const UserProfilePage = () => {
 
                   <button
                     type="submit"
-                    className="theme-button-primary w-full px-10 py-4 font-black tracking-widest uppercase active:scale-[0.98] md:w-auto"
+                    className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all w-full px-10 py-4 font-black tracking-widest uppercase active:scale-[0.98] md:w-auto"
                   >
                     Update Account
                   </button>

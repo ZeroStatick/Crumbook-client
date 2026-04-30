@@ -34,7 +34,7 @@ const RecipeFilters = ({
             placeholder="Search by title..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="theme-input w-full p-3 shadow-sm"
+            className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 shadow-sm"
           />
         </div>
 
@@ -45,7 +45,7 @@ const RecipeFilters = ({
             onClick={() =>
               updateFilter("favorites", onlyFavorites ? "" : "true")
             }
-            className={`premium-serif inline-flex items-center gap-2 rounded-2xl border px-4 py-3 text-sm font-medium transition-all ${
+            className={`font-serif inline-flex items-center gap-2 rounded-2xl border px-4 py-3 text-sm font-medium transition-all ${
               onlyFavorites
                 ? "border-amber-400/30 bg-amber-400/15 text-amber-100 shadow-sm shadow-amber-400/15"
                 : "border-white/15 bg-white/10 text-sm hover:bg-white/10"
@@ -58,7 +58,7 @@ const RecipeFilters = ({
           <select
             value={sortBy}
             onChange={(e) => updateFilter("sort", e.target.value)}
-            className="premium-serif theme-input bg-white/10 p-3 text-sm shadow-sm"
+            className="font-serif rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all bg-white/10 p-3 text-sm shadow-sm"
           >
             <option value="newest">Newest First</option>
             <option value="oldest">Oldest First</option>
@@ -72,16 +72,16 @@ const RecipeFilters = ({
         Row 2: Detailed Filters Grid
         Contains dropdowns for Difficulty, Time, Servings, and Tags.
       */}
-      <div className="theme-card-soft grid grid-cols-2 gap-4 rounded-[1.75rem] p-5 md:grid-cols-4">
+      <div className="bg-white/5 border border-white/10 backdrop-blur-[18px] grid grid-cols-2 gap-4 rounded-[1.75rem] p-5 md:grid-cols-4">
         {/* Difficulty Filter */}
         <div>
-          <label className="premium-serif mb-1 ml-1 block text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
+          <label className="font-serif mb-1 ml-1 block text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
             Difficulty
           </label>
           <select
             value={difficulty}
             onChange={(e) => updateFilter("difficulty", e.target.value)}
-            className="theme-input w-full p-3 text-sm"
+            className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 text-sm"
           >
             <option value="">All Levels</option>
             <option value="Easy">Easy</option>
@@ -92,13 +92,13 @@ const RecipeFilters = ({
 
         {/* Max Time Filter */}
         <div>
-          <label className="premium-serif mb-1 ml-1 block text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
+          <label className="font-serif mb-1 ml-1 block text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
             Max Time
           </label>
           <select
             value={maxTime}
             onChange={(e) => updateFilter("maxTime", e.target.value)}
-            className="theme-input w-full p-3 text-sm"
+            className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 text-sm"
           >
             <option value="">Any Time</option>
             <option value="15">Under 15 min</option>
@@ -110,13 +110,13 @@ const RecipeFilters = ({
 
         {/* Servings Filter */}
         <div>
-          <label className="premium-serif mb-1 ml-1 block text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
+          <label className="font-serif mb-1 ml-1 block text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
             Servings
           </label>
           <select
             value={servings}
             onChange={(e) => updateFilter("servings", e.target.value)}
-            className="theme-input w-full p-3 text-sm"
+            className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 text-sm"
           >
             <option value="">Any Size</option>
             <option value="1-2">1-2 People</option>
@@ -127,13 +127,13 @@ const RecipeFilters = ({
 
         {/* Tags Filter */}
         <div>
-          <label className="premium-serif mb-1 ml-1 block text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
+          <label className="font-serif mb-1 ml-1 block text-xs font-semibold tracking-[0.18em] text-white/70 uppercase">
             Tags
           </label>
           <select
             value={selectedTag}
             onChange={(e) => updateFilter("tag", e.target.value)}
-            className="theme-input w-full p-3 text-sm"
+            className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 text-sm"
           >
             <option value="">All Tags</option>
             {allTags.map((tag) => (

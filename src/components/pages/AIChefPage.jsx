@@ -59,14 +59,14 @@ const AIChefPage = () => {
 
       <div 
         ref={scrollContainerRef}
-        className="theme-card flex-1 overflow-y-auto rounded-2xl p-6 pr-2 custom-scrollbar mb-6"
+        className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] flex-1 overflow-y-auto rounded-2xl p-6 pr-2 custom-scrollbar mb-6"
       >
         {messages.map((msg, index) => (
           <ChatMessage key={index} message={msg} />
         ))}
         {isLoading && (
           <div className="flex justify-start mb-4">
-            <div className="theme-card flex items-center gap-2 rounded-2xl rounded-tl-none p-4 shadow-sm">
+            <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0_0,0.45)] flex items-center gap-2 rounded-2xl rounded-tl-none p-4 shadow-sm">
               <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-amber-400"></div>
               <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-amber-500 [animation-delay:0.2s]"></div>
               <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-orange-500 [animation-delay:0.4s]"></div>

@@ -41,7 +41,7 @@ const SearchBar = memo(({ placeholder, onSearchChange }) => {
         value={localValue}
         onChange={(e) => setLocalValue(e.target.value)}
         placeholder={placeholder}
-        className="theme-input w-full rounded-md p-2 pl-10 transition-shadow"
+        className="w-full p-2 pl-10 rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all"
       />
     </div>
   )
@@ -56,7 +56,7 @@ const StatsSection = memo(({ stats }) => (
       { label: "Avg Recipes/User", val: stats.averageRecipesPerUser, color: "text-cb-primary-strong", em: "📊" },
       { label: "Pending Reports", val: stats.reportsCount, color: "text-red-600", em: "🚩" },
     ].map((s, i) => (
-      <div key={i} className="theme-card flex flex-col items-center rounded-xl p-6 shadow-sm">
+      <div key={i} className="flex flex-col items-center rounded-xl p-6 bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
         <span className="mb-2 text-4xl">{s.em}</span>
         <span className="text-sm font-medium uppercase tracking-wider text-cb-text-soft">{s.label}</span>
         <span className={`text-3xl font-bold ${s.color}`}>{s.val}</span>
@@ -93,10 +93,10 @@ const UserRow = memo(({ u, onDelete, onRoleChange, currentUser }) => {
       </td>
       <td className="px-6 py-4">
         {canEditRole ? (
-          <select
+            <select
             value={u.role}
             onChange={(e) => onRoleChange(u._id || u.id, parseInt(e.target.value))}
-            className="theme-input rounded bg-white p-1 text-[10px] font-bold"
+            className="rounded p-1 text-[10px] font-bold border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all"
           >
             <option value={1}>USER</option>
             <option value={2}>ADMIN</option>
@@ -277,7 +277,7 @@ const AdminDashboard = () => {
       <div className="flex flex-col gap-2">
         <p className="text-xs font-bold text-cb-text">Delete this user account?</p>
         <div className="flex justify-end gap-2">
-          <button onClick={() => toast.dismiss(t.id)} className="theme-button-secondary text-[10px] px-2 py-1 rounded">Cancel</button>
+          <button onClick={() => toast.dismiss(t.id)} className="rounded-xl font-bold text-[#f3d8b0] bg-white/10 border border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-white/15 active:scale-95 transition-all text-[10px] px-2 py-1 rounded">Cancel</button>
           <button onClick={() => { toast.dismiss(t.id); executeDeleteUser(id); }} className="text-[10px] bg-red-600 text-white px-2 py-1 rounded">Delete</button>
         </div>
       </div>
@@ -301,7 +301,7 @@ const AdminDashboard = () => {
       <div className="flex flex-col gap-2">
         <p className="text-xs font-bold text-cb-text">Delete recipe and all reports?</p>
         <div className="flex justify-end gap-2">
-          <button onClick={() => toast.dismiss(t.id)} className="theme-button-secondary text-[10px] px-2 py-1 rounded">Cancel</button>
+          <button onClick={() => toast.dismiss(t.id)} className="rounded-xl font-bold text-[#f3d8b0] bg-white/10 border border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-white/15 active:scale-95 transition-all text-[10px] px-2 py-1 rounded">Cancel</button>
           <button onClick={() => { toast.dismiss(t.id); executeDeleteRecipe(recipeId, reportId); }} className="text-[10px] bg-red-600 text-white px-2 py-1 rounded">Delete</button>
         </div>
       </div>
@@ -326,7 +326,7 @@ const AdminDashboard = () => {
       <div className="flex flex-col gap-2">
         <p className="text-xs font-bold text-cb-text">Delete this comment?</p>
         <div className="flex justify-end gap-2">
-          <button onClick={() => toast.dismiss(t.id)} className="theme-button-secondary text-[10px] px-2 py-1 rounded">Cancel</button>
+          <button onClick={() => toast.dismiss(t.id)} className="rounded-xl font-bold text-[#f3d8b0] bg-white/10 border border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-white/15 active:scale-95 transition-all text-[10px] px-2 py-1 rounded">Cancel</button>
           <button onClick={() => { toast.dismiss(t.id); executeDeleteComment(commentId, reportId); }} className="text-[10px] bg-red-600 text-white px-2 py-1 rounded">Delete</button>
         </div>
       </div>
@@ -378,7 +378,7 @@ const AdminDashboard = () => {
       
       <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
         {/* Recipe Reports Section */}
-        <div className="theme-card flex flex-col overflow-hidden rounded-xl shadow-sm">
+        <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] flex flex-col overflow-hidden rounded-xl shadow-sm">
           <div className="border-b border-orange-50 bg-orange-50/30 p-5">
             <h2 className="flex items-center justify-between font-bold text-orange-800">
               Recipe Reports
@@ -406,7 +406,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Comment Reports Section */}
-        <div className="theme-card flex flex-col overflow-hidden rounded-xl shadow-sm">
+        <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] flex flex-col overflow-hidden rounded-xl shadow-sm">
           <div className="border-b border-red-50 bg-red-50/30 p-5">
             <h2 className="flex items-center justify-between font-bold text-red-800">
               Comment Reports
@@ -433,16 +433,16 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="theme-card flex h-[600px] flex-col overflow-hidden rounded-xl shadow-sm">
+        <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] flex h-[600px] flex-col overflow-hidden rounded-xl shadow-sm">
           <div className="space-y-4 border-b border-cb-border p-5">
             <h2 className="font-bold text-cb-text">Ingredients ({data.ingredients.length})</h2>
             <form onSubmit={handleAddIng} className="grid grid-cols-5 gap-2 rounded-lg bg-amber-50/50 p-3">
-              <input type="text" value={newIng.name} onChange={(e) => setNewIng({ ...newIng, name: e.target.value })} placeholder="Name" className="theme-input col-span-2 p-1.5 text-xs" required />
-              <select value={newIng.category} onChange={(e) => setNewIng({ ...newIng, category: e.target.value })} className="theme-input col-span-2 p-1.5 text-xs" required>
+              <input type="text" value={newIng.name} onChange={(e) => setNewIng({ ...newIng, name: e.target.value })} placeholder="Name" className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all col-span-2 p-1.5 text-xs" required />
+              <select value={newIng.category} onChange={(e) => setNewIng({ ...newIng, category: e.target.value })} className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all col-span-2 p-1.5 text-xs" required>
                 <option value="">Category</option>
                 {["Vegetables", "Fruits", "Meat", "Dairy", "Spices", "Grains", "Other"].map((c) => <option key={c} value={c}>{c}</option>)}
               </select>
-              <button disabled={isAdding} className="theme-button-primary rounded text-[10px] text-white">{isAdding ? "..." : "Add"}</button>
+              <button disabled={isAdding} className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all rounded text-[10px] text-white">{isAdding ? "..." : "Add"}</button>
             </form>
             <SearchBar placeholder="Filter..." onSearchChange={onIngSearch} />
           </div>
@@ -455,7 +455,7 @@ const AdminDashboard = () => {
           </div>
         </div>
 
-        <div className="theme-card flex h-[600px] flex-col overflow-hidden rounded-xl shadow-sm">
+        <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] flex h-[600px] flex-col overflow-hidden rounded-xl shadow-sm">
           <div className="space-y-4 border-b border-cb-border p-5">
             <h2 className="font-bold text-cb-text">Users ({data.users.length})</h2>
             <SearchBar placeholder="Search..." onSearchChange={onUserSearch} />

@@ -28,20 +28,20 @@ const Navbar = () => {
               alt="Crumbook logo"
               className="h-14 w-14 rounded-2xl object-cover"
             />
-            <span className="premium-serif font-serif text-3xl font-black tracking-tight">
+            <span className="font-serif text-3xl font-black tracking-tight">
               Crumbook
             </span>
           </Link>
           <div className="hidden items-baseline gap-8 md:flex">
             <Link
               to="/recipes"
-              className="premium-serif font-semibold tracking-[0.02em] text-amber-100/80 transition-colors hover:text-white"
+              className="font-serif font-semibold tracking-[0.02em] text-amber-100/80 transition-colors hover:text-white"
             >
               Recipes
             </Link>
             <Link
               to="/drop-ingredients"
-              className="premium-serif font-semibold tracking-[0.02em] text-amber-100/80 transition-colors hover:text-white"
+              className="font-serif font-semibold tracking-[0.02em] text-amber-100/80 transition-colors hover:text-white"
             >
               Drop Ingredients
             </Link>
@@ -93,13 +93,13 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <Link
                 to="/login"
-                className="premium-serif rounded-full font-semibold tracking-[0.02em] text-amber-100/80 transition-colors hover:text-white"
+                className="font-serif rounded-full font-semibold tracking-[0.02em] text-amber-100/80 transition-colors hover:text-white"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="premium-serif rounded-full border border-white/10 bg-white/5 px-6 py-2 font-semibold tracking-[0.02em] text-white shadow-lg shadow-black/20 transition-all hover:bg-white/10 active:scale-95"
+                className="font-serif rounded-full border border-white/10 bg-white/5 px-6 py-2 font-semibold tracking-[0.02em] text-white shadow-lg shadow-black/20 transition-all hover:bg-white/10 active:scale-95"
               >
                 Join Now
               </Link>

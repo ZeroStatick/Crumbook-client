@@ -155,7 +155,7 @@ const RecipeDetailPage = () => {
           {user && !isAuthor && (
             <button
               onClick={() => setReportTarget({ id, type: "recipe" })}
-              className="theme-button-secondary px-4 py-2 text-sm"
+              className="rounded-xl font-bold text-[#f3d8b0] bg-white/10 border border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-white/15 active:scale-95 transition-all px-4 py-2 text-sm"
             >
               Report Recipe
             </button>
@@ -184,7 +184,7 @@ const RecipeDetailPage = () => {
             <>
               <button
                 onClick={() => navigate(`/recipes/edit/${id}`)}
-                className="theme-button-secondary px-4 py-2 text-sm"
+                className="rounded-xl font-bold text-[#f3d8b0] bg-white/10 border border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-white/15 active:scale-95 transition-all px-4 py-2 text-sm"
               >
                 Edit
               </button>
@@ -330,7 +330,7 @@ const RecipeDetailPage = () => {
         {user && !isAuthor ? (
           <form
             onSubmit={handleCommentSubmit}
-            className="theme-card mb-12 rounded-2xl p-6 shadow-sm"
+            className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] mb-12 rounded-2xl p-6 shadow-sm"
           >
             <h3 className="text-cb-text mb-4 text-lg font-bold">
               Leave a comment
@@ -364,19 +364,19 @@ const RecipeDetailPage = () => {
                 setNewComment({ ...newComment, text: e.target.value })
               }
               placeholder="What do you think of this recipe?"
-              className="theme-input mb-4 h-32 w-full p-4"
+              className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all mb-4 h-32 w-full p-4"
               required
             />
             <button
               type="submit"
               disabled={isSubmittingComment}
-              className="theme-button-primary rounded-xl px-6 py-3 disabled:opacity-50"
+              className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all rounded-xl px-6 py-3 disabled:opacity-50"
             >
               {isSubmittingComment ? "Posting..." : "Post Comment"}
             </button>
           </form>
         ) : !user ? (
-          <div className="theme-card-soft mb-12 rounded-2xl p-6 text-center">
+          <div className="bg-white/5 border border-white/10 backdrop-blur-[18px] mb-12 rounded-2xl p-6 text-center">
             <p className="text-cb-primary-strong">
               Please{" "}
               <Link to="/login" className="font-bold underline">
@@ -386,7 +386,7 @@ const RecipeDetailPage = () => {
             </p>
           </div>
         ) : isAuthor ? (
-          <div className="theme-card-soft mb-12 rounded-2xl p-6 text-center">
+          <div className="bg-white/5 border border-white/10 backdrop-blur-[18px] mb-12 rounded-2xl p-6 text-center">
             <p className="text-cb-text-soft italic">
               You cannot comment on your own recipe.
             </p>

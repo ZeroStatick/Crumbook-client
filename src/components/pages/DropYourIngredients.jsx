@@ -92,7 +92,7 @@ const DropYourIngredients = () => {
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
         {/* Ingredient Selection Panel */}
-        <div className="theme-card h-fit rounded-xl p-6 lg:sticky lg:top-4 lg:col-span-1">
+        <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] h-fit rounded-xl p-6 lg:sticky lg:top-4 lg:col-span-1">
           <div className="flex justify-between items-center mb-4">
             <h2 className="flex items-center gap-2 whitespace-nowrap text-lg font-bold text-cb-text">
               Your Selection
@@ -141,7 +141,7 @@ const DropYourIngredients = () => {
                 ? 'cursor-not-allowed bg-amber-100 text-amber-300' 
                 : searching 
                   ? 'cursor-wait bg-amber-400' 
-                  : 'theme-button-primary shadow-md hover:shadow-lg active:scale-[0.98]'
+                  : 'rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all shadow-md hover:shadow-lg active:scale-[0.98]'
             }`}
           >
             {searching ? (
@@ -165,7 +165,7 @@ const DropYourIngredients = () => {
           {searching ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-pulse">
               {[1, 2, 4, 5].map(i => (
-                <div key={i} className="theme-card h-32 rounded-xl"></div>
+                <div key={i} className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] h-32 rounded-xl"></div>
               ))}
             </div>
           ) : matchingRecipes.length > 0 ? (
@@ -191,7 +191,7 @@ const DropYourIngredients = () => {
                   <Link 
                     to={`/recipe/${recipe._id}`} 
                     key={recipe._id}
-                    className="theme-card group flex overflow-hidden rounded-xl transition-all hover:border-amber-200 hover:shadow-md"
+                    className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] group flex overflow-hidden rounded-xl transition-all hover:border-amber-200 hover:shadow-md"
                   >
                     {recipe.image && (
                       <div className="w-24 sm:w-32 h-full overflow-hidden">
@@ -242,7 +242,7 @@ const DropYourIngredients = () => {
                 <input
                   type="text"
                   placeholder="Filter ingredients..."
-                  className="theme-input w-full rounded-xl bg-white py-3 pl-10 pr-4 shadow-sm"
+                  className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full rounded-xl bg-white py-3 pl-10 pr-4 shadow-sm"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
