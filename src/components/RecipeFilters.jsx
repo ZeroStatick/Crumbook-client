@@ -58,12 +58,12 @@ const RecipeFilters = ({
           <select
             value={sortBy}
             onChange={(e) => updateFilter("sort", e.target.value)}
-            className="font-serif rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all bg-white/10 p-3 text-sm shadow-sm"
+            className="font-serif rounded-2xl border border-white/15 bg-[#0a0f16] text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all p-3 text-sm shadow-sm"
           >
-            <option value="newest">Newest First</option>
-            <option value="oldest">Oldest First</option>
-            <option value="title-asc">A-Z</option>
-            <option value="title-desc">Z-A</option>
+            <option value="newest" className="bg-[#0f141d]">Newest First</option>
+            <option value="oldest" className="bg-[#0f141d]">Oldest First</option>
+            <option value="title-asc" className="bg-[#0f141d]">A-Z</option>
+            <option value="title-desc" className="bg-[#0f141d]">Z-A</option>
           </select>
         </div>
       </div>
@@ -81,12 +81,12 @@ const RecipeFilters = ({
           <select
             value={difficulty}
             onChange={(e) => updateFilter("difficulty", e.target.value)}
-            className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 text-sm"
+            className="rounded-2xl border border-white/15 bg-[#0a0f16] text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 text-sm"
           >
-            <option value="">All Levels</option>
-            <option value="Easy">Easy</option>
-            <option value="Medium">Medium</option>
-            <option value="Hard">Hard</option>
+            <option value="" className="bg-[#0f141d]">All Levels</option>
+            <option value="Easy" className="bg-[#0f141d]">Easy</option>
+            <option value="Medium" className="bg-[#0f141d]">Medium</option>
+            <option value="Hard" className="bg-[#0f141d]">Hard</option>
           </select>
         </div>
 
@@ -98,13 +98,13 @@ const RecipeFilters = ({
           <select
             value={maxTime}
             onChange={(e) => updateFilter("maxTime", e.target.value)}
-            className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 text-sm"
+            className="rounded-2xl border border-white/15 bg-[#0a0f16] text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 text-sm"
           >
-            <option value="">Any Time</option>
-            <option value="15">Under 15 min</option>
-            <option value="30">Under 30 min</option>
-            <option value="60">Under 1 hour</option>
-            <option value="120">Under 2 hours</option>
+            <option value="" className="bg-[#0f141d]">Any Time</option>
+            <option value="15" className="bg-[#0f141d]">Under 15 min</option>
+            <option value="30" className="bg-[#0f141d]">Under 30 min</option>
+            <option value="60" className="bg-[#0f141d]">Under 1 hour</option>
+            <option value="120" className="bg-[#0f141d]">Under 2 hours</option>
           </select>
         </div>
 
@@ -116,12 +116,12 @@ const RecipeFilters = ({
           <select
             value={servings}
             onChange={(e) => updateFilter("servings", e.target.value)}
-            className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 text-sm"
+            className="rounded-2xl border border-white/15 bg-[#0a0f16] text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 text-sm"
           >
-            <option value="">Any Size</option>
-            <option value="1-2">1-2 People</option>
-            <option value="3-4">3-4 People</option>
-            <option value="5+">5+ People</option>
+            <option value="" className="bg-[#0f141d]">Any Size</option>
+            <option value="1-2" className="bg-[#0f141d]">1-2 People</option>
+            <option value="3-4" className="bg-[#0f141d]">3-4 People</option>
+            <option value="5+" className="bg-[#0f141d]">5+ People</option>
           </select>
         </div>
 
@@ -133,11 +133,11 @@ const RecipeFilters = ({
           <select
             value={selectedTag}
             onChange={(e) => updateFilter("tag", e.target.value)}
-            className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 text-sm"
+            className="rounded-2xl border border-white/15 bg-[#0a0f16] text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full p-3 text-sm"
           >
-            <option value="">All Tags</option>
+            <option value="" className="bg-[#0f141d]">All Tags</option>
             {allTags.map((tag) => (
-              <option key={tag} value={tag}>
+              <option key={tag} value={tag} className="bg-[#0f141d]">
                 {tag}
               </option>
             ))}

@@ -37,10 +37,10 @@ const VisitProfilePage = () => {
   if (loading) {
     return (
       <div className="mx-auto max-w-7xl p-4 md:p-8 px-6 lg:px-8 pb-24 min-h-[60vh]">
-        <div className="mb-12 h-40 animate-pulse rounded-3xl bg-amber-100"></div>
+        <div className="mb-12 h-48 animate-pulse rounded-4xl border border-white/10 bg-[#0f141d]"></div>
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[...Array(3)].map((_, i) => (
-            <div key={i} className="h-64 animate-pulse rounded-3xl bg-amber-100"></div>
+            <div key={i} className="h-72 animate-pulse rounded-[1.75rem] border border-white/10 bg-[#0f141d]"></div>
           ))}
         </div>
       </div>
@@ -50,11 +50,11 @@ const VisitProfilePage = () => {
   if (!profileUser) {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center text-center px-4">
-        <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] w-full max-w-md rounded-3xl p-8 shadow-xl">
-          <div className="text-6xl mb-4">🔍</div>
-          <h2 className="text-2xl font-bold text-cb-text">Chef not found</h2>
-          <p className="mt-2 text-cb-text-soft">The user profile you are looking for does not exist.</p>
-          <Link to="/recipes" className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all mt-8 inline-block w-full px-6 py-3 text-center active:scale-95">
+        <div className="w-full max-w-md rounded-4xl border border-white/10 bg-[#0f141d] p-10 shadow-2xl">
+          <div className="text-6xl mb-6 opacity-50">🔍</div>
+          <h2 className="font-serif text-3xl font-black text-white">Chef not found</h2>
+          <p className="mt-4 text-white/60">The user profile you are looking for does not exist.</p>
+          <Link to="/recipes" className="mt-8 block w-full rounded-full border border-amber-400/20 bg-amber-400/15 py-4 text-sm font-bold text-amber-100 hover:bg-amber-400/25 transition-all">
             Browse All Recipes
           </Link>
         </div>
@@ -65,63 +65,69 @@ const VisitProfilePage = () => {
   return (
     <div className="mx-auto max-w-7xl p-4 md:p-8 px-6 lg:px-8 pb-24">
       {/* User Info Section */}
-      <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] mb-12 overflow-hidden rounded-3xl shadow-sm">
-        <div className="h-40 bg-gradient-to-r from-[#9a3d16] via-[#b45309] to-[#d9981d]"></div>
-        <div className="px-8 pb-8">
-          <div className="relative flex flex-col items-center -mt-16 mb-6 gap-4">
-            <div className="h-32 w-32 overflow-hidden rounded-3xl border-4 border-white bg-amber-50 shadow-2xl">
+      <div className="mb-12 overflow-hidden rounded-4xl border border-white/10 bg-[#0f141d] shadow-2xl">
+        <div className="h-48 bg-[#0a0f16] relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-orange-500/10" />
+          <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+        </div>
+        <div className="px-10 pb-10">
+          <div className="relative flex flex-col items-center -mt-20 gap-6">
+            <div className="h-40 w-40 overflow-hidden rounded-[2.5rem] border-4 border-amber-400/50 bg-[#0a0f16] shadow-[0_0_30px_rgba(251,191,36,0.15)] transition-transform hover:scale-105">
               <img 
-                src={profileUser.profile_picture || `https://ui-avatars.com/api/?name=${profileUser.name}&background=F97316&color=fff`} 
+                src={profileUser.profile_picture || `https://ui-avatars.com/api/?name=${profileUser.name}&background=0a0f16&color=fbbf24`} 
                 alt={profileUser.name}
                 className="h-full w-full object-cover"
               />
             </div>
             <div className="text-center">
-              <h1 className="text-4xl font-black tracking-tight text-cb-text">{profileUser.name}</h1>
-              <p className="mt-1 font-medium text-cb-text-soft">Joined {new Date(profileUser.createdAt).toLocaleDateString()}</p>
+              <p className="mb-2 inline-flex rounded-full border border-amber-400/20 bg-amber-400/10 px-4 py-1 text-[10px] font-black tracking-[0.3em] text-amber-200 uppercase">
+                Guest Kitchen
+              </p>
+              <h1 className="font-serif text-5xl font-black tracking-tight text-white">{profileUser.name}</h1>
+              <p className="mt-2 text-sm font-black tracking-widest text-white/30 uppercase">Joined {new Date(profileUser.createdAt).toLocaleDateString(undefined, { month: 'long', year: 'numeric' })}</p>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Title */}
-      <div className="mb-10">
-        <h2 className="text-2xl font-black uppercase tracking-widest text-cb-text">{profileUser.name}'s Kitchen</h2>
-        <div className="mt-2 h-1 w-20 rounded-full bg-cb-primary"></div>
+      {/* Section Divider Title */}
+      <div className="mb-10 flex items-center gap-6">
+        <h2 className="whitespace-nowrap font-serif text-3xl font-black text-white">{profileUser.name}'s Collection</h2>
+        <div className="h-px grow bg-white/10"></div>
       </div>
 
       {/* Recipes Grid */}
       <div className="min-h-[400px]">
         {userRecipes.length === 0 ? (
-          <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] rounded-3xl border-2 border-dashed border-cb-border py-20 text-center shadow-sm">
-            <div className="text-5xl mb-4">🍳</div>
-            <h3 className="text-xl font-bold text-cb-text">No recipes yet</h3>
-            <p className="mx-auto mt-2 max-w-sm text-cb-text-soft">{profileUser.name} hasn't shared any recipes yet.</p>
+          <div className="rounded-4xl border-2 border-dashed border-white/5 bg-[#0f141d] py-24 text-center">
+            <div className="text-6xl mb-6 opacity-30">🍳</div>
+            <h3 className="font-serif text-2xl font-black text-white">The kitchen is quiet</h3>
+            <p className="mx-auto mt-2 max-w-sm text-white/40">{profileUser.name} hasn't shared any culinary masterpieces yet.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {userRecipes.map((recipe) => (
-              <div key={recipe._id} className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] group flex flex-col overflow-hidden rounded-3xl transition-all hover:-translate-y-1 hover:shadow-2xl">
-                <div className="flex-grow p-8">
-                  <div className="mb-4 flex items-center gap-2">
+              <div key={recipe._id} className="group flex flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0f141d] transition-all hover:-translate-y-1 hover:border-amber-400/20 hover:shadow-2xl">
+                <div className="grow p-8">
+                  <div className="mb-6 flex flex-wrap gap-2">
                     {recipe.tags?.slice(0, 2).map(tag => (
-                      <span key={tag} className="rounded-lg bg-amber-100/60 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-cb-primary">
-                        {tag}
+                      <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold text-white/40 uppercase">
+                        #{tag}
                       </span>
                     ))}
                   </div>
-                  <h3 className="mb-3 text-2xl font-black leading-tight text-cb-text transition-colors group-hover:text-cb-primary">
+                  <h3 className="mb-3 font-serif text-2xl font-black leading-tight text-white transition-colors group-hover:text-amber-200 line-clamp-2">
                     {recipe.title}
                   </h3>
-                  <p className="line-clamp-2 text-sm leading-relaxed text-cb-text-soft">
-                    {recipe.description || "A delicious recipe shared with the Crumbook community."}
+                  <p className="line-clamp-2 text-sm leading-relaxed text-white/60">
+                    {recipe.description || "A delicious creation shared with the community."}
                   </p>
                 </div>
-                <div className="flex items-center justify-between border-t border-amber-100/60 bg-amber-50/45 px-8 py-5">
-                  <span className="text-xs font-black uppercase tracking-tighter text-cb-text-soft/75">
+                <div className="mt-auto flex items-center justify-between border-t border-white/5 bg-[#0d1219] px-8 py-5">
+                  <span className="text-[10px] font-black tracking-widest text-white/20 uppercase">
                     {recipe.difficulty} • {recipe.prepTime + recipe.cookTime} MINS
                   </span>
-                  <Link to={`/recipe/${recipe._id}`} className="text-sm font-black text-cb-primary transition-colors hover:text-cb-primary-strong">
+                  <Link to={`/recipe/${recipe._id}`} className="text-xs font-bold text-amber-200 hover:text-white transition-colors">
                     View Recipe →
                   </Link>
                 </div>
