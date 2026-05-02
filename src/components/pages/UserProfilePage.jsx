@@ -28,13 +28,12 @@ const UserProfilePage = () => {
   const [previewUrl, setPreviewUrl] = useState(null)
   const fileInputRef = useRef(null)
 
-  // Local guest favorites as fallback if user favorites are not yet available or for guests
+  // Local guest favorites as fallback
   const [guestFavorites, setGuestFavorites] = useState(() => {
     const saved = localStorage.getItem("recipe_favorites")
     return saved ? JSON.parse(saved) : []
   })
 
-  // The actual favorite IDs to use
   const favoriteIds = user ? user.favorites || [] : guestFavorites
 
   useEffect(() => {
@@ -58,11 +57,9 @@ const UserProfilePage = () => {
 
       setLoading(true)
       try {
-        // Fetch My Recipes
         const myData = await get_recipes_by_user_id(user._id)
         setMyRecipes(Array.isArray(myData) ? myData : [])
 
-        // Fetch All Recipes to filter Favorites
         const allRecipes = await get_all_recipes()
         if (Array.isArray(allRecipes)) {
           const filteredFavs = allRecipes.filter((r) =>
@@ -72,30 +69,22 @@ const UserProfilePage = () => {
         }
       } catch (error) {
         toast.error("Failed to load profile data")
-        console.error(error)
       } finally {
         setLoading(false)
       }
     }
 
     fetchData()
-  }, [user?._id, favoriteIds.length]) // Trigger refetch when user changes or favorites count changes
+  }, [user?._id, favoriteIds.length])
 
   const handleDelete = async (recipeId) => {
-    if (
-      !window.confirm(
-        "Are you sure you want to delete this recipe? This action cannot be undone.",
-      )
-    ) {
-      return
-    }
-
+    if (!window.confirm("Are you sure you want to delete this recipe?")) return
     try {
       await delete_recipe(recipeId)
-      toast.success("Recipe deleted successfully")
+      toast.success("Recipe deleted")
       setMyRecipes((prev) => prev.filter((r) => r._id !== recipeId))
     } catch (error) {
-      toast.error(error.message || "Failed to delete recipe")
+      toast.error("Failed to delete recipe")
     }
   }
 
@@ -107,10 +96,7 @@ const UserProfilePage = () => {
       try {
         const updatedUser = await toggle_favorite(id)
         setUser(updatedUser)
-        const isNowFav = updatedUser.favorites.includes(id)
-        toast.success(
-          isNowFav ? "Added to favorites" : "Removed from favorites",
-        )
+        toast.success(updatedUser.favorites.includes(id) ? "Added to favorites" : "Removed from favorites")
       } catch {
         toast.error("Failed to update favorites")
       }
@@ -118,26 +104,9 @@ const UserProfilePage = () => {
       const newFavs = guestFavorites.includes(id)
         ? guestFavorites.filter((favId) => favId !== id)
         : [...guestFavorites, id]
-
       setGuestFavorites(newFavs)
       localStorage.setItem("recipe_favorites", JSON.stringify(newFavs))
-      toast.success(
-        guestFavorites.includes(id)
-          ? "Removed from favorites"
-          : "Added to favorites (Guest)",
-      )
-    }
-  }
-
-  const handleCancel = () => {
-    setIsEditing(false)
-    setEditData({
-      name: user.name || "",
-      profile_picture: user.profile_picture || "",
-    })
-    setPreviewUrl(null)
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ""
+      toast.success(newFavs.includes(id) ? "Added to favorites" : "Removed from favorites")
     }
   }
 
@@ -148,9 +117,9 @@ const UserProfilePage = () => {
       setUser(updatedUser)
       setIsEditing(false)
       setPreviewUrl(null)
-      toast.success("Profile updated successfully")
+      toast.success("Profile updated")
     } catch (error) {
-      toast.error(error.message || "Failed to update profile")
+      toast.error(error.message || "Update failed")
     }
   }
 
@@ -160,10 +129,6 @@ const UserProfilePage = () => {
       setEditData({ ...editData, profile_picture: file })
       setPreviewUrl(URL.createObjectURL(file))
     }
-  }
-
-  const handleUploadClick = () => {
-    fileInputRef.current.click()
   }
 
   const filteredMyRecipes = myRecipes.filter((r) =>
@@ -176,17 +141,14 @@ const UserProfilePage = () => {
 
   if (!user) {
     return (
-      <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
-        <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] w-full max-w-md rounded-3xl p-8 shadow-xl">
-          <div className="mb-4 text-6xl">🔒</div>
-          <h2 className="text-cb-text text-2xl font-bold">Please log in</h2>
-          <p className="text-cb-text-soft mt-2">
-            You need to be logged in to view your personal profile and synced
-            favorites.
-          </p>
+      <div className="flex min-h-[60vh] flex-col items-center justify-center px-4">
+        <div className="w-full max-w-md rounded-4xl border border-white/10 bg-[#0f141d] p-10 text-center shadow-2xl">
+          <div className="mb-6 text-6xl opacity-50">🔒</div>
+          <h2 className="font-serif text-3xl font-black text-white">Chef Portal Only</h2>
+          <p className="mt-4 text-white/60">Please sign in to access your creations and curated collections.</p>
           <Link
             to="/login"
-            className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all mt-8 inline-block w-full px-6 py-3 text-center active:scale-95"
+            className="mt-8 block w-full rounded-full border border-amber-400/20 bg-amber-400/15 py-4 text-sm font-bold text-amber-100 hover:bg-amber-400/25 transition-all"
           >
             Go to Login
           </Link>
@@ -197,487 +159,247 @@ const UserProfilePage = () => {
 
   return (
     <div className="mx-auto max-w-7xl p-4 px-6 pb-24 md:p-8 lg:px-8">
-      {/* User Info Section */}
-      <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] mb-12 overflow-hidden rounded-3xl shadow-sm">
-        <div className="h-40 bg-gradient-to-r from-[#9a3d16] via-[#b45309] to-[#d9981d]"></div>
-        <div className="px-8 pb-8">
-          <div className="relative -mt-16 mb-6 flex flex-col items-center justify-between gap-6 md:flex-row md:items-end">
-            <div className="flex flex-col items-center gap-6 text-center md:flex-row md:items-end md:text-left">
-              <div className="group relative h-32 w-32 overflow-hidden rounded-3xl border-4 border-white bg-amber-50 shadow-2xl">
-                <img
-                  src={previewUrl || user.profile_picture || DEFAULT_AVATAR}
-                  alt={user.name}
-                  className="h-full w-full object-cover"
-                />
-              </div>
-              <div className="pb-2">
-                {isEditing ? (
-                  <form
-                    onSubmit={handleUpdateProfile}
-                    className="bg-white/5 border border-white/10 backdrop-blur-[18px] mt-4 flex flex-col gap-3 rounded-2xl p-4 md:mt-0"
+      {/* User Header Section */}
+      <div className="mb-12 overflow-hidden rounded-4xl border border-white/10 bg-[#0f141d] shadow-2xl">
+        <div className="h-48 bg-[#0a0f16] relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-orange-500/10" />
+          <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
+        </div>
+        <div className="px-10 pb-10">
+          <div className="relative -mt-20 flex flex-col items-center justify-between gap-8 md:flex-row md:items-end">
+            <div className="flex flex-col items-center gap-8 md:flex-row md:items-end">
+              <div className="relative group">
+                <div className="h-40 w-40 overflow-hidden rounded-[2.5rem] border-4 border-amber-400/50 bg-[#0a0f16] shadow-[0_0_30px_rgba(251,191,36,0.15)] transition-transform hover:scale-105">
+                  <img
+                    src={previewUrl || user.profile_picture || DEFAULT_AVATAR}
+                    alt={user.name}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                {!isEditing && (
+                  <button
+                    onClick={() => setIsEditing(true)}
+                    className="absolute -bottom-2 -right-2 flex h-10 w-10 items-center justify-center rounded-2xl border border-white/10 bg-white/5 text-white shadow-xl backdrop-blur-xl transition-all hover:bg-white/10"
                   >
+                    ✏️
+                  </button>
+                )}
+              </div>
+
+              <div className="text-center md:text-left pb-2">
+                {isEditing ? (
+                  <form onSubmit={handleUpdateProfile} className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
                     <input
                       type="text"
-                      className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all rounded-xl px-4 py-2 text-sm"
+                      className="rounded-2xl border border-white/10 bg-white/5 px-4 py-2 text-white focus:border-amber-400/30 outline-none"
                       value={editData.name}
-                      onChange={(e) =>
-                        setEditData({ ...editData, name: e.target.value })
-                      }
-                      placeholder="Display Name"
+                      onChange={(e) => setEditData({ ...editData, name: e.target.value })}
                       required
                     />
-                    <div className="flex flex-col gap-2">
-                      <input
-                        type="file"
-                        ref={fileInputRef}
-                        onChange={handleFileChange}
-                        accept="image/*"
-                        className="hidden"
-                      />
-                      <button
-                        type="button"
-                        onClick={handleUploadClick}
-                        onKeyDown={(e) =>
-                          e.key === "Enter" && e.preventDefault()
-                        }
-                        onMouseDown={(e) => e.preventDefault()}
-                        className="text-cb-primary flex w-full items-center justify-center gap-2 rounded-xl border-2 border-dashed border-amber-300 bg-amber-50/70 px-4 py-2 text-xs font-bold transition-colors hover:bg-amber-50"
-                      >
-                        📷 Upload New Picture
-                      </button>
-                    </div>
                     <div className="flex gap-2">
-                      <button
-                        type="submit"
-                        className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all flex-1 px-4 py-2 text-xs"
-                      >
-                        Save Changes
+                      <input type="file" ref={fileInputRef} onChange={handleFileChange} accept="image/*" className="hidden" />
+                      <button type="button" onClick={() => fileInputRef.current.click()} className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-white hover:bg-white/10">
+                        📷 New Picture
                       </button>
-                      <button
-                        type="button"
-                        onClick={handleCancel}
-                        className="rounded-xl font-bold text-[#f3d8b0] bg-white/10 border border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-white/15 active:scale-95 transition-all flex-1 px-4 py-2 text-xs"
-                      >
+                      <button type="submit" className="rounded-xl bg-amber-400/10 border border-amber-400/20 px-4 py-2 text-xs font-bold text-amber-100 hover:bg-amber-400/20">
+                        Save
+                      </button>
+                      <button type="button" onClick={() => setIsEditing(false)} className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-xs font-bold text-white/40">
                         Cancel
                       </button>
                     </div>
                   </form>
                 ) : (
                   <>
-                    <div className="flex items-center justify-center gap-3 md:justify-start">
-                      <h1 className="text-cb-text text-4xl font-black tracking-tight">
-                        {user.name}
-                      </h1>
-                      <button
-                        onClick={() => setIsEditing(true)}
-                        className="text-cb-primary rounded-full p-2 transition-colors hover:bg-amber-50"
-                        title="Edit Profile"
-                      >
-                        ✏️
-                      </button>
-                    </div>
-                    <p className="text-cb-text-soft font-medium">
-                      {user.email}
-                    </p>
+                    <h1 className="font-serif text-5xl font-black tracking-tight text-white">{user.name}</h1>
+                    <p className="mt-2 text-lg font-medium text-amber-200/60">{user.email}</p>
                   </>
                 )}
               </div>
             </div>
-            <div className="pb-4">
-              <span className="text-cb-primary inline-flex items-center gap-1.5 rounded-full border border-amber-200 bg-amber-50 px-4 py-1.5 text-xs font-black tracking-widest uppercase">
-                <span className="bg-cb-primary h-1.5 w-1.5 animate-pulse rounded-full"></span>
-                {user.role === 3
-                  ? "Owner"
-                  : user.role === 2
-                    ? "Moderator"
-                    : "Head Chef"}
+            
+            <div className="mb-4">
+              <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/20 bg-amber-400/10 px-5 py-2 text-[10px] font-black tracking-[0.2em] text-amber-200 uppercase">
+                <span className="h-1.5 w-1.5 rounded-full bg-amber-400 animate-pulse" />
+                {user.role === 3 ? "Owner" : user.role === 2 ? "Moderator" : "Head Chef"}
               </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Tabs Navigation */}
-      <div className="mb-10 flex w-fit flex-wrap gap-2 rounded-2xl bg-amber-50/70 p-1">
-        <button
-          onClick={() => {
-            setActiveTab("my-recipes")
-            setSearchTerm("")
-          }}
-          className={`rounded-xl px-8 py-3 text-sm font-black tracking-widest uppercase transition-all ${
-            activeTab === "my-recipes"
-              ? "text-cb-primary bg-white shadow-sm"
-              : "text-cb-text-soft hover:text-cb-text hover:bg-white/50"
-          }`}
-        >
-          My Creations
-        </button>
-        <button
-          onClick={() => {
-            setActiveTab("favorites")
-            setSearchTerm("")
-          }}
-          className={`rounded-xl px-8 py-3 text-sm font-black tracking-widest uppercase transition-all ${
-            activeTab === "favorites"
-              ? "bg-white text-red-500 shadow-sm"
-              : "text-cb-text-soft hover:text-cb-text hover:bg-white/50"
-          }`}
-        >
-          Favorites ❤️
-        </button>
-        <button
-          onClick={() => {
-            setActiveTab("settings")
-            setSearchTerm("")
-          }}
-          className={`rounded-xl px-8 py-3 text-sm font-black tracking-widest uppercase transition-all ${
-            activeTab === "settings"
-              ? "text-cb-text bg-white shadow-sm"
-              : "text-cb-text-soft hover:text-cb-text hover:bg-white/50"
-          }`}
-        >
-          Account Settings ⚙️
-        </button>
+      {/* Navigation Tabs */}
+      <div className="mb-12 flex items-center gap-3 overflow-x-auto pb-4 custom-scrollbar">
+        {[
+          { id: "my-recipes", label: "My Creations", icon: "🍳" },
+          { id: "favorites", label: "Favorites", icon: "❤️" },
+          { id: "settings", label: "Account Settings", icon: "⚙️" },
+        ].map((tab) => (
+          <button
+            key={tab.id}
+            onClick={() => { setActiveTab(tab.id); setSearchTerm(""); }}
+            className={`flex items-center gap-3 whitespace-nowrap rounded-full border px-8 py-4 text-xs font-black tracking-[0.15em] uppercase transition-all ${
+              activeTab === tab.id
+                ? "border-amber-400/30 bg-amber-400/10 text-amber-200 shadow-lg shadow-amber-950/20"
+                : "border-white/5 bg-white/5 text-white/40 hover:bg-white/10 hover:text-white"
+            }`}
+          >
+            <span className="text-base">{tab.icon}</span> {tab.label}
+          </button>
+        ))}
       </div>
 
-      {/* Search Bar - Only for My Recipes and Favorites */}
-      {(activeTab === "my-recipes" || activeTab === "favorites") &&
-        (myRecipes.length > 0 || favoriteRecipes.length > 0) && (
-          <div className="mb-8 max-w-md">
-            <div className="group relative">
-              <span className="absolute inset-y-0 left-0 flex items-center pl-4 text-xl">
-                🔍
-              </span>
-              <input
-                type="text"
-                placeholder={`Search in ${activeTab === "my-recipes" ? "your creations" : "favorites"}...`}
-                className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all w-full rounded-2xl py-4 pr-4 pl-12 transition-all focus:ring-2 focus:ring-amber-200"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-              {searchTerm && (
-                <button
-                  onClick={() => setSearchTerm("")}
-                  className="text-cb-text-soft hover:text-cb-text absolute inset-y-0 right-0 flex items-center pr-4"
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-          </div>
-        )}
-
-      {/* Content Section */}
+      {/* Main Content Area */}
       <div className="min-h-[400px]">
         {loading && activeTab !== "settings" ? (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {[...Array(3)].map((_, i) => (
-              <div
-                key={i}
-                className="h-64 animate-pulse rounded-3xl bg-amber-100"
-              ></div>
+              <div key={i} className="h-72 animate-pulse rounded-[1.75rem] border border-white/10 bg-[#0f141d]" />
             ))}
           </div>
         ) : (
           <>
-            {activeTab === "my-recipes" &&
-              (myRecipes.length === 0 ? (
-                <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] border-cb-border rounded-3xl border-2 border-dashed py-20 text-center shadow-sm">
-                  <div className="mb-4 text-5xl">🍳</div>
-                  <h3 className="text-cb-text text-xl font-bold">
-                    No recipes yet
-                  </h3>
-                  <p className="text-cb-text-soft mx-auto mt-2 max-w-sm">
-                    Your culinary masterpieces will appear here once you share
-                    them!
-                  </p>
-                  <Link
-                    to="/recipes/new"
-                    className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all mt-8 inline-flex items-center gap-2 px-6 py-3"
-                  >
-                    + Create Your First Recipe
-                  </Link>
-                </div>
-              ) : filteredMyRecipes.length === 0 ? (
-                <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] border-cb-border rounded-3xl border-2 border-dashed py-20 text-center shadow-sm">
-                  <div className="mb-4 text-5xl">🔍</div>
-                  <h3 className="text-cb-text text-xl font-bold">
-                    No matches found
-                  </h3>
-                  <p className="text-cb-text-soft mx-auto mt-2 max-w-sm">
-                    We couldn't find any recipes matching "{searchTerm}" in your
-                    creations.
-                  </p>
-                  <button
-                    onClick={() => setSearchTerm("")}
-                    className="rounded-xl font-bold text-[#f3d8b0] bg-white/10 border border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-white/15 active:scale-95 transition-all mt-8 px-6 py-3"
-                  >
-                    Clear Search
-                  </button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                  {filteredMyRecipes.map((recipe) => (
-                    <div
-                      key={recipe._id}
-                      className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] group flex flex-col overflow-hidden rounded-3xl transition-all hover:-translate-y-1 hover:shadow-2xl"
-                    >
-                      <div className="flex-grow p-8">
-                        <div className="mb-4 flex items-center gap-2">
-                          {recipe.tags?.slice(0, 2).map((tag) => (
-                            <span
-                              key={tag}
-                              className="text-cb-primary rounded-lg bg-amber-100/60 px-2.5 py-1 text-[10px] font-black tracking-widest uppercase"
-                            >
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
-                        <h3 className="text-cb-text group-hover:text-cb-primary mb-3 text-2xl leading-tight font-black transition-colors">
-                          {recipe.title}
-                        </h3>
-                        <p className="text-cb-text-soft line-clamp-2 text-sm leading-relaxed">
-                          {recipe.description ||
-                            "A delicious recipe shared with the Crumbook community."}
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-between border-t border-amber-100/60 bg-amber-50/45 px-8 py-5">
-                        <span className="text-cb-text-soft/75 text-xs font-black tracking-tighter uppercase">
-                          {recipe.difficulty} •{" "}
-                          {recipe.prepTime + recipe.cookTime} MINS
-                        </span>
-                        <div className="flex gap-4">
-                          <Link
-                            to={`/recipes/edit/${recipe._id}`}
-                            className="text-cb-primary hover:text-cb-primary-strong text-sm font-bold transition-colors"
-                          >
-                            Edit
-                          </Link>
-                          <button
-                            onClick={() => handleDelete(recipe._id)}
-                            className="text-sm font-bold text-red-500 transition-colors hover:text-red-700"
-                          >
-                            Delete
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-
-            {activeTab === "favorites" &&
-              (favoriteRecipes.length === 0 ? (
-                <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] border-cb-border rounded-3xl border-2 border-dashed py-20 text-center shadow-sm">
-                  <div className="mb-4 text-5xl">❤️</div>
-                  <h3 className="text-cb-text text-xl font-bold">
-                    Your favorites are empty
-                  </h3>
-                  <p className="text-cb-text-soft mx-auto mt-2 max-w-sm">
-                    Explore the world of recipes and save the ones that inspire
-                    you!
-                  </p>
-                  <Link
-                    to="/recipes"
-                    className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all mt-8 inline-flex items-center gap-2 px-6 py-3"
-                  >
-                    Browse Global Kitchen <span className="ml-1">→</span>
-                  </Link>
-                </div>
-              ) : filteredFavoriteRecipes.length === 0 ? (
-                <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] border-cb-border rounded-3xl border-2 border-dashed py-20 text-center shadow-sm">
-                  <div className="mb-4 text-5xl">🔍</div>
-                  <h3 className="text-cb-text text-xl font-bold">
-                    No matches found
-                  </h3>
-                  <p className="text-cb-text-soft mx-auto mt-2 max-w-sm">
-                    We couldn't find any recipes matching "{searchTerm}" in your
-                    favorites.
-                  </p>
-                  <button
-                    onClick={() => setSearchTerm("")}
-                    className="rounded-xl font-bold text-[#f3d8b0] bg-white/10 border border-white/15 shadow-[0_10px_24px_rgba(0,0,0,0.18)] hover:bg-white/15 active:scale-95 transition-all mt-8 px-6 py-3"
-                  >
-                    Clear Search
-                  </button>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-                  {filteredFavoriteRecipes.map((recipe) => (
-                    <div
-                      key={recipe._id}
-                      className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] group relative flex flex-col overflow-hidden rounded-3xl transition-all hover:-translate-y-1 hover:shadow-2xl"
-                    >
-                      <button
-                        onClick={(e) => toggleFavoriteHandler(recipe._id, e)}
-                        className="absolute top-6 right-6 z-10 rounded-2xl bg-white p-3 text-red-500 shadow-xl transition-transform hover:scale-110"
-                      >
-                        ❤️
-                      </button>
-                      <div className="flex-grow p-8">
-                        <div className="mb-4">
-                          <span className="rounded-lg bg-emerald-50 px-2.5 py-1 text-[10px] font-black tracking-widest text-emerald-600 uppercase">
-                            {recipe.difficulty}
-                          </span>
-                        </div>
-                        <h3 className="text-cb-text group-hover:text-cb-primary mb-3 text-2xl leading-tight font-black transition-colors">
-                          {recipe.title}
-                        </h3>
-                        <p className="text-cb-text-soft line-clamp-2 text-sm leading-relaxed">
-                          {recipe.description}
-                        </p>
-                      </div>
-                      <div className="flex items-center justify-between border-t border-amber-100/60 bg-amber-50/45 px-8 py-5">
-                        <div className="flex items-center gap-2">
-                          <div className="text-cb-primary flex h-6 w-6 items-center justify-center rounded-full border border-amber-200 bg-amber-100 text-[10px] font-bold uppercase">
-                            {recipe.author?.name?.charAt(0) || "C"}
+            {activeTab === "my-recipes" && (
+              <div className="space-y-10">
+                {myRecipes.length > 0 && (
+                  <div className="max-w-md">
+                    <input
+                      type="text"
+                      placeholder="Search creations..."
+                      className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-amber-400/30 transition-all"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                )}
+                {filteredMyRecipes.length === 0 ? (
+                  <div className="rounded-4xl border-2 border-dashed border-white/5 bg-[#0f141d] py-24 text-center">
+                    <div className="mb-6 text-6xl opacity-30">🍳</div>
+                    <h3 className="font-serif text-2xl font-black text-white">No recipes found</h3>
+                    <p className="mt-2 text-white/40">Ready to share your culinary genius?</p>
+                    <Link to="/recipes/new" className="mt-8 inline-flex rounded-full border border-amber-400/20 bg-amber-400/15 px-8 py-3 text-sm font-bold text-amber-100 hover:bg-amber-400/25">
+                      + Create Recipe
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                    {filteredMyRecipes.map((recipe) => (
+                      <div key={recipe._id} className="group flex flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0f141d] transition-all hover:-translate-y-1 hover:border-amber-400/20 hover:shadow-2xl">
+                        <div className="p-8">
+                          <h3 className="font-serif text-2xl font-black text-white group-hover:text-amber-200 transition-colors line-clamp-1">{recipe.title}</h3>
+                          <p className="mt-3 line-clamp-2 text-sm text-white/60">{recipe.description || "Shared with the community."}</p>
+                          <div className="mt-6 flex flex-wrap gap-2">
+                            {recipe.tags?.slice(0, 2).map(tag => (
+                              <span key={tag} className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold text-white/40 uppercase">#{tag}</span>
+                            ))}
                           </div>
-                          <span className="text-cb-text-soft/75 text-xs font-bold">
-                            {recipe.author?._id ? (
-                              <Link
-                                to={`/user/${recipe.author._id}`}
-                                className="hover:text-cb-primary transition-colors"
-                              >
-                                {recipe.author.name}
-                              </Link>
-                            ) : (
-                              recipe.author?.name || "Chef"
-                            )}
-                          </span>
                         </div>
-                        <Link
-                          to={`/recipe/${recipe._id}`}
-                          className="text-cb-primary hover:text-cb-primary-strong text-sm font-black"
-                        >
-                          View Recipe →
-                        </Link>
+                        <div className="mt-auto border-t border-white/5 bg-[#0d1219] px-8 py-5 flex items-center justify-between">
+                          <span className="text-[10px] font-black tracking-widest text-white/20 uppercase">{recipe.difficulty}</span>
+                          <div className="flex gap-6">
+                            <Link to={`/recipes/edit/${recipe._id}`} className="text-xs font-bold text-amber-200 hover:text-white transition-colors">Edit</Link>
+                            <button onClick={() => handleDelete(recipe._id)} className="text-xs font-bold text-rose-400 hover:text-rose-300 transition-colors">Delete</button>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {activeTab === "favorites" && (
+              <div className="space-y-10">
+                {favoriteRecipes.length > 0 && (
+                  <div className="max-w-md">
+                    <input
+                      type="text"
+                      placeholder="Search favorites..."
+                      className="w-full rounded-2xl border border-white/10 bg-white/5 px-6 py-4 text-white outline-none focus:border-amber-400/30 transition-all"
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                )}
+                {filteredFavoriteRecipes.length === 0 ? (
+                  <div className="rounded-4xl border-2 border-dashed border-white/5 bg-[#0f141d] py-24 text-center">
+                    <div className="mb-6 text-6xl opacity-30">❤️</div>
+                    <h3 className="font-serif text-2xl font-black text-white">Your favorites is empty</h3>
+                    <p className="mt-2 text-white/40">Explore the world of recipes and save the ones you love.</p>
+                    <Link to="/recipes" className="mt-8 inline-flex rounded-full border border-amber-400/20 bg-amber-400/15 px-8 py-3 text-sm font-bold text-amber-100 hover:bg-amber-400/25">
+                      Explore Recipes
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
+                    {filteredFavoriteRecipes.map((recipe) => (
+                      <div key={recipe._id} className="group relative flex flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0f141d] transition-all hover:-translate-y-1 hover:border-amber-400/20">
+                        <button onClick={(e) => toggleFavoriteHandler(recipe._id, e)} className="absolute top-6 right-6 z-10 flex h-10 w-10 items-center justify-center rounded-2xl bg-black/40 text-rose-400 shadow-xl backdrop-blur-md transition-transform hover:scale-110">❤️</button>
+                        <div className="p-8">
+                          <h3 className="font-serif text-2xl font-black text-white group-hover:text-amber-200 transition-colors line-clamp-1">{recipe.title}</h3>
+                          <p className="mt-3 line-clamp-2 text-sm text-white/60">{recipe.description}</p>
+                        </div>
+                        <div className="mt-auto border-t border-white/5 bg-[#0d1219] px-8 py-5 flex items-center justify-between">
+                          <span className="text-[10px] font-black tracking-widest text-white/20 uppercase">{recipe.author?.name}</span>
+                          <Link to={`/recipe/${recipe._id}`} className="text-xs font-bold text-amber-200 hover:text-white">View Recipe →</Link>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
 
             {activeTab === "settings" && (
-              <div className="bg-[#10141e]/95 border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.45)] max-w-2xl rounded-3xl p-8 shadow-sm">
-                <h2 className="text-cb-text mb-6 text-2xl font-black">
-                  Personal Information
-                </h2>
-                <form
-                  onSubmit={async (e) => {
-                    e.preventDefault()
+              <div className="mx-auto max-w-2xl animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="rounded-4xl border border-white/10 bg-[#0f141d] p-10 shadow-2xl text-center">
+                  <h2 className="mb-8 font-serif text-3xl font-black text-white">Personal Information</h2>
+                  <form onSubmit={async (e) => {
+                    e.preventDefault();
                     try {
-                      // Filter out empty password fields if not changing password
-                      const dataToLink = { ...settingsData }
-                      if (!dataToLink.password) {
-                        delete dataToLink.password
-                        delete dataToLink.currentPassword
-                      }
-
-                      const updatedUser = await edit_user(user._id, dataToLink)
-                      setUser(updatedUser)
-                      setSettingsData({
-                        ...settingsData,
-                        currentPassword: "",
-                        password: "",
-                      })
-                      toast.success("Account information updated!")
+                      const data = { ...settingsData };
+                      if (!data.password) { delete data.password; delete data.currentPassword; }
+                      const updated = await edit_user(user._id, data);
+                      setUser(updated);
+                      setSettingsData({ ...settingsData, currentPassword: "", password: "" });
+                      toast.success("Account updated!");
                     } catch (error) {
-                      toast.error(error.message || "Update failed")
+                      toast.error("Update failed");
                     }
-                  }}
-                  className="space-y-6"
-                >
-                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                    <div className="flex flex-col gap-2">
-                      <label className="text-cb-text-soft/75 ml-1 text-xs font-black tracking-widest uppercase">
-                        Full Name
-                      </label>
-                      <input
-                        type="text"
-                        className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all rounded-2xl px-5 py-4 text-sm"
-                        value={settingsData.name}
-                        onChange={(e) =>
-                          setSettingsData({
-                            ...settingsData,
-                            name: e.target.value,
-                          })
-                        }
-                        required
-                      />
-                    </div>
-                    <div className="flex flex-col gap-2">
-                      <label className="text-cb-text-soft/75 ml-1 text-xs font-black tracking-widest uppercase">
-                        Email Address
-                      </label>
-                      <input
-                        type="email"
-                        className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all rounded-2xl px-5 py-4 text-sm"
-                        value={settingsData.email}
-                        onChange={(e) =>
-                          setSettingsData({
-                            ...settingsData,
-                            email: e.target.value,
-                          })
-                        }
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="border-cb-border border-t pt-6">
-                    <h3 className="text-cb-text mb-4 text-lg font-black">
-                      Change Password
-                    </h3>
-                    <p className="text-cb-text-soft mb-6 text-sm">
-                      Leave these blank if you don't want to change your
-                      password.
-                    </p>
-
-                    <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-                      <div className="flex flex-col gap-2">
-                        <label className="text-cb-text-soft/75 ml-1 text-xs font-black tracking-widest uppercase">
-                          Current Password
-                        </label>
-                        <input
-                          type="password"
-                          className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all rounded-2xl px-5 py-4 text-sm"
-                          value={settingsData.currentPassword}
-                          onChange={(e) =>
-                            setSettingsData({
-                              ...settingsData,
-                              currentPassword: e.target.value,
-                            })
-                          }
-                          placeholder="••••••••"
-                        />
+                  }} className="space-y-12 text-left">
+                    <div className="flex flex-col gap-10">
+                      <div className="flex flex-col gap-5">
+                        <label className="ml-1 text-xs font-black tracking-widest text-white/50 uppercase">Full Name</label>
+                        <input type="text" className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-white outline-none focus:border-amber-400/30 transition-all" value={settingsData.name} onChange={(e) => setSettingsData({ ...settingsData, name: e.target.value })} required />
                       </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-cb-text-soft/75 ml-1 text-xs font-black tracking-widest uppercase">
-                          New Password
-                        </label>
-                        <input
-                          type="password"
-                          className="rounded-2xl border border-white/15 bg-white/10 text-[#f8f4e7] outline-none shadow-[inset_0_1px_2px_rgba(0,0,0,0.35)] placeholder:text-[#f8f4e7]/60 focus:border-white/30 focus:shadow-[0_0_0_4px_rgba(255,185,95,0.16)] focus:bg-white/15 transition-all rounded-2xl px-5 py-4 text-sm"
-                          value={settingsData.password}
-                          onChange={(e) =>
-                            setSettingsData({
-                              ...settingsData,
-                              password: e.target.value,
-                            })
-                          }
-                          placeholder="Min. 6 characters"
-                        />
+                      <div className="flex flex-col gap-5">
+                        <label className="ml-1 text-xs font-black tracking-widest text-white/50 uppercase">Email Address</label>
+                        <input type="email" className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-white outline-none focus:border-amber-400/30 transition-all" value={settingsData.email} onChange={(e) => setSettingsData({ ...settingsData, email: e.target.value })} required />
                       </div>
                     </div>
-                  </div>
 
-                  <button
-                    type="submit"
-                    className="rounded-xl font-bold text-white bg-gradient-to-br from-[#b45309] to-[#d88b1c] shadow-[0_12px_30px_rgba(216,139,28,0.26)] hover:brightness-105 active:scale-95 transition-all w-full px-10 py-4 font-black tracking-widest uppercase active:scale-[0.98] md:w-auto"
-                  >
-                    Update Account
-                  </button>
-                </form>
+                    <div className="border-t border-white/5 pt-12 text-left">
+                      <h3 className="mb-2 font-serif text-2xl font-black text-white">Security</h3>
+                      <p className="mb-10 text-sm text-white/40">Keep these blank to maintain your current password.</p>
+                      <div className="flex flex-col gap-10 text-left">
+                        <div className="flex flex-col gap-5">
+                          <label className="ml-1 text-xs font-black tracking-widest text-white/50 uppercase">Current Password</label>
+                          <input type="password" className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-white outline-none focus:border-amber-400/30 transition-all" value={settingsData.currentPassword} onChange={(e) => setSettingsData({ ...settingsData, currentPassword: e.target.value })} placeholder="••••••••" />
+                        </div>
+                        <div className="flex flex-col gap-5">
+                          <label className="ml-1 text-xs font-black tracking-widest text-white/50 uppercase">New Password</label>
+                          <input type="password" className="w-full rounded-2xl border border-white/10 bg-white/5 px-5 py-4 text-white outline-none focus:border-amber-400/30 transition-all" value={settingsData.password} onChange={(e) => setSettingsData({ ...settingsData, password: e.target.value })} placeholder="Min. 6 characters" />
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex justify-center">
+                      <button type="submit" className="rounded-full border border-amber-400/20 bg-amber-400/15 px-10 py-4 text-sm font-bold text-amber-100 hover:bg-amber-400/25 transition-all">
+                        Update Account
+                      </button>
+                    </div>
+                  </form>
+                </div>
               </div>
             )}
           </>
