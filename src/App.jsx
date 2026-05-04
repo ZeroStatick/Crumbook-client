@@ -41,10 +41,13 @@ function App() {
       setUser(user)
     } catch (error) {
       console.error("Failed to fetch user data:", error.message)
-      // Clear storage if the token is invalid
-      localStorage.removeItem("token")
-      localStorage.removeItem("user_data")
-      setUser(null)
+      // Only clear storage if the token is definitely invalid (401)
+      // The error message from our axios interceptor includes the status code
+      if (error.message.includes("401")) {
+        localStorage.removeItem("token")
+        localStorage.removeItem("user_data")
+        setUser(null)
+      }
     } finally {
       setIsInitializing(false)
     }
