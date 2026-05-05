@@ -12,6 +12,7 @@ import useUserStore from "../../global/user.js"
 import toast from "react-hot-toast"
 import ReportModal from "../ReportModal"
 import ShareButton from "../ShareButton"
+import Avatar from "../Avatar"
 
 const RecipeDetailPage = () => {
   const { id } = useParams()
@@ -161,7 +162,7 @@ const RecipeDetailPage = () => {
           <span className="transition-transform group-hover:-translate-x-1">←</span> Back to recipes
         </Link>
         <div className="flex flex-wrap gap-3">
-          {user && !isAuthor && (
+          {user && !isAuthor && !recipe.isExternal && (
             <button
               onClick={() => setReportTarget({ id, type: "recipe" })}
               className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-[10px] font-black tracking-widest text-white/60 uppercase transition-all hover:bg-white/10 hover:text-white"
@@ -169,7 +170,7 @@ const RecipeDetailPage = () => {
               Report
             </button>
           )}
-          {user && (
+          {user && !recipe.isExternal && (
             <button
               onClick={() => navigate(`/recipes/fork/${id}`)}
               className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-[10px] font-black tracking-widest text-amber-200 uppercase transition-all hover:bg-amber-400/10"
@@ -178,16 +179,18 @@ const RecipeDetailPage = () => {
             </button>
           )}
           <ShareButton recipeId={id} className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-[10px] font-black tracking-widest text-white/60 uppercase hover:bg-white/10" />
-          <button
-            onClick={toggleFavoriteHandler}
-            className={`flex items-center gap-2 rounded-full border px-5 py-2 text-[10px] font-black tracking-widest uppercase transition-all ${
-              isFav
-                ? "border-rose-500/30 bg-rose-500/10 text-rose-400"
-                : "border-white/10 bg-white/5 text-white/60 hover:text-white"
-            }`}
-          >
-            {isFav ? "❤️ Saved" : "🤍 Save"}
-          </button>
+          {!recipe.isExternal && (
+            <button
+              onClick={toggleFavoriteHandler}
+              className={`flex items-center gap-2 rounded-full border px-5 py-2 text-[10px] font-black tracking-widest uppercase transition-all ${
+                isFav
+                  ? "border-rose-500/30 bg-rose-500/10 text-rose-400"
+                  : "border-white/10 bg-white/5 text-white/60 hover:text-white"
+              }`}
+            >
+              {isFav ? "❤️ Saved" : "🤍 Save"}
+            </button>
+          )}
 
           {isAuthor && (
             <div className="flex gap-2">
@@ -349,7 +352,7 @@ const RecipeDetailPage = () => {
           </span>
         </div>
 
-        {user && !isAuthor ? (
+        {user && !isAuthor && !recipe.isExternal ? (
           <div className="mb-16 overflow-hidden rounded-[2rem] border border-white/10 bg-[#0f141d] p-10 shadow-2xl">
             <h3 className="mb-8 font-serif text-2xl font-black text-white">Leave a critique</h3>
             <form onSubmit={handleCommentSubmit} className="space-y-8">
@@ -399,6 +402,10 @@ const RecipeDetailPage = () => {
           <div className="mb-16 rounded-3xl border border-white/5 bg-white/5 p-10 text-center">
             <p className="text-white/30 italic">You are the author of this recipe.</p>
           </div>
+        ) : recipe.isExternal ? (
+          <div className="mb-16 rounded-3xl border border-white/5 bg-white/5 p-10 text-center">
+            <p className="text-white/30 italic">Critiques are not available for external recipes.</p>
+          </div>
         ) : null}
 
         <div className="space-y-12">
@@ -410,9 +417,12 @@ const RecipeDetailPage = () => {
               <div key={comment._id} className="group relative border-b border-white/5 pb-10 last:border-0">
                 <div className="mb-6 flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-[1.25rem] border border-white/10 bg-[#0a0f16] font-serif text-xl font-black text-amber-200">
-                      {comment.comment_author?.name?.[0]?.toUpperCase() || "U"}
-                    </div>
+                    <Avatar 
+                      src={comment.comment_author?.profile_picture} 
+                      name={comment.comment_author?.name} 
+                      size="h-12 w-12" 
+                      className="rounded-[1.25rem] text-xl"
+                    />
                     <div>
                       <h4 className="font-serif text-lg font-black text-white">
                         {comment.comment_author?.name || "Anonymous Chef"}

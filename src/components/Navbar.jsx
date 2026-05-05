@@ -2,7 +2,7 @@ import React from "react"
 import { Link, useNavigate } from "react-router-dom"
 import { logout } from "../../API/auth.api"
 import useUserStore from "../global/user"
-import { DEFAULT_AVATAR } from "../../constant/images.js"
+import Avatar from "./Avatar"
 import crumbookLogo from "../assets/crumbookLogo.png"
 
 const Navbar = () => {
@@ -61,13 +61,12 @@ const Navbar = () => {
                 to="/profile"
                 className="flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1.5 transition-colors hover:border-white/20 hover:bg-white/10"
               >
-                <div className="h-8 w-8 overflow-hidden rounded-full border border-white/10 bg-[#111821]">
-                  <img
-                    src={user.profile_picture || DEFAULT_AVATAR}
-                    alt={user.name}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
+                <Avatar
+                  src={user.profile_picture}
+                  name={user.name}
+                  size="h-8 w-8"
+                  fontSize="text-xs"
+                />
                 <span className="hidden font-bold text-white sm:inline">
                   {user.name || "Chef"}
                 </span>
@@ -93,13 +92,13 @@ const Navbar = () => {
             <div className="flex items-center gap-4">
               <Link
                 to="/login"
-                className="font-serif rounded-full font-semibold tracking-[0.02em] text-amber-100/80 transition-colors hover:text-white"
+                className="rounded-full font-serif font-semibold tracking-[0.02em] text-amber-100/80 transition-colors hover:text-white"
               >
                 Login
               </Link>
               <Link
                 to="/register"
-                className="font-serif rounded-full border border-white/10 bg-white/5 px-6 py-2 font-semibold tracking-[0.02em] text-white shadow-lg shadow-black/20 transition-all hover:bg-white/10 active:scale-95"
+                className="rounded-full border border-white/10 bg-white/5 px-6 py-2 font-serif font-semibold tracking-[0.02em] text-white shadow-lg shadow-black/20 transition-all hover:bg-white/10 active:scale-95"
               >
                 Join Now
               </Link>
