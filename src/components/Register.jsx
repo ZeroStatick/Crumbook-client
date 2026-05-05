@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
 import { register } from "../../API/auth.api"
+import useUserStore from "../global/user"
 
 const Register = () => {
   const [registerData, setRegisterData] = useState({
@@ -11,6 +12,7 @@ const Register = () => {
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const setUser = useUserStore((state) => state.setUser)
 
   const updateData = ({ target }) => {
     setRegisterData({
@@ -25,8 +27,9 @@ const Register = () => {
     setIsLoading(true)
 
     try {
-      await register(registerData)
-      navigate("/login")
+      const result = await register(registerData)
+      setUser(result.user)
+      navigate("/")
     } catch (err) {
       setError(err.message || "Registration failed. Please try again.")
     } finally {

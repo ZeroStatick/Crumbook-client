@@ -3,8 +3,14 @@ import { LOGIN_URL, REGISTER_URL } from "../constant/endpoints"
 
 export const register = async (userData) => {
   const result = await api.post(REGISTER_URL, userData)
-  // Register currently doesn't return a token, so just set user_data
-  localStorage.setItem("user_data", JSON.stringify(result))
+  // result = { user, token }
+  const { user, token } = result
+
+  if (token) {
+    localStorage.setItem("token", token)
+    localStorage.setItem("user_data", JSON.stringify(user))
+  }
+
   return result
 }
 
