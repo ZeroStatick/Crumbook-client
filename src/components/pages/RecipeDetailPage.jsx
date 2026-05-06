@@ -161,7 +161,7 @@ const RecipeDetailPage = () => {
           <span className="transition-transform group-hover:-translate-x-1">←</span> Back to recipes
         </Link>
         <div className="flex flex-wrap gap-3">
-          {user && !isAuthor && (
+          {user && !isAuthor && !recipe.isExternal && (
             <button
               onClick={() => setReportTarget({ id, type: "recipe" })}
               className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-[10px] font-black tracking-widest text-white/60 uppercase transition-all hover:bg-white/10 hover:text-white"
@@ -169,7 +169,7 @@ const RecipeDetailPage = () => {
               Report
             </button>
           )}
-          {user && (
+          {user && !recipe.isExternal && (
             <button
               onClick={() => navigate(`/recipes/fork/${id}`)}
               className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-[10px] font-black tracking-widest text-amber-200 uppercase transition-all hover:bg-amber-400/10"
