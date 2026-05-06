@@ -35,8 +35,15 @@ api.interceptors.response.use(
       useUserStore.getState().setUser(null)
     }
     // Standardize error handling
+    const status = error.response?.status
     const message = error.response?.data?.message || "An unexpected error occurred"
-    return Promise.reject(new Error(message))
+    const enrichedError = new Error(message)
+    enrichedError.status = status
+    
+    // Include status in message for easier checking where only message is available
+    if (status) enrichedError.message = `[${status}] ${message}`
+    
+    return Promise.reject(enrichedError)
   }
 )
 

@@ -34,7 +34,6 @@ const AIChefPage = () => {
     setIsLoading(true);
 
     try {
-      // We send the current message and the history (excluding the first greeting)
       const history = messages.slice(1); 
       const responseText = await get_ai_response(text, history);
       
@@ -49,37 +48,42 @@ const AIChefPage = () => {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-4 md:p-8 flex flex-col h-[calc(100vh-120px)]">
-      <div className="text-center mb-8 shrink-0">
-        <h1 className="mb-2 flex items-center justify-center gap-3 text-4xl font-extrabold text-cb-text">
-          <span className="text-4xl">👨‍🍳</span> AI Chef
+    <div className="mx-auto flex h-[calc(100vh-140px)] max-w-5xl flex-col p-4 md:p-8">
+      <div className="mb-10 shrink-0 text-center">
+        <p className="mb-3 inline-flex rounded-full border border-amber-400/20 bg-amber-400/10 px-4 py-2 text-[10px] tracking-[0.32em] text-amber-200 uppercase">
+          Culinary Intelligence
+        </p>
+        <h1 className="font-serif text-5xl font-black tracking-tight text-white flex items-center justify-center gap-4">
+          <span className="text-4xl filter grayscale contrast-125 brightness-200 opacity-50">👨‍🍳</span> AI Chef
         </h1>
-        <p className="text-cb-text-soft">Your personal culinary assistant, ready to help 24/7.</p>
+        <p className="mt-4 text-lg text-white/60">Your personal culinary assistant, ready to help 24/7.</p>
       </div>
 
       <div 
         ref={scrollContainerRef}
-        className="theme-card flex-1 overflow-y-auto rounded-2xl p-6 pr-2 custom-scrollbar mb-6"
+        className="custom-scrollbar mb-8 flex-1 overflow-y-auto rounded-[2rem] border border-white/10 bg-[#0f141d] p-8 shadow-2xl shadow-black/40 pr-4"
       >
-        {messages.map((msg, index) => (
-          <ChatMessage key={index} message={msg} />
-        ))}
-        {isLoading && (
-          <div className="flex justify-start mb-4">
-            <div className="theme-card flex items-center gap-2 rounded-2xl rounded-tl-none p-4 shadow-sm">
-              <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-amber-400"></div>
-              <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-amber-500 [animation-delay:0.2s]"></div>
-              <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-orange-500 [animation-delay:0.4s]"></div>
+        <div className="space-y-8">
+          {messages.map((msg, index) => (
+            <ChatMessage key={index} message={msg} />
+          ))}
+          {isLoading && (
+            <div className="flex justify-start animate-in fade-in slide-in-from-left-2 duration-300">
+              <div className="flex items-center gap-3 rounded-[1.25rem] rounded-tl-none border border-white/10 bg-[#0a0f16] p-5 shadow-lg">
+                <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-amber-400"></div>
+                <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-amber-400/60 [animation-delay:0.2s]"></div>
+                <div className="h-1.5 w-1.5 animate-bounce rounded-full bg-amber-400/30 [animation-delay:0.4s]"></div>
+              </div>
             </div>
-          </div>
-        )}
+          )}
+        </div>
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="shrink-0">
+      <div className="shrink-0 max-w-3xl mx-auto w-full">
         <ChatInput onSendMessage={handleSendMessage} isLoading={isLoading} />
-        <p className="mt-3 text-center text-[10px] text-cb-text-soft/75">
-          Our AI Chef can make mistakes. Always double-check cooking temperatures and ingredient safety.
+        <p className="mt-4 text-center text-[10px] font-black tracking-widest text-white/20 uppercase">
+          AI generated content can be inaccurate. verify safety before cooking.
         </p>
       </div>
     </div>
