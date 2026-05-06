@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom"
 import { get_user_by_id } from "../../../API/api.api"
 import { get_recipes_by_user_id } from "../../../API/recipe.api"
 import toast from "react-hot-toast"
+import Avatar from "../Avatar"
 
 const VisitProfilePage = () => {
   const { id } = useParams()
@@ -72,13 +73,13 @@ const VisitProfilePage = () => {
         </div>
         <div className="px-10 pb-10">
           <div className="relative flex flex-col items-center -mt-20 gap-6">
-            <div className="h-40 w-40 overflow-hidden rounded-[2.5rem] border-4 border-amber-400/50 bg-[#0a0f16] shadow-[0_0_30px_rgba(251,191,36,0.15)] transition-transform hover:scale-105">
-              <img 
-                src={profileUser.profile_picture || `https://ui-avatars.com/api/?name=${profileUser.name}&background=0a0f16&color=fbbf24`} 
-                alt={profileUser.name}
-                className="h-full w-full object-cover"
-              />
-            </div>
+            <Avatar 
+              src={profileUser.profile_picture} 
+              name={profileUser.name} 
+              size="h-40 w-40" 
+              fontSize="text-6xl"
+              className="rounded-[2.5rem] border-4 border-amber-400/50 shadow-[0_0_30px_rgba(251,191,36,0.15)] transition-transform hover:scale-105"
+            />
             <div className="text-center">
               <p className="mb-2 inline-flex rounded-full border border-amber-400/20 bg-amber-400/10 px-4 py-1 text-[10px] font-black tracking-[0.3em] text-amber-200 uppercase">
                 Guest Kitchen

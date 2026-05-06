@@ -8,7 +8,7 @@ import {
 } from "../../../API/recipe.api"
 import { edit_user, toggle_favorite } from "../../../API/api.api"
 import toast from "react-hot-toast"
-import { DEFAULT_AVATAR } from "../../../constant/images.js"
+import Avatar from "../Avatar"
 
 const UserProfilePage = () => {
   const { user, setUser } = useUserStore()
@@ -169,13 +169,13 @@ const UserProfilePage = () => {
           <div className="relative -mt-20 flex flex-col items-center justify-between gap-8 md:flex-row md:items-end">
             <div className="flex flex-col items-center gap-8 md:flex-row md:items-end">
               <div className="relative group">
-                <div className="h-40 w-40 overflow-hidden rounded-[2.5rem] border-4 border-amber-400/50 bg-[#0a0f16] shadow-[0_0_30px_rgba(251,191,36,0.15)] transition-transform hover:scale-105">
-                  <img
-                    src={previewUrl || user.profile_picture || DEFAULT_AVATAR}
-                    alt={user.name}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
+                <Avatar 
+                  src={previewUrl || user.profile_picture} 
+                  name={user.name} 
+                  size="h-40 w-40" 
+                  fontSize="text-6xl"
+                  className="rounded-[2.5rem] border-4 border-amber-400/50 shadow-[0_0_30px_rgba(251,191,36,0.15)] transition-transform hover:scale-105"
+                />
                 {!isEditing && (
                   <button
                     onClick={() => setIsEditing(true)}
