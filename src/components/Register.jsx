@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
 import { register } from "../../API/auth.api"
+import useUserStore from "../global/user"
 
 const Register = () => {
   const [registerData, setRegisterData] = useState({
@@ -11,6 +12,7 @@ const Register = () => {
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const setUser = useUserStore((state) => state.setUser)
 
   const updateData = ({ target }) => {
     setRegisterData({
@@ -25,11 +27,10 @@ const Register = () => {
     setIsLoading(true)
 
     try {
-      await register(registerData)
-      console.log("Registration successful!")
-      navigate("/login")
+      const result = await register(registerData)
+      setUser(result.user)
+      navigate("/")
     } catch (err) {
-      console.log("failed to register", err)
       setError(err.message || "Registration failed. Please try again.")
     } finally {
       setIsLoading(false)
@@ -37,68 +38,85 @@ const Register = () => {
   }
 
   return (
-    <div className="theme-page flex min-h-screen flex-col items-center justify-center px-4">
-      <div className="theme-card w-full max-w-md rounded-3xl p-8">
-        <h2 className="mb-6 text-center text-2xl font-bold text-cb-text">
-          Register
-        </h2>
-        <form onSubmit={handleRegister} className="space-y-4">
+    <div className="min-h-[80vh] flex flex-col items-center justify-center px-4 py-12">
+      <div className="w-full max-w-md rounded-[2rem] border border-white/10 bg-[#0f141d] p-10 shadow-2xl shadow-black/40">
+        <div className="text-center mb-10">
+          <p className="mb-2 inline-flex rounded-full border border-amber-400/20 bg-amber-400/10 px-4 py-1 text-[10px] tracking-[0.3em] text-amber-200 uppercase">
+            Join Crumbook
+          </p>
+          <h2 className="font-serif text-4xl font-black tracking-tight text-white">
+            Create Profile
+          </h2>
+        </div>
+
+        <form onSubmit={handleRegister} className="space-y-6">
           {error && (
-            <div className="rounded-xl bg-red-50 p-3 text-sm text-red-600">
+            <div className="rounded-xl border border-rose-500/20 bg-rose-500/10 p-4 text-sm font-medium text-rose-400">
               {error}
             </div>
           )}
-          <div>
-            <label className="block text-sm font-medium text-cb-text-soft">Name</label>
+
+          <div className="space-y-2">
+            <label className="ml-1 block text-xs font-black tracking-widest text-white/40 uppercase">
+              Full Name
+            </label>
             <input
               type="text"
               name="name"
-              placeholder="Name"
-              className="theme-input mt-1 w-full p-2.5"
+              placeholder="Chef Nom de Plume"
+              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white outline-none transition-all placeholder:text-white/20 focus:border-amber-400/30 focus:bg-white/10"
               value={registerData.name}
               onChange={updateData}
               required
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-cb-text-soft">Email</label>
+
+          <div className="space-y-2">
+            <label className="ml-1 block text-xs font-black tracking-widest text-white/40 uppercase">
+              Email Address
+            </label>
             <input
               type="email"
               name="email"
-              placeholder="Email"
-              className="theme-input mt-1 w-full p-2.5"
+              placeholder="chef@crumbook.com"
+              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white outline-none transition-all placeholder:text-white/20 focus:border-amber-400/30 focus:bg-white/10"
               value={registerData.email}
               onChange={updateData}
               required
             />
           </div>
-          <div>
-            <label className="block text-sm font-medium text-cb-text-soft">Password</label>
+
+          <div className="space-y-2">
+            <label className="ml-1 block text-xs font-black tracking-widest text-white/40 uppercase">
+              Password
+            </label>
             <input
               type="password"
               name="password"
-              placeholder="Password"
-              className="theme-input mt-1 w-full p-2.5"
+              placeholder="••••••••"
+              className="w-full rounded-2xl border border-white/10 bg-white/5 px-4 py-3.5 text-white outline-none transition-all placeholder:text-white/20 focus:border-amber-400/30 focus:bg-white/10"
               value={registerData.password}
               onChange={updateData}
               required
             />
           </div>
+
           <button
             type="submit"
             disabled={isLoading}
-            className={`theme-button-primary w-full p-2.5 ${
+            className={`mt-4 w-full rounded-full border border-amber-400/20 bg-amber-400/15 py-4 text-sm font-bold text-amber-100 shadow-lg shadow-amber-950/20 transition-all hover:bg-amber-400/25 active:scale-[0.98] ${
               isLoading ? "opacity-50 cursor-not-allowed" : ""
             }`}
           >
-            {isLoading ? "Registering..." : "Register"}
+            {isLoading ? "Creating Account..." : "Join the Community"}
           </button>
         </form>
-        <div className="mt-4 text-center">
-          <p className="text-sm text-cb-text-soft">
+
+        <div className="mt-8 text-center border-t border-white/5 pt-8">
+          <p className="text-sm text-white/40">
             Already have an account?{" "}
-            <NavLink to="/login" className="font-semibold text-cb-primary hover:underline">
-              Login
+            <NavLink to="/login" className="font-bold text-amber-200 hover:text-amber-100 transition-colors">
+              Login here
             </NavLink>
           </p>
         </div>
