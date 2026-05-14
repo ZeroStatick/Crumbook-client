@@ -7,8 +7,8 @@ import {
   create_comment,
   delete_comment,
 } from "../../../API/comment.api"
-import { DEFAULT_RECIPE_IMAGE } from "../../../constant/images.js"
-import useUserStore from "../../global/user.js"
+import { DEFAULT_RECIPE_IMAGE } from "../../../constant/images"
+import useUserStore from "../../global/user"
 import toast from "react-hot-toast"
 import ReportModal from "../ReportModal"
 import ShareButton from "../ShareButton"
@@ -143,8 +143,15 @@ const RecipeDetailPage = () => {
     return (
       <div className="flex min-h-[60vh] flex-col items-center justify-center p-8 text-center">
         <div className="mb-4 text-6xl">🔍</div>
-        <h2 className="font-serif text-3xl font-black text-white">Recipe not found</h2>
-        <Link to="/recipes" className="mt-6 text-amber-200 hover:text-white underline">Back to collection</Link>
+        <h2 className="font-serif text-3xl font-black text-white">
+          Recipe not found
+        </h2>
+        <Link
+          to="/recipes"
+          className="mt-6 text-amber-200 underline hover:text-white"
+        >
+          Back to collection
+        </Link>
       </div>
     )
 
@@ -159,7 +166,10 @@ const RecipeDetailPage = () => {
           to="/recipes"
           className="group flex items-center gap-2 text-sm font-bold tracking-widest text-white/40 uppercase transition-colors hover:text-white"
         >
-          <span className="transition-transform group-hover:-translate-x-1">←</span> Back to recipes
+          <span className="transition-transform group-hover:-translate-x-1">
+            ←
+          </span>{" "}
+          Back to recipes
         </Link>
         <div className="flex flex-wrap gap-3">
           {user && !isAuthor && !recipe.isExternal && (
@@ -178,7 +188,10 @@ const RecipeDetailPage = () => {
               Fork Recipe
             </button>
           )}
-          <ShareButton recipeId={id} className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-[10px] font-black tracking-widest text-white/60 uppercase hover:bg-white/10" />
+          <ShareButton
+            recipeId={id}
+            className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-[10px] font-black tracking-widest text-white/60 uppercase hover:bg-white/10"
+          />
           {!recipe.isExternal && (
             <button
               onClick={toggleFavoriteHandler}
@@ -234,8 +247,8 @@ const RecipeDetailPage = () => {
             </span>
           )}
         </div>
-        
-        <div className="px-8 pb-12 pt-8 text-center md:px-16">
+
+        <div className="px-8 pt-8 pb-12 text-center md:px-16">
           <h1 className="font-serif text-5xl font-black tracking-tight text-white sm:text-6xl">
             {recipe.title}
           </h1>
@@ -245,29 +258,47 @@ const RecipeDetailPage = () => {
 
           <div className="mt-10 flex flex-wrap justify-center gap-10">
             <div className="flex flex-col gap-1">
-              <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Prep Time</span>
-              <span className="font-serif text-xl font-black text-white">{recipe.prepTime || 0}m</span>
+              <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">
+                Prep Time
+              </span>
+              <span className="font-serif text-xl font-black text-white">
+                {recipe.prepTime || 0}m
+              </span>
             </div>
             <div className="h-10 w-px bg-white/5" />
             <div className="flex flex-col gap-1">
-              <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Cook Time</span>
-              <span className="font-serif text-xl font-black text-white">{recipe.cookTime || 0}m</span>
+              <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">
+                Cook Time
+              </span>
+              <span className="font-serif text-xl font-black text-white">
+                {recipe.cookTime || 0}m
+              </span>
             </div>
             <div className="h-10 w-px bg-white/5" />
             <div className="flex flex-col gap-1">
-              <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Servings</span>
-              <span className="font-serif text-xl font-black text-white">{recipe.servings || 1} people</span>
+              <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">
+                Servings
+              </span>
+              <span className="font-serif text-xl font-black text-white">
+                {recipe.servings || 1} people
+              </span>
             </div>
             {recipe.difficulty && (
               <>
                 <div className="h-10 w-px bg-white/5" />
                 <div className="flex flex-col gap-1">
-                  <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">Level</span>
-                  <span className={`inline-flex rounded-full border px-3 py-0.5 text-[10px] font-bold tracking-widest uppercase ${
-                    recipe.difficulty === "Easy" ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-300" :
-                    recipe.difficulty === "Hard" ? "border-rose-400/20 bg-rose-400/10 text-rose-300" :
-                    "border-amber-400/20 bg-amber-400/10 text-amber-300"
-                  }`}>
+                  <span className="text-[10px] font-black tracking-[0.2em] text-white/30 uppercase">
+                    Level
+                  </span>
+                  <span
+                    className={`inline-flex rounded-full border px-3 py-0.5 text-[10px] font-bold tracking-widest uppercase ${
+                      recipe.difficulty === "Easy"
+                        ? "border-emerald-400/20 bg-emerald-400/10 text-emerald-300"
+                        : recipe.difficulty === "Hard"
+                          ? "border-rose-400/20 bg-rose-400/10 text-rose-300"
+                          : "border-amber-400/20 bg-amber-400/10 text-amber-300"
+                    }`}
+                  >
                     {recipe.difficulty}
                   </span>
                 </div>
@@ -281,7 +312,7 @@ const RecipeDetailPage = () => {
       <div className="grid grid-cols-1 gap-12 lg:grid-cols-3">
         {/* Ingredients Column */}
         <div className="lg:col-span-1">
-          <h2 className="mb-6 font-serif text-3xl font-black tracking-tight text-white flex items-center gap-3">
+          <h2 className="mb-6 flex items-center gap-3 font-serif text-3xl font-black tracking-tight text-white">
             Ingredients <span className="h-px grow bg-white/10" />
           </h2>
           <ul className="space-y-4">
@@ -303,7 +334,7 @@ const RecipeDetailPage = () => {
 
         {/* Instructions Column */}
         <div className="lg:col-span-2">
-          <h2 className="mb-6 font-serif text-3xl font-black tracking-tight text-white flex items-center gap-3">
+          <h2 className="mb-6 flex items-center gap-3 font-serif text-3xl font-black tracking-tight text-white">
             Instructions <span className="h-px grow bg-white/10" />
           </h2>
           <div className="space-y-10">
@@ -328,16 +359,21 @@ const RecipeDetailPage = () => {
           {recipe.author?._id ? (
             <Link
               to={`/user/${recipe.author._id}`}
-              className="text-amber-200 hover:text-white transition-colors"
+              className="text-amber-200 transition-colors hover:text-white"
             >
               {recipe.author.name}
             </Link>
           ) : (
-            <span className="text-white/60">{recipe.author?.name || "Anonymous"}</span>
+            <span className="text-white/60">
+              {recipe.author?.name || "Anonymous"}
+            </span>
           )}
         </div>
         <div className="text-white/20 italic">
-          Source: <span className="text-white/40">{recipe.source || "Original Creation"}</span>
+          Source:{" "}
+          <span className="text-white/40">
+            {recipe.source || "Original Creation"}
+          </span>
         </div>
       </div>
 
@@ -348,22 +384,28 @@ const RecipeDetailPage = () => {
             Chef Comments
           </h2>
           <span className="text-xs font-black tracking-[0.3em] text-amber-200/40 uppercase">
-            {comments.length} Discussion{comments.length !== 1 ? 's' : ''}
+            {comments.length} Discussion{comments.length !== 1 ? "s" : ""}
           </span>
         </div>
 
         {user && !isAuthor && !recipe.isExternal ? (
           <div className="mb-16 overflow-hidden rounded-[2rem] border border-white/10 bg-[#0f141d] p-10 shadow-2xl">
-            <h3 className="mb-8 font-serif text-2xl font-black text-white">Leave a critique</h3>
+            <h3 className="mb-8 font-serif text-2xl font-black text-white">
+              Leave a critique
+            </h3>
             <form onSubmit={handleCommentSubmit} className="space-y-8">
               <div className="space-y-4">
-                <label className="ml-1 text-[10px] font-black tracking-widest text-white/30 uppercase">Rating</label>
+                <label className="ml-1 text-[10px] font-black tracking-widest text-white/30 uppercase">
+                  Rating
+                </label>
                 <div className="flex gap-3">
                   {[1, 2, 3, 4, 5].map((num) => (
                     <button
                       key={num}
                       type="button"
-                      onClick={() => setNewComment({ ...newComment, rating: num })}
+                      onClick={() =>
+                        setNewComment({ ...newComment, rating: num })
+                      }
                       className={`flex h-12 w-12 items-center justify-center rounded-2xl text-xl transition-all ${
                         newComment.rating >= num
                           ? "bg-amber-400/20 text-amber-300 shadow-inner"
@@ -376,19 +418,23 @@ const RecipeDetailPage = () => {
                 </div>
               </div>
               <div className="space-y-4">
-                <label className="ml-1 text-[10px] font-black tracking-widest text-white/30 uppercase">Your thoughts</label>
+                <label className="ml-1 text-[10px] font-black tracking-widest text-white/30 uppercase">
+                  Your thoughts
+                </label>
                 <textarea
                   value={newComment.text}
-                  onChange={(e) => setNewComment({ ...newComment, text: e.target.value })}
+                  onChange={(e) =>
+                    setNewComment({ ...newComment, text: e.target.value })
+                  }
                   placeholder="What makes this dish unique?"
-                  className="h-32 w-full rounded-2xl border border-white/10 bg-white/5 p-6 text-white outline-none transition-all placeholder:text-white/20 focus:border-amber-400/30 focus:bg-white/10"
+                  className="h-32 w-full rounded-2xl border border-white/10 bg-white/5 p-6 text-white transition-all outline-none placeholder:text-white/20 focus:border-amber-400/30 focus:bg-white/10"
                   required
                 />
               </div>
               <button
                 type="submit"
                 disabled={isSubmittingComment}
-                className="rounded-full border border-amber-400/20 bg-amber-400/15 px-10 py-4 text-sm font-bold text-amber-100 hover:bg-amber-400/25 transition-all disabled:opacity-50"
+                className="rounded-full border border-amber-400/20 bg-amber-400/15 px-10 py-4 text-sm font-bold text-amber-100 transition-all hover:bg-amber-400/25 disabled:opacity-50"
               >
                 {isSubmittingComment ? "Submitting..." : "Post Critique"}
               </button>
@@ -396,31 +442,56 @@ const RecipeDetailPage = () => {
           </div>
         ) : !user ? (
           <div className="mb-16 rounded-3xl border border-white/5 bg-white/5 p-10 text-center">
-            <p className="text-white/40">Please <Link to="/login" className="font-bold text-amber-200 hover:underline">login</Link> to join the discussion.</p>
+            <p className="text-white/40">
+              Please{" "}
+              <Link
+                to="/login"
+                className="font-bold text-amber-200 hover:underline"
+              >
+                login
+              </Link>{" "}
+              to join the discussion.
+            </p>
           </div>
         ) : isAuthor ? (
           <div className="mb-16 rounded-3xl border border-white/5 bg-white/5 p-10 text-center">
-            <p className="text-white/30 italic">You are the author of this recipe.</p>
+            <p className="text-white/30 italic">
+              You are the author of this recipe.
+            </p>
           </div>
         ) : recipe.isExternal ? (
           <div className="mb-16 rounded-3xl border border-white/5 bg-white/5 p-10 text-center">
-            <p className="text-white/30 italic">Critiques are not available for external recipes.</p>
+            <p className="text-white/30 italic">
+              Critiques are not available for external recipes.
+            </p>
+          </div>
+        ) : recipe.isExternal ? (
+          <div className="theme-card-soft mb-12 rounded-2xl p-6 text-center">
+            <p className="text-cb-text-soft italic">
+              Comments are disabled for external recipes.
+            </p>
           </div>
         ) : null}
 
         <div className="space-y-12">
           {comments.map((comment) => {
-            const isCommentAuthor = user && (user._id === comment.comment_author?._id || user._id === comment.comment_author)
+            const isCommentAuthor =
+              user &&
+              (user._id === comment.comment_author?._id ||
+                user._id === comment.comment_author)
             const isAdmin = user && user.role > 1
 
             return (
-              <div key={comment._id} className="group relative border-b border-white/5 pb-10 last:border-0">
+              <div
+                key={comment._id}
+                className="group relative border-b border-white/5 pb-10 last:border-0"
+              >
                 <div className="mb-6 flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Avatar 
-                      src={comment.comment_author?.profile_picture} 
-                      name={comment.comment_author?.name} 
-                      size="h-12 w-12" 
+                    <Avatar
+                      src={comment.comment_author?.profile_picture}
+                      name={comment.comment_author?.name}
+                      size="h-12 w-12"
                       className="rounded-[1.25rem] text-xl"
                     />
                     <div>
@@ -428,14 +499,17 @@ const RecipeDetailPage = () => {
                         {comment.comment_author?.name || "Anonymous Chef"}
                       </h4>
                       <div className="flex text-xs tracking-tighter text-amber-400">
-                        {"★".repeat(comment.rating)}{"☆".repeat(5 - comment.rating)}
+                        {"★".repeat(comment.rating)}
+                        {"☆".repeat(5 - comment.rating)}
                       </div>
                     </div>
                   </div>
                   <div className="flex gap-4 opacity-0 transition-opacity group-hover:opacity-100">
                     {user && !isCommentAuthor && (
                       <button
-                        onClick={() => setReportTarget({ id: comment._id, type: "comment" })}
+                        onClick={() =>
+                          setReportTarget({ id: comment._id, type: "comment" })
+                        }
                         className="text-[10px] font-black tracking-widest text-white/20 uppercase hover:text-white"
                       >
                         Report
@@ -455,13 +529,17 @@ const RecipeDetailPage = () => {
                   {comment.text}
                 </p>
                 <span className="mt-4 block text-[10px] font-black tracking-widest text-white/20 uppercase">
-                  {new Date(comment.createdAt).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: 'numeric' })}
+                  {new Date(comment.createdAt).toLocaleDateString(undefined, {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
                 </span>
               </div>
             )
           })}
           {comments.length === 0 && (
-            <p className="text-center text-sm italic text-white/20">
+            <p className="text-center text-sm text-white/20 italic">
               Silence in the kitchen. Be the first to speak.
             </p>
           )}
