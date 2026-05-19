@@ -40,6 +40,12 @@ const Navbar = () => {
               Recipes
             </Link>
             <Link
+              to="/guides"
+              className="font-serif font-semibold tracking-[0.02em] text-amber-100/80 transition-colors hover:text-white"
+            >
+              Guides
+            </Link>
+            <Link
               to="/drop-ingredients"
               className="font-serif font-semibold tracking-[0.02em] text-amber-100/80 transition-colors hover:text-white"
             >

@@ -1,4 +1,4 @@
-export const BASE_URL = "http://localhost:3000"
+export const BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000"
 
 export const REGISTER_URL = "/api/auth/register"
 export const LOGIN_URL = "/api/auth/login"

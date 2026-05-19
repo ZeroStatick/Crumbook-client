@@ -394,7 +394,7 @@ const CreateRecipePage = () => {
                 ) : (
                   <div className="w-full">
                     <img
-                      src={imageFile ? URL.createObjectURL(imageFile) : formData.image}
+                      src={previewUrl || formData.image}
                       alt="Preview"
                       className="mx-auto h-48 w-full rounded-2xl object-cover shadow-2xl transition-transform duration-700 group-hover:scale-[1.02]"
                     />

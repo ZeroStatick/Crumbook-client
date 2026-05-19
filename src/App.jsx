@@ -22,6 +22,9 @@ import UserProfilePage from "./components/pages/UserProfilePage.jsx"
 import VisitProfilePage from "./components/pages/VisitProfilePage.jsx"
 import AIChefPage from "./components/pages/AIChefPage.jsx"
 import AdminDashboard from "./components/pages/AdminDashboard.jsx"
+import GuidesFeed from "./components/pages/GuidesFeed.jsx"
+import GuideDetailPage from "./components/pages/GuideDetailPage.jsx"
+import CreateGuidePage from "./components/pages/CreateGuidePage.jsx"
 
 import { Toaster } from "react-hot-toast"
 
@@ -40,13 +43,10 @@ function App() {
       const user = await get_me()
       setUser(user)
     } catch (error) {
-      console.error("Failed to fetch user data:", error.message)
-      // Only clear storage if the token is definitely invalid (401)
-      // The error message from our axios interceptor includes the status code
-      if (error.message.includes("401")) {
-        localStorage.removeItem("token")
-        localStorage.removeItem("user_data")
-        setUser(null)
+      // If it's a 401, the interceptor already cleared the token and state
+      // We only log non-auth errors to avoid console noise on expired sessions
+      if (!error.message.includes("401")) {
+        console.error("Failed to fetch user data:", error.message)
       }
     } finally {
       setIsInitializing(false)
@@ -75,6 +75,24 @@ function App() {
             {/* Main Routes */}
             <Route path="/" element={<Home />} />
             <Route path="/recipes" element={<RecipePage />} />
+            <Route path="/guides" element={<GuidesFeed />} />
+            <Route
+              path="/guides/new"
+              element={
+                <ProtectedRoute>
+                  <CreateGuidePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/guide/edit/:id"
+              element={
+                <ProtectedRoute>
+                  <CreateGuidePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/guide/:id" element={<GuideDetailPage />} />
             <Route path="/drop-ingredients" element={<DropYourIngredients />} />
             <Route
               path="/ai-chef"

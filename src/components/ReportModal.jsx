@@ -16,9 +16,11 @@ const ReportModal = ({ targetId, targetType = "recipe", onClose }) => {
       }
       if (targetType === "recipe") payload.recipe_id = targetId
       if (targetType === "comment") payload.comment_id = targetId
+      if (targetType === "guide_comment") payload.guide_comment_id = targetId
+      if (targetType === "guide") payload.guide_id = targetId
 
       await create_report(payload)
-      toast.success("Incident trace recorded")
+      toast.success("Report submitted successfully")
       onClose()
     } catch (error) {
       toast.error(error.message || "Submission failed")
@@ -32,7 +34,7 @@ const ReportModal = ({ targetId, targetType = "recipe", onClose }) => {
       <div className="w-full max-w-lg rounded-[2rem] border border-white/10 bg-[#0f141d] p-10 shadow-2xl shadow-black/60 animate-in zoom-in-95 duration-300">
         <div className="mb-8">
           <p className="mb-2 inline-flex rounded-full border border-rose-500/20 bg-rose-500/10 px-4 py-1 text-[10px] font-black tracking-[0.3em] text-rose-300 uppercase">
-            Security Incident
+            Content Report
           </p>
           <h2 className="font-serif text-3xl font-black tracking-tight text-white">
             Report {targetType}
@@ -42,7 +44,7 @@ const ReportModal = ({ targetId, targetType = "recipe", onClose }) => {
         <form onSubmit={handleReportSubmit} className="space-y-8">
           <div className="space-y-3">
             <label className="ml-1 text-[10px] font-black tracking-widest text-white/40 uppercase">
-              Incident Category
+              Reason for Reporting
             </label>
             <select
               value={reportData.sort}
@@ -65,7 +67,7 @@ const ReportModal = ({ targetId, targetType = "recipe", onClose }) => {
 
           <div className="space-y-3">
             <label className="ml-1 text-[10px] font-black tracking-widest text-white/40 uppercase">
-              Incident Context (Optional)
+              Additional Context (Optional)
             </label>
             <textarea
               value={reportData.reason}
@@ -77,7 +79,7 @@ const ReportModal = ({ targetId, targetType = "recipe", onClose }) => {
               maxLength={500}
             />
             <div className="flex items-center justify-between px-1">
-              <span className="text-[9px] font-black tracking-widest text-white/20 uppercase italic">Confidential Submission</span>
+              <span className="text-[9px] font-black tracking-widest text-white/20 uppercase italic">Your report is confidential</span>
               <span className="text-[10px] font-black tracking-widest text-white/40">
                 {reportData.reason.length}/500
               </span>
@@ -98,7 +100,7 @@ const ReportModal = ({ targetId, targetType = "recipe", onClose }) => {
               disabled={isSubmitting}
               className="order-1 rounded-full border border-rose-500/20 bg-rose-500/15 px-8 py-3 text-xs font-black tracking-widest text-rose-400 uppercase shadow-lg shadow-rose-950/20 transition-all hover:bg-rose-500/25 active:scale-[0.98] disabled:opacity-50 sm:order-2"
             >
-              {isSubmitting ? "Transmitting..." : "Submit Incident"}
+              {isSubmitting ? "Submitting..." : "Submit Report"}
             </button>
           </div>
         </form>
