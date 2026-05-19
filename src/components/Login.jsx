@@ -1,7 +1,9 @@
 import { useState } from "react"
 import { NavLink, useNavigate } from "react-router-dom"
 import { login } from "../../API/auth.api.js"
+import { sync_favorites } from "../../API/api.api.js"
 import useUserStore from "../global/user"
+import toast from "react-hot-toast"
 
 const Login = () => {
   const [loginData, setLoginData] = useState({
@@ -28,7 +30,29 @@ const Login = () => {
 
     try {
       const result = await login(loginData)
-      setUser(result.user)
+      
+      // Handle guest favorites sync if they exist
+      const guestFavsRaw = localStorage.getItem("recipe_favorites")
+      if (guestFavsRaw) {
+        try {
+          const guestFavs = JSON.parse(guestFavsRaw)
+          if (Array.isArray(guestFavs) && guestFavs.length > 0) {
+            // Silently sync favorites with the new account
+            const updatedUser = await sync_favorites(guestFavs)
+            setUser(updatedUser)
+            localStorage.removeItem("recipe_favorites")
+            toast.success("Synchronized your saved recipes!")
+          } else {
+            setUser(result.user)
+          }
+        } catch (syncErr) {
+          console.error("Failed to sync guest favorites:", syncErr)
+          setUser(result.user) // Proceed anyway
+        }
+      } else {
+        setUser(result.user)
+      }
+
       navigate("/")
     } catch (err) {
       setError(err.message || "Something went wrong. Please try again.")

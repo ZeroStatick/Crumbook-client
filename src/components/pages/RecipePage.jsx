@@ -7,6 +7,7 @@ import useUserStore from "../../global/user"
 import toast from "react-hot-toast"
 import RecipeFilters from "../RecipeFilters"
 import ShareButton from "../ShareButton"
+import ReportModal from "../ReportModal"
 
 // SKELETON : Refactorisé en Dark Mode
 const RecipeCardSkeleton = () => (
@@ -29,11 +30,14 @@ const RecipePage = () => {
   const { user, setUser } = useUserStore()
   const [recipes, setRecipes] = useState([])
   const [loading, setLoading] = useState(true)
+  const [reportTarget, setReportTarget] = useState(null)
 
   const [guestFavorites, setGuestFavorites] = useState(() => {
     const saved = localStorage.getItem("recipe_favorites")
     return saved ? JSON.parse(saved) : []
   })
+  
+  // ... rest of state and effects ...
 
   const favorites = user ? user.favorites || [] : guestFavorites
 
@@ -303,7 +307,7 @@ const RecipePage = () => {
                 className="group relative flex flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#0f141d] transition-all duration-300 hover:-translate-y-1 hover:border-amber-400/20 hover:shadow-[0_30px_60px_rgba(0,0,0,0.35)]"
               >
                 <div className="p-4">
-                  <div className="relative overflow-hidden rounded-[1rem] border border-white/10 bg-[#0a0f16]">
+                  <div className="relative overflow-hidden rounded-[1rem] border border-white/10 bg-black">
                     <img
                       src={recipe.image || DEFAULT_RECIPE_IMAGE}
                       alt={recipe.title}
@@ -326,6 +330,28 @@ const RecipePage = () => {
                     >
                       {isFav ? "❤️" : "🤍"}
                     </button>
+
+                    {/* Floating Report Button */}
+                    {(user?._id || user?.id) !== (recipe.author?._id || recipe.author) && !recipe.isExternal && (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (!user) {
+                            toast.error("Please login to report content");
+                            return;
+                          }
+                          setReportTarget({ id: recipeId, type: "recipe" });
+                        }}
+                        className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-black/40 px-3 py-1.5 text-[9px] font-black tracking-widest text-rose-500/80 uppercase backdrop-blur-md transition-all hover:bg-rose-500 hover:text-white"
+                        title="Report Recipe"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 01-2 2zm9-13.5V9" />
+                        </svg>
+                        REPORT 🚩
+                      </button>
+                    )}
                   </div>
                 </div>
 
@@ -383,6 +409,24 @@ const RecipePage = () => {
                       recipeId={recipeId}
                       className="text-white/60 transition-colors hover:text-white"
                     />
+                    {(user?._id || user?.id) !== (recipe.author?._id || recipe.author) && !recipe.isExternal && (
+                      <button
+                        onClick={() => {
+                          if (!user) {
+                            toast.error("Please login to report content");
+                            return;
+                          }
+                          setReportTarget({ id: recipeId, type: "recipe" });
+                        }}
+                        className="flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/5 px-3 py-1 text-[9px] font-black tracking-widest text-rose-500/60 uppercase transition-all hover:bg-rose-500 hover:text-white"
+                        title="Report Recipe"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 01-2 2zm9-13.5V9" />
+                        </svg>
+                        REPORT 🚩
+                      </button>
+                    )}
                   </div>
                   <Link
                     to={`/recipe/${recipeId}`}
@@ -395,6 +439,14 @@ const RecipePage = () => {
             )
           })}
         </div>
+      )}
+
+      {reportTarget && (
+        <ReportModal
+          targetId={reportTarget.id}
+          targetType={reportTarget.type}
+          onClose={() => setReportTarget(null)}
+        />
       )}
 
       {/* PAGINATION : Boutons dark mode */}

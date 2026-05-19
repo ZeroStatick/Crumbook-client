@@ -162,12 +162,21 @@ const RecipeDetailPage = () => {
           <span className="transition-transform group-hover:-translate-x-1">←</span> Back to recipes
         </Link>
         <div className="flex flex-wrap gap-3">
-          {user && !isAuthor && !recipe.isExternal && (
+          {!isAuthor && !recipe.isExternal && (
             <button
-              onClick={() => setReportTarget({ id, type: "recipe" })}
-              className="rounded-full border border-white/10 bg-white/5 px-5 py-2 text-[10px] font-black tracking-widest text-white/60 uppercase transition-all hover:bg-white/10 hover:text-white"
+              onClick={() => {
+                if (!user) {
+                  toast.error("Please login to report content");
+                  return;
+                }
+                setReportTarget({ id, type: "recipe" });
+              }}
+              className="flex items-center gap-2 rounded-full border border-rose-500/20 bg-rose-500/5 px-5 py-2 text-[10px] font-black tracking-widest text-rose-500/60 uppercase transition-all hover:bg-rose-500 hover:text-white"
             >
-              Report
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 01-2 2zm9-13.5V9" />
+              </svg>
+              REPORT 🚩
             </button>
           )}
           {user && !recipe.isExternal && (
@@ -221,7 +230,7 @@ const RecipeDetailPage = () => {
 
       {/* Hero Section */}
       <section className="mb-12 overflow-hidden rounded-4xl border border-white/10 bg-[#0f141d] shadow-2xl">
-        <div className="relative h-[30rem] w-full overflow-hidden">
+        <div className="relative h-[30rem] w-full overflow-hidden bg-black">
           <img
             src={recipe.image || DEFAULT_RECIPE_IMAGE}
             alt={recipe.title}
@@ -433,12 +442,22 @@ const RecipeDetailPage = () => {
                     </div>
                   </div>
                   <div className="flex gap-4 opacity-0 transition-opacity group-hover:opacity-100">
-                    {user && !isCommentAuthor && (
+                    {!isCommentAuthor && (
                       <button
-                        onClick={() => setReportTarget({ id: comment._id, type: "comment" })}
-                        className="text-[10px] font-black tracking-widest text-white/20 uppercase hover:text-white"
+                        onClick={() => {
+                          if (!user) {
+                            toast.error("Please login to report content");
+                            return;
+                          }
+                          setReportTarget({ id: comment._id, type: "comment" });
+                        }}
+                        className="flex items-center gap-1 rounded-full border border-rose-500/20 bg-rose-500/5 px-2 py-0.5 text-[9px] font-black tracking-widest text-rose-500/60 uppercase transition-all hover:bg-rose-500 hover:text-white"
+                        title="Report Comment"
                       >
-                        Report
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 01-2 2zm9-13.5V9" />
+                        </svg>
+                        REPORT 🚩
                       </button>
                     )}
                     {(isCommentAuthor || isAdmin) && (

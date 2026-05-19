@@ -161,7 +161,7 @@ const UserProfilePage = () => {
     <div className="mx-auto max-w-7xl p-4 px-6 pb-24 md:p-8 lg:px-8">
       {/* User Header Section */}
       <div className="mb-12 overflow-hidden rounded-4xl border border-white/10 bg-[#0f141d] shadow-2xl">
-        <div className="h-48 bg-[#0a0f16] relative overflow-hidden">
+        <div className="h-48 bg-black relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-r from-amber-500/10 via-transparent to-orange-500/10" />
           <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '32px 32px' }} />
         </div>

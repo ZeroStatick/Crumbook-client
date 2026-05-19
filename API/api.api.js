@@ -92,3 +92,5 @@ export const delete_user = (user_id) => api.delete(`/api/users/${user_id}`)
 export const get_me = () => api.get("/api/users/me")
 
 export const toggle_favorite = (recipeId) => api.post("/api/users/favorites", { recipeId })
+
+export const sync_favorites = (recipeIds) => api.post("/api/users/sync-favorites", { recipeIds })
