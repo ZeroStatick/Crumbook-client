@@ -69,7 +69,7 @@ const Navbar = () => {
               <Link
                 key={link.path}
                 to={link.path}
-                className="text-[10px] font-bold uppercase tracking-[0.3em] text-white/40 transition-colors hover:text-white"
+                className="text-xs font-bold uppercase tracking-[0.3em] text-white/40 transition-colors hover:text-white"
               >
                 {link.name}
               </Link>
