@@ -5,72 +5,72 @@ const Footer = () => {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="mt-20 border-t border-white/10 bg-[#090c12]/95 px-6 py-16 text-white/60 backdrop-blur-xl">
-      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-12 md:grid-cols-4">
+    <footer className="border-t border-white/5 bg-[#0a0c10] px-6 py-24 text-white/40">
+      <div className="mx-auto grid max-w-7xl grid-cols-1 gap-16 md:grid-cols-4">
         <div className="col-span-1 md:col-span-2">
           <Link
             to="/"
-            className="mb-6 inline-block font-serif text-3xl font-black tracking-tight text-white transition-transform hover:scale-105"
+            className="mb-8 inline-block font-serif text-2xl font-normal tracking-[0.2em] uppercase text-white"
           >
             Crumbook
           </Link>
-          <p className="max-w-md text-base leading-relaxed text-white/60">
-            Your ultimate recipe companion. Discover, create, and share delicious meals with the world.
-            Join our community of food lovers today and transform your kitchen experience.
+          <p className="max-w-md text-base leading-relaxed font-light">
+            A refined culinary collective dedicated to the art of cooking. 
+            Discover, curate, and share techniques that define the modern kitchen.
           </p>
-          <div className="mt-8 flex gap-4">
-            {/* Social Icons Placeholder */}
-            {["FB", "TW", "IG"].map((icon) => (
-              <div
-                key={icon}
-                className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-bold text-white/70 transition-all hover:border-amber-400/20 hover:bg-white/10 hover:text-white"
+          <div className="mt-10 flex gap-8">
+            {["Instagram", "Twitter", "Facebook"].map((platform) => (
+              <a
+                key={platform}
+                href="#"
+                className="text-xs font-bold uppercase tracking-[0.2em] hover:text-white transition-colors"
               >
-                {icon}
-              </div>
+                {platform}
+              </a>
             ))}
           </div>
         </div>
 
         <div>
-          <h3 className="mb-6 font-serif text-sm font-bold tracking-widest text-white uppercase">
-            Quick Links
+          <h3 className="mb-8 text-xs font-bold tracking-[0.3em] text-white uppercase">
+            Directory
           </h3>
           <ul className="space-y-4">
             <li>
-              <Link to="/" className="text-sm transition-colors hover:text-amber-200">Home</Link>
+              <Link to="/recipes" className="text-sm font-medium tracking-wider hover:text-white transition-colors">Recipes</Link>
             </li>
             <li>
-              <Link to="/recipes" className="text-sm transition-colors hover:text-amber-200">All Recipes</Link>
+              <Link to="/guides" className="text-sm font-medium tracking-wider hover:text-white transition-colors">Guides</Link>
             </li>
             <li>
-              <Link to="/drop-ingredients" className="text-sm transition-colors hover:text-amber-200">Drop Ingredients</Link>
+              <Link to="/drop-ingredients" className="text-sm font-medium tracking-wider hover:text-white transition-colors">Inventory</Link>
             </li>
             <li>
-              <Link to="/recipes/new" className="text-sm transition-colors hover:text-amber-200">Create Recipe</Link>
+              <Link to="/ai-chef" className="text-sm font-medium tracking-wider hover:text-white transition-colors">AI Chef</Link>
             </li>
           </ul>
         </div>
 
         <div>
-          <h3 className="mb-6 font-serif text-sm font-bold tracking-widest text-white uppercase">
-            Account
+          <h3 className="mb-8 text-xs font-bold tracking-[0.3em] text-white uppercase">
+            Access
           </h3>
           <ul className="space-y-4">
             <li>
-              <Link to="/login" className="text-sm transition-colors hover:text-amber-200">Login</Link>
+              <Link to="/login" className="text-sm font-medium tracking-wider hover:text-white transition-colors">Login</Link>
             </li>
             <li>
-              <Link to="/register" className="text-sm transition-colors hover:text-amber-200">Register</Link>
+              <Link to="/register" className="text-sm font-medium tracking-wider hover:text-white transition-colors">Join Collective</Link>
             </li>
             <li>
-              <Link to="/profile" className="text-sm transition-colors hover:text-amber-200">My Profile</Link>
+              <Link to="/profile" className="text-sm font-medium tracking-wider hover:text-white transition-colors">Profile</Link>
             </li>
           </ul>
         </div>
       </div>
 
-      <div className="mx-auto mt-16 max-w-7xl border-t border-white/5 pt-8 text-center text-xs text-white/40">
-        <p>&copy; {currentYear} Crumbook. Built for foodies, by foodies. All rights reserved.</p>
+      <div className="mx-auto mt-24 max-w-7xl border-t border-white/5 pt-12 text-center text-[11px] font-bold uppercase tracking-[0.4em] text-white/20">
+        <p>&copy; {currentYear} Crumbook Collective. All Rights Reserved.</p>
       </div>
     </footer>
   )

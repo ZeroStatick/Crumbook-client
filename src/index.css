@@ -33,18 +33,7 @@
 
 @layer base {
   html {
-    background:
-      radial-gradient(
-        circle at top left,
-        rgba(255, 255, 255, 0.08),
-        transparent 18%
-      ),
-      radial-gradient(
-        circle at bottom right,
-        rgba(255, 255, 255, 0.06),
-        transparent 18%
-      ),
-      linear-gradient(180deg, #090b10 0%, #111821 42%, #171f2b 100%);
+    background: #0a0c10;
   }
 
   body {
