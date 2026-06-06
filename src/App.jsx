@@ -70,7 +70,7 @@ function App() {
       <Toaster />
       <BrowserRouter>
         <Navbar />
-        <main className="min-h-screen bg-transparent text-[#f6efe8]">
+        <main className="min-h-screen bg-[#0a0c10] text-[#f6efe8]">
           <Routes>
             {/* Main Routes */}
             <Route path="/" element={<Home />} />
