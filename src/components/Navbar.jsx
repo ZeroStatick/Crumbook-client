@@ -3,6 +3,7 @@ import { Link, useNavigate, useLocation } from "react-router-dom"
 import { logout } from "../../API/auth.api"
 import useUserStore from "../global/user"
 import Avatar from "./Avatar"
+import Sidebar from "./Sidebar"
 import crumbookLogo from "../assets/crumbookLogo.png"
 import defaultUserIcon from "../assets/defaultusericone.png"
 
@@ -22,9 +23,8 @@ const Navbar = () => {
     navigate("/login")
   }
 
-  // Close menus on route change
+  // Close avatar menu on route change
   useEffect(() => {
-    setIsSidebarOpen(false)
     setIsAvatarMenuOpen(false)
   }, [location.pathname])
 
@@ -163,41 +163,11 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Mobile Sidebar */}
-      <div 
-        className={`fixed inset-0 z-[60] flex justify-end min-[1150px]:hidden transition-opacity duration-500 ${isSidebarOpen ? "pointer-events-auto" : "pointer-events-none"}`}
-      >
-        {/* Backdrop */}
-        <div 
-          className={`absolute inset-0 bg-black/80 backdrop-blur-sm transition-opacity duration-500 ${isSidebarOpen ? "opacity-100" : "opacity-0"}`}
-          onClick={() => setIsSidebarOpen(false)}
-        ></div>
-
-        {/* Content */}
-        <div className={`relative h-full w-full max-w-[320px] bg-[#0a0c10] border-l border-white/5 p-10 flex flex-col transform transition-transform duration-500 ease-out ${isSidebarOpen ? "translate-x-0" : "translate-x-full"}`}>
-          <div className="flex justify-start mb-20">
-            <span className="text-[10px] font-bold uppercase tracking-[0.5em] text-white/20">Menu</span>
-          </div>
-          
-          <div className="flex flex-col gap-8">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className="font-serif text-2xl font-light tracking-widest text-white/60 hover:text-white transition-colors uppercase"
-              >
-                {link.name}
-              </Link>
-            ))}
-          </div>
-
-          <div className="mt-auto">
-            <div className="pt-8 border-t border-white/5 text-[9px] font-bold uppercase tracking-[0.3em] text-white/10">
-              Crumbook Collective
-            </div>
-          </div>
-        </div>
-      </div>
+      <Sidebar 
+        isOpen={isSidebarOpen} 
+        onClose={() => setIsSidebarOpen(false)} 
+        links={navLinks} 
+      />
     </>
   )
 }
