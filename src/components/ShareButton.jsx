@@ -1,7 +1,7 @@
 import React, { useState } from "react"
 import toast from "react-hot-toast"
 
-const ShareButton = ({ recipeId, className = "" }) => {
+const ShareButton = ({ recipeId, className = "", plain = false }) => {
   const [isCopied, setIsCopied] = useState(false)
 
   const handleCopyLink = async (e) => {
@@ -24,6 +24,18 @@ const ShareButton = ({ recipeId, className = "" }) => {
       console.error("Failed to copy link: ", err)
       toast.error("Failed to copy link. Please try manually.")
     }
+  }
+
+  if (plain) {
+    return (
+      <button
+        onClick={handleCopyLink}
+        title="Copy recipe link"
+        className={className}
+      >
+        <span>{isCopied ? "✓ Link Copied" : "🔗 Share"}</span>
+      </button>
+    )
   }
 
   return (

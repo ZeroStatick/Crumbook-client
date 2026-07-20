@@ -31,6 +31,18 @@ const RecipePage = () => {
   const [recipes, setRecipes] = useState([])
   const [loading, setLoading] = useState(true)
   const [reportTarget, setReportTarget] = useState(null)
+  const [activeMenuId, setActiveMenuId] = useState(null)
+
+  useEffect(() => {
+    if (!activeMenuId) return
+    const handleOutsideClick = () => {
+      setActiveMenuId(null)
+    }
+    document.addEventListener("click", handleOutsideClick)
+    return () => {
+      document.removeEventListener("click", handleOutsideClick)
+    }
+  }, [activeMenuId])
 
   const [guestFavorites, setGuestFavorites] = useState(() => {
     const saved = localStorage.getItem("recipe_favorites")
@@ -344,28 +356,6 @@ const RecipePage = () => {
                     >
                       {isFav ? "❤️" : "🤍"}
                     </button>
-
-                    {/* Floating Report Button */}
-                    {(user?._id || user?.id) !== (recipe.author?._id || recipe.author) && !recipe.isExternal && (
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          if (!user) {
-                            toast.error("Please login to report content");
-                            return;
-                          }
-                          setReportTarget({ id: recipeId, type: "recipe" });
-                        }}
-                        className="absolute bottom-3 right-3 z-10 flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-black/40 px-3 py-1.5 text-[9px] font-black tracking-widest text-rose-500/80 uppercase backdrop-blur-md transition-all hover:bg-rose-500 hover:text-white"
-                        title="Report Recipe"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 01-2 2zm9-13.5V9" />
-                        </svg>
-                        REPORT 🚩
-                      </button>
-                    )}
                   </div>
                 </div>
 
@@ -417,29 +407,50 @@ const RecipePage = () => {
                   </div>
                 </div>
 
-                <div className="mt-auto flex items-center justify-between border-t border-white/10 bg-[#0d1219] px-6 py-4">
-                  <div className="flex items-center gap-3">
-                    <ShareButton
-                      recipeId={recipeId}
-                      className="text-white/60 transition-colors hover:text-white"
-                    />
-                    {(user?._id || user?.id) !== (recipe.author?._id || recipe.author) && !recipe.isExternal && (
-                      <button
-                        onClick={() => {
-                          if (!user) {
-                            toast.error("Please login to report content");
-                            return;
-                          }
-                          setReportTarget({ id: recipeId, type: "recipe" });
-                        }}
-                        className="flex items-center gap-1.5 rounded-full border border-rose-500/20 bg-rose-500/5 px-3 py-1 text-[9px] font-black tracking-widest text-rose-500/60 uppercase transition-all hover:bg-rose-500 hover:text-white"
-                        title="Report Recipe"
+                <div className="mt-auto flex items-center justify-between border-t border-white/10 bg-[#0d1219] px-6 py-4 relative">
+                  <div className="relative">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault()
+                        e.stopPropagation()
+                        setActiveMenuId(activeMenuId === recipeId ? null : recipeId)
+                      }}
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-white/5 text-white/60 hover:border-white/20 hover:bg-white/10 hover:text-white transition-all"
+                      title="Options"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
+                      </svg>
+                    </button>
+
+                    {activeMenuId === recipeId && (
+                      <div
+                        className="absolute bottom-12 left-0 z-20 w-40 rounded-xl border border-white/10 bg-[#161b26] p-1.5 shadow-2xl shadow-black animate-in fade-in slide-in-from-bottom-2 duration-150"
+                        onClick={(e) => e.stopPropagation()}
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 01-2 2zm9-13.5V9" />
-                        </svg>
-                        REPORT 🚩
-                      </button>
+                        <ShareButton
+                          recipeId={recipeId}
+                          plain={true}
+                          className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-semibold text-white/80 hover:bg-white/5 hover:text-white transition-all"
+                        />
+                        {(user?._id || user?.id) !== (recipe.author?._id || recipe.author) && !recipe.isExternal && (
+                          <button
+                            onClick={(e) => {
+                              e.preventDefault()
+                              e.stopPropagation()
+                              if (!user) {
+                                toast.error("Please login to report content")
+                                return
+                              }
+                              setReportTarget({ id: recipeId, type: "recipe" })
+                              setActiveMenuId(null)
+                            }}
+                            className="mt-1 flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs font-semibold text-rose-400 hover:bg-rose-500/10 transition-all"
+                          >
+                            <span>🚩 Report</span>
+                          </button>
+                        )}
+                      </div>
                     )}
                   </div>
                   <Link
